@@ -8,14 +8,16 @@ Blagodatskikh and Peter Schierack}
 \abstract{
 There is an ever-increasing number of publications, which use quantitative PCR 
 (qPCR) or digital PCR (dPCR) to elicit fundamentals of biological processes. 
-Several software solutions have been developed, which are either distributed as 
-closed source software or as monolithic block with little freedom to perform 
-highly customized analysis procedures. Others and we argue that R is an 
-excellent environment for a reproducible and transparent analysis of data. 
-However, for newcomers it is often very challenging to master R from reading the 
-manuals and FAQs the not so obvious steps. Here we describe exemplary work-flows 
-for the analysis of dPCR or qPCR experiments including the analysis of melting 
-curve data. Our analysis relies entirely on R packages available from public 
+Novel amplification strategies based on quantitative isothermal amplification 
+(qIA) start to become more prominent in life sciences and diagnostics. Several 
+software solutions have been developed, which are either distributed as closed 
+source software or as monolithic block with little freedom to perform highly 
+customized analysis procedures. Others and we argue that R is an excellent 
+environment for a reproducible and transparent analysis of data. However, for 
+newcomers it is often very challenging to master R from reading the manuals and 
+FAQs the not so obvious steps. Here we describe exemplary work-flows for the 
+analysis of dPCR, qIA or qPCR experiments including the analysis of melting curve 
+data. Our analysis relies entirely on R packages available from public 
 repositories.
 }
 
@@ -35,12 +37,16 @@ and guidelines for a proper conduct of qPCR experiments as implemented in the
 MIQE guidelines (minimum information for publication of quantitative real-time 
 PCR experiments) \citep{bustin_miqe_2009, huggett_2013}. We share the philosophy 
 of the MIQE guidelines to increase experimental transparency for better 
-experimental practice and reliable interpretation of qPCR results. 
+experimental practice and reliable interpretation of qPCR results. In the past 
+decades emerged several isothermal amplification technologies, such as helicase 
+dependent amplification (HDA). Isothermal amplification was readily combined 
+with real-time monitoring technologies (qIA) and is used in various fields like 
+diagnostics and point of care testing \citep{rodiger_nucleic_2014}.
 
 R is one of the most used tools in bioinformatics and is known to be an early 
 adopter of emerging technologies \citep{pabinger_2014}. Recently we published 
-the \CRANpkg{dpcR} package at CRAN, which is the first open source software package 
-based on R for the analysis of digital PCR (dPCR) experiments. The dPCR 
+the \CRANpkg{dpcR} package at CRAN, which is the first open source software 
+package based on R for the analysis of digital PCR (dPCR) experiments. The dPCR 
 Technology breaks fundamentally with the previous concept of nucleic acid 
 quantification and can be seen as a next generation nucleic acid quantification. 
 The key difference between dPCR and traditional PCR lies in the method of 
@@ -174,6 +180,11 @@ In particular, we used the \CRANpkg{dpcR} (0.1.3.1) to estimate the number of
 molecules in a sample.
 
 \section{Results}
+
+In this section we will try to show that R is a unified open software which fits 
+the needs for (I) data analysis and presentation in research, (II) as software 
+frame-work for novel technical developments, (III) as platform for teaching this 
+new technology and (IV) serves as reference for statistical methods.
 
 \subsection{Example one}
 
@@ -310,7 +321,6 @@ plotCurves(tmp.std[, 1], tmp.std[, -1], type = "l")
 
 \begin{figure}[htbp]
   \centering
-%   \includegraphics[clip=true,trim=0.1cm 0.6cm 1cm 1.8cm, width=16cm]{figures/plotCurves.pdf}
   \includegraphics{figures/plotCurves.pdf}
   \caption{Analysis of the amplification curve data of the calibration curve 
 samples by the \code{plotCurves} function from the \CRANpkg{chipPCR} package.}
@@ -325,6 +335,18 @@ samples by the \code{plotCurves} function from the \CRANpkg{chipPCR} package.}
 \end{figure}
 
 \subsection{Example three}
+
+qIA
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[clip=true, width=16cm]{figures/qIA.pdf}
+  \caption{by the \code{diffQ} function from the \CRANpkg{MBmca} package.}
+  \label{figure:qIA}
+\end{figure}
+
+
+\subsection{Example four}
 
 We have developed the \CRANpkg{dpcR} package for analysis and presentation of 
 digital PCR experiments. The \CRANpkg{dpcR} package can be used to build 
@@ -357,7 +379,6 @@ summaries.}.
   \label{figure:dpcR}
 \end{figure}
 
-
 \section{Discussion and Conclusion}
 
 This study gave a brief introduction how to perform a dPCR or qPCR analysis with 
@@ -371,18 +392,18 @@ plate qPCR). It should be quite easy even for an inexperienced user to define a
 workflowz and to setup environment for specific needs in a broad range of 
 technical settings (Figure~\ref{figure:options}). R is no monolithic 
 integration. We claim that the modular structure of R packages allows user to 
-perform flexible data analysis adjusted to their needs. R allows to access and 
-reuse code for the creation of reports in various formats (e.g., HTML, PDF). 
-Most of the software is cross-platform open source software and is freely 
-available from CRAN or Bioconductor. Despite the fact that R is free of charge 
-it is quite possible to build commercial applications. The packages cover 
-implementation of novel approaches and peer-reviewed analysis methods. R 
-packages are an open environment to adopt to the growing knowledge in dPCR and 
-qPCR. Therefore, we argue that R may provide a structure for standardized 
-nomenclature and serve as reference in qPCR and dPCR analysis. Speaking about 
-openness, it is important to emphasize that main advantage is the software is 
-transparent at any time for anybody. Thus, it is possible to track numerical 
-errors. 
+perform flexible data analysis adjusted to their needs and to design frameworks 
+for high-throughput analysis. R allows to access and reuse code for the creation 
+of reports in various formats (e.g., HTML, PDF). Most of the software is 
+cross-platform open source software and is freely available from CRAN or 
+Bioconductor. Despite the fact that R is free of charge it is quite possible to 
+build commercial applications. The packages cover implementation of novel 
+approaches and peer-reviewed analysis methods. R packages are an open 
+environment to adopt to the growing knowledge in dPCR and qPCR. Therefore, we 
+argue that R may provide a structure for standardized nomenclature and serve as 
+reference in qPCR and dPCR analysis. Speaking about openness, it is important to 
+emphasize that main advantage is the software is transparent at any time for 
+anybody. Thus, it is possible to track numerical errors. 
 
 \url{http://michbur.github.io/pcRuniveRsum/}
 
@@ -415,8 +436,7 @@ to a utility over a network (typically the Internet).}
 \section{Acknowledgment}
 
 Part of this work was funded by the BMBF InnoProfile-Transfer-Projekt 03 IPT 
-611X. We would like to thank R community who created this environment for the 
-analysis of qPCR data. Part of this work was funded by the Russian Ministry of 
+611X. We would like to thank R community. Part of this work was funded by the Russian Ministry of 
 Education and Science (project No. RFMEFI62114X0003) and with usage of scientific equipment of 
 Center for collective use ``Biotechnology'' at All-Russia Research Institute of Agricultural Biotechnology.
 

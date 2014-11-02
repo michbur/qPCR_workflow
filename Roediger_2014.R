@@ -93,9 +93,15 @@ filename <- paste(path, "/extdata/", "BioRad_qPCR_melt.rdml", sep = "")
 BioRad <- RDML(filename, name.pattern = "%TUBE%_%NAME%_%TYPE%_%TARGET%")
 # 
 # 
-# # Fetch cycle dependent fluorescence for HEX chanel of beta actin (bACT).
+# # Fetch cycle dependent fluorescence for EvaGreen chanel of NAME_GENE_HERE.
 qPCR <- cbind(BioRad$qPCR$EvaGreen$pos, BioRad$qPCR$EvaGreen$ntc[, -1])
 melt <- cbind(BioRad$Melt$EvaGreen$pos, BioRad$Melt$EvaGreen$ntc[, -1])
+
+res.diffQ <- lapply(2:ncol(melt), function(x) {
+						res <- mcaSmoother(melt[, 1], melt[, x], Trange = c(70, 95))
+						diffQ(res, verbose = TRUE, inder = TRUE)
+						}
+	     )
 
 # # Use plotCurves function from the chipPCR package to get an overview of the
 # # amplification curve samples.
@@ -111,16 +117,20 @@ pdf("amp_melt.pdf", width = 8, height = 6)
 layout(matrix(c(1,2,1,3), 2, 2, byrow = TRUE))
 matplot(qPCR[, 1], qPCR[, -1], type = "l", col = c(rep(1,12), rep(2,12)), lty = 1, xlab = "Cycle", 
 	    ylab = "RFU")
+
 matplot(melt[, 1], melt[, -1], type = "l", col = c(rep(1,12), rep(2,12)), lty = 1, xlab = "Temperature", 
 	    ylab = "RFU")
-matplot(melt[, 1], melt[, -1], type = "l", col = c(rep(1,12), rep(2,12)), lty = 1, xlab = "Temperature")
+plot(NA, NA, xlim = c(70, 93), ylim = c(0,25), xlab = "Temperature", ylab = "-d(RFU)/dT")
+color <- c(rep(1,12), rep(2,12))
+lapply(1L:24, function(i) {lines(res.diffQ[[i]]$xy, col = color[i])})
+
 dev.off()
 # 
 # dil <- as.vector(lc96[["Dilutions"]][["FAM"]])
 
 
 #################################
-# Example two
+# Example three
 #################################
 require(dpcR)
 
@@ -134,3 +144,25 @@ dev.off()
 # Let us assume, that every droplet has roughly 5 nl 
 # total concentration (and its confidence intervals) in molecules/ml
 dens[4:6] / 5 * 1e-6
+
+
+#################################
+# Example four
+#################################
+Ct <- 0.05
+
+pdf("qIA.pdf")
+par(mfrow = c(2,1))
+plot(NA, NA, xlim = c(0, 120), ylim = c(0.4,1.2), xlab = "Time (min)", ylab = "RFU")
+legend("topleft", "A", cex = 3, bty = "n")
+lapply(c(2,4), function(i) {lines(C81[, i]/60, C81[, i + 1], type = "b", pch = 20)})
+
+plot(NA, NA, xlim = c(0, 120), ylim = c(0,0.8), xlab = "Time (min)", ylab = "RFU")
+legend("topleft", "B", cex = 3, bty = "n")
+res <- lapply(c(2,4), function(i) {
+			    y.s <- CPP(C81[, i]/60, C81[, i + 1], trans = TRUE, method = "mova", bg.outliers = TRUE, bg.range = c(1, 190))
+			    lines(C81[, i]/60, y.s$y.norm, type = "b", pch = 20)
+			    th.cyc(C81[, i]/60, y.s$y.norm, r = Ct)
+			    })
+abline(h = Ct, lty = 2)
+dev.off()
