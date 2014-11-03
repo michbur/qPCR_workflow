@@ -43,14 +43,15 @@ dependent amplification (HDA). Isothermal amplification was readily combined
 with real-time monitoring technologies (qIA) and is used in various fields like 
 diagnostics and point of care testing \citep{rodiger_nucleic_2014}.
 
-R is one of the most used tools in bioinformatics and is known to be an early 
+R is one of the most used tools in bioinformatics and is known as an early 
 adopter of emerging technologies \citep{pabinger_2014}. Recently we published 
 the \CRANpkg{dpcR} package at CRAN, which is the first open source software 
 package based on R for the analysis of digital PCR (dPCR) experiments. The dPCR 
 Technology breaks fundamentally with the previous concept of nucleic acid 
 quantification and can be seen as a next generation nucleic acid quantification. 
 The key difference between dPCR and traditional PCR lies in the method of 
-measuring (absolute) nucleic acids amounts. This is possible after ``clonal DNA 
+measuring (absolute) nucleic acids amounts, which yields discrete information
+instead of the countinous signal. This is possible after ``clonal DNA 
 amplification'' in thousands of small separated partitions (e.g., droplets, nano 
 chambers) \citep{huggett_2013, milbury_2014, morley_2014}. Partitions with no 
 nucleic acid remain negative and the others turn positive. Selected technologies 
@@ -62,10 +63,10 @@ Poisson statistics (see \CRANpkg{dpcR} for details).
 
 Most of the commercial and experimental hardware platforms provide means to 
 analyse the amplification curve data. Yet, in case of closed source software the 
-analysis happens is in most cases a blackbox fashion tied to a specific 
+analysis happens in most cases in a blackbox fashion tied to a specific 
 platforms. Often such systems have limitation in the data processing and force 
 the used to suboptimal analysis algorithm as discussed by \citet{ruijter_2013}. 
-The visualization options are often limited by the software and not in 
+The visualization options are usually limited by the software and not in 
 acceptable publication quality. The data processing in spreadsheets is time 
 consuming and prone to errors because the advanced mathematical expertise is 
 often not available in a laboratory.
@@ -77,7 +78,7 @@ analysis of data, interpretation of results and reporting
 thing, but should be avoided wherever possible. A recent study by 
 \citet{Duran_2014} exemplified this. Scientific misconduct and fraud have shaken 
 the scientific community on several occasions \citep{fang_2012}. In particular 
-qPCR is a sensible topic. Therefore, several reason strongly support to use R in 
+qPCR is a sensible topic. Therefore, several reasons strongly support to use R in 
 science. R provides essential packages to build a highly customized workflows, 
 covering: data read-in, data preprocessing, analysis, post-processing, 
 visualization and storage. As recently briefly reviewed in 
@@ -87,15 +88,15 @@ of qPCR experiments, including: \CRANpkg{kulife}, \CRANpkg{MCMC.qpcr},
 \CRANpkg{chipPCR}, \CRANpkg{MBmca}, \CRANpkg{RDML}, \BIOpkg{nondetects}, 
 \BIOpkg{qpcrNorm}, \BIOpkg{HTqPCR}, \BIOpkg{SLqPCR}, \BIOpkg{ddCt}, 
 \BIOpkg{EasyqpcR}, \BIOpkg{unifiedWMWqPCR}, \BIOpkg{ReadqPCR}, 
-\BIOpkg{NormqPCR}. All the packages are either available form CRAN or 
+\BIOpkg{NormqPCR}. All the packages are either available from CRAN or 
 Bioconductor \citep{gentleman_2004}. The packages can be freely combined in a 
 plugin-like architecture. R is instrument independent, cross-platform and 
 provides a wide spectrum of calculation options. In particular, visualization of 
 experiments is one of R pinnacles. Though the intrinsic properties of R such as 
 the naming convention \citep{Baaaath_2012} and use of R's class systems (e.g., 
-\strong{S3}, \strong{S4} and \strong{R6}) vary considerable depending on the 
-package developer preferences there is the common ground to track numerical 
-errors in R due to the open source approach. In addition, offers the R 
+\strong{S3}, \strong{S4}, reference classes and \strong{R6}) vary considerable 
+depending on the package developer preferences there is the common ground to track
+numerical errors in R due to the open source approach. In addition, offers the R 
 environment several data sets. R offers various methods for a standardized data 
 import/export and exchange. Workflows can be embedded in structures for models 
 (e.g., Predictive Model Markup Language (PMML) as proposed by 
@@ -117,7 +118,8 @@ particular, we show how to:
 \end{itemize}
 
 Our workflow effectively follows the principle illustrated in 
-Figure~\ref{figure:workflow}. The intend is to offer a fast insight for novices 
+Figure~\ref{figure:workflow}. The intent is to aggregate functionalities 
+dispersed between various packages and offer a fast insight for novices 
 in the analysis of qPCR experiments with R.
 
 \begin{figure}[htbp]
@@ -389,6 +391,7 @@ summaries.}.
 
 \section{Discussion and Conclusion}
 
+<<<<<<< HEAD
 This study gave a brief introduction how to perform a qPCR, qIA or dPCR analysis 
 with R based on packages available from CRAN. In addition we briefly referenced 
 to a vast collection of additional packages available from CRAN and 
@@ -407,6 +410,26 @@ software is cross-platform open source software and is freely available from
 CRAN or Bioconductor. Despite the fact that R is free of charge it is quite 
 possible to build commercial applications. The packages cover implementation of 
 novel approaches and peer-reviewed analysis methods. R packages are an open 
+=======
+This study gave a brief introduction how to perform a dPCR or qPCR analysis with 
+R based on packages available from CRAN. In addition we briefly referenced to a 
+vast collection of additional packages available from CRAN and Bioconductor. The 
+packages may be considered building blocks (libraries) to create what users want and 
+need. We showed that an automatic research with R offers powerful means for 
+statistical analysis and visualization. The software is not tied to a vendor or 
+specific application (e.g, chamber or droplet based digital PCR, capillary or 
+plate qPCR). It should be quite easy even for an inexperienced user to define a 
+workflow and to setup environment for specific needs in a broad range of 
+technical settings (Figure~\ref{figure:options}). R enforces no monolithic 
+integration. We claim that the modular structure of R packages allows user to 
+perform flexible data analysis adjusted to their needs and to design frameworks 
+for high-throughput analysis. R allows to access and reuse code for the creation 
+of reports in various formats (e.g., HTML, PDF). Most of the software is 
+cross-platform open source software and is freely available from CRAN or 
+Bioconductor. Despite the fact that R is free of charge it is quite possible to 
+build commercial applications. The packages cover implementation of novel 
+approaches and peer-reviewed analysis methods. R packages are an open 
+>>>>>>> 68a5dcc5de6ccc7b2c63c4b7f9630bafde729fd7
 environment to adopt to the growing knowledge in dPCR and qPCR. Therefore, we 
 argue that R may provide a structure for standardized nomenclature and serve as 
 reference in qPCR and dPCR analysis. Speaking about openness, it is important to 
