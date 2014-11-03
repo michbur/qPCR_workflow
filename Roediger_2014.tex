@@ -186,7 +186,7 @@ the needs for (I) data analysis and presentation in research, (II) as software
 frame-work for novel technical developments, (III) as platform for teaching this 
 new technology and (IV) serves as reference for statistical methods.
 
-\subsection{Example one}
+\subsection{Example one - qPCR and Amplification Efficiency Calculation}
 
 The goal of our fist example was to calculate the Cq values and the AE from a 
 qPCR experiment. Therefore, we used the ``guescini1'' dataset\footnote{Details 
@@ -257,13 +257,16 @@ the \code{CPP} function from the \CRANpkg{chipPCR} was sued to baseline the
 data, to smooth the data with Savitzky-Golay smoothing filter and to normalize 
 the data between 0 and 1. \strong{(C)} The Cq values were calculated for the 
 second derivative maximum (SDM) method (\code{inder}, \CRANpkg{chipPCR}) and the 
-cycle threshold method (Ct) (\code{th.cyc}, \CRANpkg{chipPCR}). linear 
-regression $R^{2}~=~0.9945$ ($P < 2.2^{-16}$) and Pearson's $r~=~0.9972605$ ($P 
-< 2.2^{-16}$), \strong{(D)}, \strong{(E)}} 
+cycle threshold method (Ct) (\code{th.cyc}, \CRANpkg{chipPCR}). The threshold 
+value was set to $r~=~0.05$. The Cq values from the SDM and Ct method were 
+plotted and analysed by a linear regression $R^{2}~=~0.9945$ ($P < 2.2^{-16}$) 
+and Pearson's $r~=~0.9972605$ ($P < 2.2^{-16}$). The Cq values from \strong{(D)} 
+the Ct method and \strong{(E)} the SDM method were automatically analysed with 
+the \code{effcalc} (\CRANpkg{chipPCR}) function.}
   \label{figure:dilution_Cq}
 \end{figure}
 
-\subsection{Example two}
+\subsection{Example two - qPCR and Melting Curve Analysis}
 In this study we used the \CRANpkg{RDML} package to read the qPCR experiment. A 
 good practice for reproducible research is to track the package versions and 
 environment used during the analysis. The function $sessionInfo()$ from the 
@@ -334,13 +337,13 @@ samples by the \code{plotCurves} function from the \CRANpkg{chipPCR} package.}
   \label{figure:amp_melt}
 \end{figure}
 
-\subsection{Example three}
+\subsection{Example three - Isothermal Amplification}
 
-A quantitative isothermal amplifcation by Helicase Dependent Amplification (HDA) was performed for the of pCNG1 using the VideoScan platform
-\citep{rodiger_highly_2013}. The HDA was performed at 65~\textcelsius. Two concentrations of input DNA were used.
-Number of variables: 351
-Number of measurements: 5
-Data set: C85:
+A quantitative isothermal amplifcation by Helicase Dependent Amplification (HDA) 
+was performed for the of pCNG1 using the VideoScan platform 
+\citep{rodiger_highly_2013}. The dataset was taken form the \CRANpkg{chipPCR} 
+package. The HDA was performed at 65~\textcelsius. Two concentrations of input 
+DNA were used. Number of variables: 351 Number of measurements: 5 Data set: C85:
 
 
 \begin{figure}[htbp]
@@ -351,7 +354,7 @@ Data set: C85:
 \end{figure}
 
 
-\subsection{Example four}
+\subsection{Example four - digital PCR}
 
 We have developed the \CRANpkg{dpcR} package for analysis and presentation of 
 digital PCR experiments. The \CRANpkg{dpcR} package can be used to build 
@@ -386,24 +389,24 @@ summaries.}.
 
 \section{Discussion and Conclusion}
 
-This study gave a brief introduction how to perform a dPCR or qPCR analysis with 
-R based on packages available from CRAN. In addition we briefly referenced to a 
-vast collection of additional packages available from CRAN and Bioconductor. The 
-packages are building blocks (libraries) to create what users want and need. We 
-showed that an automatic data analysis with R offers powerful means for 
-statistical analysis and visualization. The software is not tied to a vendor or 
-specific application (e.g, chamber or droplet based digital PCR, capillary or 
-plate qPCR). It should be quite easy even for an inexperienced user to define a 
-workflow and to setup environment for specific needs in a broad range of 
-technical settings (Figure~\ref{figure:options}). R enforces no monolithic 
-integration. We claim that the modular structure of R packages allows user to 
-perform flexible data analysis adjusted to their needs and to design frameworks 
-for high-throughput analysis. R allows to access and reuse code for the creation 
-of reports in various formats (e.g., HTML, PDF). Most of the software is 
-cross-platform open source software and is freely available from CRAN or 
-Bioconductor. Despite the fact that R is free of charge it is quite possible to 
-build commercial applications. The packages cover implementation of novel 
-approaches and peer-reviewed analysis methods. R packages are an open 
+This study gave a brief introduction how to perform a qPCR, qIA or dPCR analysis 
+with R based on packages available from CRAN. In addition we briefly referenced 
+to a vast collection of additional packages available from CRAN and 
+Bioconductor. The packages are building blocks (libraries) to create what users 
+want and need. We showed that an automatic data analysis with R offers powerful 
+means for statistical analysis and visualization. The software is not tied to a 
+vendor or specific application (e.g, chamber or droplet based digital PCR, 
+capillary or plate qPCR). It should be quite easy even for an inexperienced user 
+to define a workflow and to setup environment for specific needs in a broad 
+range of technical settings (Figure~\ref{figure:options}). R enforces no 
+monolithic integration. We claim that the modular structure of R packages allows 
+user to perform flexible data analysis adjusted to their needs and to design 
+frameworks for high-throughput analysis. R allows to access and reuse code for 
+the creation of reports in various formats (e.g., HTML, PDF). Most of the 
+software is cross-platform open source software and is freely available from 
+CRAN or Bioconductor. Despite the fact that R is free of charge it is quite 
+possible to build commercial applications. The packages cover implementation of 
+novel approaches and peer-reviewed analysis methods. R packages are an open 
 environment to adopt to the growing knowledge in dPCR and qPCR. Therefore, we 
 argue that R may provide a structure for standardized nomenclature and serve as 
 reference in qPCR and dPCR analysis. Speaking about openness, it is important to 
