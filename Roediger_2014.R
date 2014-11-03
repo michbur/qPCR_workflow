@@ -134,7 +134,7 @@ dev.off()
 #################################
 require(dpcR)
 
-# a demonstration of digital PCR density estimation
+# Analysis of a digital PCR experiment. The density estimation
 # analysis of results of biorad experiment; of 16800 counted droplets (n) 4601 were positive (k).
 pdf("dpcR.pdf")
 
