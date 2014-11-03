@@ -160,7 +160,7 @@ lapply(c(2,4), function(i) {lines(C81[, i]/60, C81[, i + 1], type = "b", pch = 2
 plot(NA, NA, xlim = c(0, 120), ylim = c(0,0.8), xlab = "Time (min)", ylab = "RFU")
 legend("topleft", "B", cex = 3, bty = "n")
 res <- lapply(c(2,4), function(i) {
-			    y.s <- CPP(C81[, i]/60, C81[, i + 1], trans = TRUE, method = "mova", bg.outliers = TRUE, bg.range = c(1, 190))
+			    y.s <- CPP(C81[, i]/60, C81[, i + 1], trans = TRUE, method = "spline", bg.outliers = TRUE, bg.range = c(1, 190))
 			    lines(C81[, i]/60, y.s$y.norm, type = "b", pch = 20)
 			    th.cyc(C81[, i]/60, y.s$y.norm, r = Ct)
 			    })
