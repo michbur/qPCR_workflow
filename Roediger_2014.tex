@@ -352,7 +352,7 @@ An alternative to PCR offer isothermal amplification (IA) methods
 \citep{rodiger_nucleic_2014}. IA methods use a constant temperature rather than 
 cycling through denaturation, annealing and extension steps. The corresponding 
 signal is monitored depending on the time instead of cycles. We performed a 
-quantitative isothermal amplifcation by Helicase Dependent Amplification (HDA). 
+quantitative isothermal amplification by Helicase Dependent Amplification (HDA). 
 The enzyme DNA Helicase unwinds DNA. Therefore, no thermal denaturation is 
 needed. We performed the HDA in the VideoScan platform 
 \citep{rodiger_highly_2013} at 65~\textcelsius for the target 
@@ -369,17 +369,61 @@ adding ``mix B)'' at 65\textcelsius. A $1x$ (D1) and a $1:10$ dilution (D2) were
 tested.}. The resulting dataset \texttt{C81} is part of the \CRANpkg{chipPCR} 
 package. Two concentrations of input DNA were used in the HDA.
 
+\begin{example}
+# Define the threshold level for the calculation of the cycle threshold time.
+Ct <- 0.05
+# Drawn in an 2-by-1 array on the device by two columns and one row.
+par(mfrow = c(2, 1))
+
+# Plot the raw data from the C81 dataset to the first array and add
+# a legend.
+plot(NA, NA, xlim = c(0, 120), ylim = c(0.4, 1.2), xlab = "Time (min)", ylab = "RFU")
+mtext("A", cex = 2, side = 3, adj = 0, font = 2)
+lapply(c(2, 4), function(i) {
+    lines(C81[, i]/60, C81[, i + 1], type = "b", pch = 20, col = i - 1)
+})
+legend(10, 0.8, c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 3), 
+    bty = "n")
+
+# Prepare a plot on the second array for the pre-proccessed data.
+plot(NA, NA, xlim = c(0, 120), ylim = c(0, 0.8), xlab = "Time (min)", ylab = "RFU")
+mtext("B", cex = 2, side = 3, adj = 0, font = 2)
+
+# Apply the CPP functions to pro-process the raw data.
+res <- lapply(c(2, 4), function(i) {
+    y.s <- CPP(C81[, i]/60, C81[, i + 1],
+    		trans = TRUE,		# Basline to zero
+		method = "spline",	# Smooth data with spline
+		bg.outliers = TRUE,	# Remove outliers
+		bg.range = c(1, 190))	# Define range of background singnal
+    lines(C81[, i]/60, y.s$y.norm, type = "b", pch = 20, col = i - 1)
+# Use the th.cyc function to calculate the cycle threshold time.
+    paste(round(th.cyc(C81[, i]/60, y.s$y.norm, r = Ct)[1], 2), "min")
+})
+
+# Add the cycle threshold time and the threshold level to plot.
+
+abline(h = Ct, lty = 2)
+text(10, 0.55, "Cq:")
+legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), bty = "n")
+\end{example}
+
+
 \begin{figure}[htbp]
   \centering
   \includegraphics[clip=true, width=16cm]{figures/qIA.pdf}
-  \caption{Quantitative isothermal amplifcation by Helicase Dependent 
-Amplification (HDA). \strong{(A)} The raw data of the HDA exhibit some outliers 
-(detector artifacts), an off-set of circa 0.5 relative fluorescence units (RFU) 
-and a slight negative trend in the baseline region (0 to 50 minutes). 
-\strong{(B)} by the \code{th.cyc} function from the \CRANpkg{chipPCR} package.}
+  \caption{Quantitative isothermal amplification by Helicase Dependent 
+Amplification (HDA). \strong{(A)} The raw data of the HDA (D1, undiluted, D2 
+$1:10$ diluted) exhibit some outliers (detector artifacts), an off-set of circa 
+0.5 relative fluorescence units (RFU) and a slight negative trend in the 
+baseline region (0 to ~52 minutes). \strong{(B)} First we used the \code{CPP} 
+function from the \CRANpkg{chipPCR} package to smooth the data with spline 
+function. Baselining was done with a robust MM-estimator (range 0 to 52 min). 
+Finally, we used the \code{th.cyc} function from the \CRANpkg{chipPCR} package 
+to calculate the cycle threshold time for samples D1 and D2. The threshold value 
+was set to $r = 0.05$ ($--$).}
   \label{figure:qIA}
 \end{figure}
-
 
 \subsection{Example four - digital PCR}
 

@@ -149,23 +149,43 @@ dens[4:6] / 5 * 1e-6
 #################################
 # Example four
 #################################
-Ct <- 0.05
 
 pdf("qIA.pdf")
-par(mfrow = c(2,1))
-plot(NA, NA, xlim = c(0, 120), ylim = c(0.4,1.2), xlab = "Time (min)", ylab = "RFU")
-legend("topleft", "A", cex = 3, bty = "n")
-lapply(c(2,4), function(i) {lines(C81[, i]/60, C81[, i + 1], type = "b", pch = 20, col = i - 1)})
-legend(10, 0.8, c("D1: ", "D2: "), pch = 19, col = c(1,3), bty = "n")
 
-plot(NA, NA, xlim = c(0, 120), ylim = c(0,0.8), xlab = "Time (min)", ylab = "RFU")
-legend("topleft", "B", cex = 3, bty = "n")
-res <- lapply(c(2,4), function(i) {
-			    y.s <- CPP(C81[, i]/60, C81[, i + 1], trans = TRUE, method = "spline", bg.outliers = TRUE, bg.range = c(1, 190))
-			    lines(C81[, i]/60, y.s$y.norm, type = "b", pch = 20, col = i - 1)
-			    paste(round(th.cyc(C81[, i]/60, y.s$y.norm, r = Ct)[1], 2), "min")
-			    })
+# Define the threshold level for the calculation of the cycle threshold time.
+Ct <- 0.05
+# Drawn in an 2-by-1 array on the device by two columns and one row.
+par(mfrow = c(2, 1))
+
+# Plot the raw data from the C81 dataset to the first array and add
+# a legend.
+plot(NA, NA, xlim = c(0, 120), ylim = c(0.4, 1.2), xlab = "Time (min)", ylab = "RFU")
+mtext("A", cex = 2, side = 3, adj = 0, font = 2)
+lapply(c(2, 4), function(i) {
+    lines(C81[, i]/60, C81[, i + 1], type = "b", pch = 20, col = i - 1)
+})
+legend(10, 0.8, c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 3), 
+    bty = "n")
+
+# Prepare a plot on the second array for the pre-proccessed data.
+plot(NA, NA, xlim = c(0, 120), ylim = c(0, 0.8), xlab = "Time (min)", ylab = "RFU")
+mtext("B", cex = 2, side = 3, adj = 0, font = 2)
+
+# Apply the CPP functions to pro-process the raw data.
+res <- lapply(c(2, 4), function(i) {
+    y.s <- CPP(C81[, i]/60, C81[, i + 1],
+    		trans = TRUE,		# Basline to zero
+		method = "spline",	# Smooth data with spline
+		bg.outliers = TRUE,	# Remove outliers
+		bg.range = c(1, 190))	# Define range of background singnal
+    lines(C81[, i]/60, y.s$y.norm, type = "b", pch = 20, col = i - 1)
+# Use the th.cyc function to calculate the cycle threshold time.
+    paste(round(th.cyc(C81[, i]/60, y.s$y.norm, r = Ct)[1], 2), "min")
+})
+
+# Add the cycle threshold time and the threshold level to plot.
+
 abline(h = Ct, lty = 2)
 text(10, 0.55, "Cq:")
-legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1,3), bty = "n")
+legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), bty = "n")
 dev.off()
