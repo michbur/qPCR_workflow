@@ -78,14 +78,14 @@ The complexity of hardware, wetware and software requires expertise to master a
 technical workflow comprising standards for experimental design, generation and 
 analysis of data, interpretation of results and reporting 
 \citep{huggett_BDQ_2014}. We argue that blackboxs are not necessarily a bad 
-thing, but should be avoided wherever possible. A recent study by 
-\citet{Duran_2014} exemplified this. Scientific misconduct and fraud have shaken 
-the scientific community on several occasions \citep{mccullough_2008, 
-Almiron_2010, fang_2012}. In particular qPCR is a sensible topic. Therefore, 
-several reasons strongly support to use R in science. R provides essential 
-packages to build a highly customized workflows, covering: data read-in, data 
-preprocessing, analysis, post-processing, visualization and storage. As recently 
-briefly reviewed in 
+thing, but should be avoided wherever possible. Studies by 
+\citet{mccullough_2008, Almiron_2010, Duran_2014} exemplified this. Scientific 
+misconduct and fraud have shaken the scientific community on several occasions 
+\citep{fang_2012}. In particular qPCR is a sensible topic. Therefore, several 
+reasons strongly support to use R in science. R provides essential packages to 
+build a highly customized workflows, covering: data read-in, data preprocessing, 
+analysis, post-processing, visualization and storage. As recently briefly 
+reviewed in 
 \citet{pabinger_2014}, numerous R packages have been developed for the analysis 
 of qPCR experiments, including: \CRANpkg{kulife}, \CRANpkg{MCMC.qpcr}, 
 \CRANpkg{qPCR.CT}, \CRANpkg{DivMelt}, \CRANpkg{qpcR}, \CRANpkg{dpcR}, 
@@ -258,7 +258,7 @@ legend("topright", "E", cex = 3, bty = "n")
 %   \includegraphics[clip=true,trim=0.1cm 0.6cm 1cm 1.8cm, width=16cm]{figures/plotCurves.pdf}
   \includegraphics[clip=true, width=14cm]{figures/dilution_Cq.pdf}
   \caption{Analysis of the amplification curve data of the calibration curve 
-samples. \strong{(A)} Visual inspection of the raw data from the ``guescini1'' 
+samples. \strong{(A)} Visual inspection of the raw data from the \texttt{guescini1} 
 dataset. The qPCR curves display a broad variation in plateau fluorescence (38 
 -- 62 RFU). The red horizontal line indicates the fluorescence level (0.05) used 
 for the calculation of the Cq by the ``cycle threshold'' method. \strong{(B)} 
@@ -348,17 +348,35 @@ samples by the \code{plotCurves} function from the \CRANpkg{chipPCR} package.}
 
 \subsection{Example three - Isothermal Amplification}
 
-A quantitative isothermal amplifcation by Helicase Dependent Amplification (HDA) 
-was performed for the of pCNG1 using the VideoScan platform 
-\citep{rodiger_highly_2013}. The dataset was taken form the \CRANpkg{chipPCR} 
-package. The HDA was performed at 65~\textcelsius. Two concentrations of input 
-DNA were used. Number of variables: 351 Number of measurements: 5 Data set: C85:
-
+An alternative to PCR offer isothermal amplification (IA) methods 
+\citep{rodiger_nucleic_2014}. IA methods use a constant temperature rather than 
+cycling through denaturation, annealing and extension steps. The corresponding 
+signal is monitored depending on the time instead of cycles. We performed a 
+quantitative isothermal amplifcation by Helicase Dependent Amplification (HDA). 
+The enzyme DNA Helicase unwinds DNA. Therefore, no thermal denaturation is 
+needed. We performed the HDA in the VideoScan platform 
+\citep{rodiger_highly_2013} at 65~\textcelsius for the target 
+\textit{pCNG1}\footnote{The HDA conditions were taken from the ``IsoAmp III 
+Universal tHDA Kit'', Biohelix Corp, as described by the vendor. In detail, the 
+reaction was composed of ``mix A)'' 10 $\mu$L A. bidest, 1.25 $\mu$L 10xbuffer, 
+0.75 $\mu$L primer(150 nM final), 0.5 $\mu$L template plasmid. Preincubation: 
+The mixture was incubated for 2 min at 95\textcelsius and immediately placed on 
+ice. Reaction ``mix B)'' contained 5 $\mu$L A. bidest., 1.25 $\mu$L 10x buffer, 
+2 $\mu$L NaCl, 1.25 $\mu$L MgSO_{4}, 1,75 $\mu$L dNTPs, 0.25 $\mu$L EvaGreen 
+(Biotium), 1 $\mu$L enzyme mix. The mix was covered with 50 $\mu$L mineral oil 
+(Roth). The fluorescence measurement in VideoScan HCU started directly after 
+adding ``mix B)'' at 65\textcelsius. A $1x$ (D1) and a $1:10$ dilution (D2) were 
+tested.}. The resulting dataset \texttt{C81} is part of the \CRANpkg{chipPCR} 
+package. Two concentrations of input DNA were used in the HDA.
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[clip=true, width=16cm]{figures/qIA.pdf}
-  \caption{by the \code{th.cyc} function from the \CRANpkg{chipPCR} package.}
+  \caption{Quantitative isothermal amplifcation by Helicase Dependent 
+Amplification (HDA). \strong{(A)} The raw data of the HDA exhibit some outliers 
+(detector artifacts), an off-set of circa 0.5 relative fluorescence units (RFU) 
+and a slight negative trend in the baseline region (0 to 50 minutes). 
+\strong{(B)} by the \code{th.cyc} function from the \CRANpkg{chipPCR} package.}
   \label{figure:qIA}
 \end{figure}
 
