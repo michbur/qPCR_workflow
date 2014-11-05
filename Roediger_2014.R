@@ -18,9 +18,6 @@ current.session <- sessionInfo()
 require(qpcR)
 tmp <- guescini1
 
-# Define the threshold value for the th.cyc function
-Ct <- 0.05
-
 # Define the diltuion of the sample DNA quantity for
 # the calibration curve.
 
@@ -29,13 +26,13 @@ dil <- sapply((2:-4), function(i) {10^i})
 # Preporcess the amplification curve data with the CPP function from the chipPCR
 # package.
 res.CPP <- cbind(tmp[, 1], apply(tmp[, -1], 2, function(x) {
-    CPP(tmp[, 1], x, trans = TRUE, method.norm = "minm", bg.range = c(1,7))$y.norm
+    CPP(tmp[, 1], x, trans = TRUE, method.norm = "minm", bg.range = c(1,7))[["y.norm"]]
 }))
 
 # Use the th.cyc function from the chipPCR package to calculate the Cq values
-# by the cycle threshold method.
+# by the cycle threshold method. The threshold level r was set to 0.05.
 
-Cq.Ct <- apply(tmp[, -1], 2, function(x) {th.cyc(res.CPP[, 1], x, r = Ct)[1]})
+Cq.Ct <- apply(tmp[, -1], 2, function(x) {th.cyc(res.CPP[, 1], x, r = 0.05)[1]})
 Cq.SDM <- apply(tmp[, -1], 2, function(x) {summary(inder(res.CPP[, 1], x))[2]})
 
 res.Cq <- lm(Cq.Ct ~ Cq.SDM)
@@ -50,7 +47,7 @@ legend("topleft", "A", cex = 3, bty = "n")
 matplot(res.CPP[, -1], type = "l", lty = 1, col = 1, xlab = "Cycle", 
 	ylab = "RFU", main = "Pre-processed data")
 legend("topleft", "B", cex = 3, bty = "n")
-abline(h = Ct, col = "red", lwd = 2)
+abline(h = 0.05, col = "red", lwd = 2)
 
 plot(Cq.SDM, Cq.Ct, xlab = "Ct method", ylab = "SDM method", 
      main = "Comparison of Cq methods")
@@ -98,7 +95,7 @@ qPCR <- cbind(BioRad[["qPCR"]][["EvaGreen"]][["pos"]],
 	      BioRad[["qPCR"]][["EvaGreen"]][["unkn"]][, -1], 
 	      BioRad[["qPCR"]][["EvaGreen"]][["ntc"]][, -1])
 # Leave data only from row 'D' that contains target 'Cy5-2' at channel 'Cy5'
-qPCR<-cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
+qPCR <- cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
 
 # Use plotCurves function from the chipPCR package to get an overview of the
 # amplification curve samples.
@@ -111,17 +108,18 @@ dev.off()
 # Fetch temperature dependent fluorescence for the Cy5 channel of the 
 # probe that can hybridize with Mycobacterium tuberculosis katG gene (codon 315)
 # and aggregate the data in the object melt.
-melt <- cbind(BioRad[["Melt"]][["Cy5-2"]][["pos"]], 
-	      BioRad[["Melt"]][["Cy5-2"]][["unkn"]][, -1], 
-	      BioRad[["Melt"]][["Cy5-2"]][["ntc"]][, -1])
+melt <- cbind(BioRad[["Melt"]][["EvaGreen"]][["pos"]], 
+	      BioRad[["Melt"]][["EvaGreen"]][["unkn"]][, -1], 
+	      BioRad[["Melt"]][["EvaGreen"]][["ntc"]][, -1])
 
 # Calculate the melting temperature with the diffQ function
 # from the MBmca package. Use as simple logic to test if a 
 # wild-type sample with the expexcted Tm of circa 54.5 degree 
 # Celsius is found.
 res.Tm <- apply(melt[, -1], 2, function(x) {
-		res.Tm <- diffQ(cbind(melt[, 1], x), fct = max, inder = TRUE)
-		Decission <- ifelse(res.Tm[1] > 54 & res.Tm[1] < 55 & res.Tm[2] > 80, 1, 0)
+		res <- mcaSmoother(melt[, 1], x, Trange = c(70,95))
+		res.Tm <- diffQ(res, fct = max, inder = TRUE)
+		Decission <- ifelse(res.Tm[1] > 82 & res.Tm[1] < 87 & res.Tm[2] > 10, 1, 0)
 		out <- data.frame(res.Tm[c(1,2)], Decission)
 		}
 	      )     
@@ -142,19 +140,21 @@ color <- c(resutlts.Tm[, 3] + 1)
 # Arrange the results of the calculations in plot.
 layout(matrix(c(1,2,1,3), 2, 2, byrow = TRUE))
 
-# Use the CPP function to preporcess the 
-plot(NA, NA, xlim = c(1, 40), ylim = c(0,60), xlab = "Cycle", ylab = "RFU")
+# Use the CPP function to preporcess the amplification curve data.
+plot(NA, NA, xlim = c(1, 40), ylim = c(0,200), xlab = "Cycle", ylab = "RFU")
+mtext("A", cex = 2, side = 3, adj = 0, font = 2)
 lapply(2L:ncol(qPCR), function(i) {
     lines(qPCR[, 1], CPP(qPCR[, 1], qPCR[, i], 
-			 trans = TRUE, bg.range = c(10,20))[["y.norm"]],
+			 trans = TRUE, bg.range = c(1,9))[["y.norm"]],
 			 col = color[i - 1]
 			 )})
-
 matplot(melt[, 1], melt[, -1], type = "l", col = color, 
 	lty = 1, xlab = "Temperature [°C]", ylab = "RFU")
+mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 	
-plot(NA, NA, xlim = c(35, 95), ylim = c(-15,115), xlab = "Temperature [°C]", 
+plot(NA, NA, xlim = c(35, 95), ylim = c(-15,30), xlab = "Temperature [°C]", 
      ylab = "-d(RFU)/dT")
+mtext("C", cex = 2, side = 3, adj = 0, font = 2)
 lapply(2L:ncol(melt), function(i) {
 	    lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
 			fct = max, inder = TRUE)$xy, col = color[i - 1])
@@ -167,7 +167,7 @@ res.Cq <- lapply(2L:ncol(qPCR), function(i) {
 	      })
 	      
 result.Cq <- matrix(unlist(res.Cq), nrow = length(res.Cq), byrow = TRUE, 
-       dimnames = list(colnames(melt[, -1]),
+       dimnames = list(colnames(qPCR[, -1]),
        c("Cq")))
        
 result.Cq
@@ -194,8 +194,6 @@ dens[4:6] / 5 * 1e-6
 
 pdf("qIA.pdf")
 
-# Define the threshold level for the calculation of the cycle threshold time.
-Ct <- 0.05
 # Drawn in an 2-by-1 array on the device by two columns and one row.
 par(mfrow = c(2, 1))
 
@@ -214,20 +212,24 @@ plot(NA, NA, xlim = c(0, 120), ylim = c(0, 0.8), xlab = "Time (min)", ylab = "RF
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 
 # Apply the CPP functions to pro-process the raw data.
+# 1) Basline data to zero, 2) Smooth data with spline,
+# 3) Remove outliers in background range between 
+# entry 1 and 190.
 res <- lapply(c(2, 4), function(i) {
     y.s <- CPP(C81[, i]/60, C81[, i + 1],
-    		trans = TRUE,		# Basline to zero
-		method = "spline",	# Smooth data with spline
-		bg.outliers = TRUE,	# Remove outliers
-		bg.range = c(1, 190))	# Define range of background singnal
-    lines(C81[, i]/60, y.s$y.norm, type = "b", pch = 20, col = i - 1)
-# Use the th.cyc function to calculate the cycle threshold time.
-    paste(round(th.cyc(C81[, i]/60, y.s$y.norm, r = Ct)[1], 2), "min")
+    		trans = TRUE, 
+		method = "spline",
+		bg.outliers = TRUE,
+		bg.range = c(1, 190))
+    lines(C81[, i]/60, y.s[["y.norm"]], type = "b", pch = 20, col = i - 1)
+# Use the th.cyc function to calculate the cycle threshold time. 
+# The threshold level r was set to 0.05.
+    paste(round(th.cyc(C81[, i]/60, y.s[["y.norm"]], r = 0.05)[1], 2), "min")
 })
 
 # Add the cycle threshold time and the threshold level to plot.
 
-abline(h = Ct, lty = 2)
+abline(h = 0.05, lty = 2)
 text(10, 0.55, "Cq:")
 legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), bty = "n")
 dev.off()
