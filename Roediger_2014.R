@@ -84,45 +84,65 @@ require(MBmca)
 current.session <- sessionInfo()
 
 
-# Load lc96_bACTXY.rdml dataset form RDML package and assign the data to the
-# object LC96.dat. The data were measured with CFX96 (Bio-Rad). The data set
-# contains qPCR data with four targets and two types.
+# Load the BioRad_qPCR_melt.rdml file form RDML package and assign the data to the
+# object BioRad.
 
 path <- path.package("RDML")
 filename <- paste(path, "/extdata/", "BioRad_qPCR_melt.rdml", sep = "")
 BioRad <- RDML(filename, name.pattern = "%TUBE%_%NAME%_%TYPE%_%TARGET%")
-# 
-# 
-# # Fetch cycle dependent fluorescence for EvaGreen chanel of NAME_GENE_HERE.
-qPCR <- cbind(BioRad$qPCR$EvaGreen$pos, BioRad$qPCR$EvaGreen$ntc[, -1])
-melt <- cbind(BioRad$Melt$EvaGreen$pos, BioRad$Melt$EvaGreen$ntc[, -1])
 
-res.diffQ <- lapply(2:ncol(melt), function(x) {
-						res <- mcaSmoother(melt[, 1], melt[, x], Trange = c(70, 95))
-						diffQ(res, verbose = TRUE, inder = TRUE)
-						}
-	     )
+# Fetch cycle dependent fluorescence for the Cy5 chanel of the gen
+# katG315 and aggregate the data in the object qPCR. 
+qPCR <- cbind(BioRad[["qPCR"]][["Cy5-2"]][["pos"]], 
+	      BioRad[["qPCR"]][["Cy5-2"]][["unkn"]][, -1], 
+	      BioRad[["qPCR"]][["Cy5-2"]][["ntc"]][, -1])
 
-# # Use plotCurves function from the chipPCR package to get an overview of the
-# # amplification curve samples.
-# 
+# Use plotCurves function from the chipPCR package to get an overview of the
+# amplification curve samples.
+
 pdf("plotCurves.pdf", width = 6, height = 4)
 
 plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
 
 dev.off()
+# Fetch temperature dependent fluorescence for the Cy5 chanel of the gen
+# katG315 and aggregate the data in the object melt.
+melt <- cbind(BioRad[["Melt"]][["Cy5-2"]][["pos"]], 
+	      BioRad[["Melt"]][["Cy5-2"]][["unkn"]][, -1], 
+	      BioRad[["Melt"]][["Cy5-2"]][["ntc"]][, -1])
 
+# Calculate the melting temperature with the diffQ function
+# from the MBmca package. Use as simple logic to test if the
+# a sample with the expexcted Tm of circa 54.5 degree Celsius
+# is found.
+res.Tm <- apply(melt[, -1], 2, function(x) {
+		res.Tm <- diffQ(cbind(melt[, 1], x), fct = max, inder = TRUE)
+		Decission <- ifelse(res.Tm[1] > 54 & res.Tm[1] < 55, 1, 0)
+		out <- data.frame(res.Tm[c(1,2)], Decission)
+		}
+	      )     
+# Present the results in a tabular output.	      
+resutlts <- matrix(unlist(res.Tm), nrow = length(res.Tm), byrow = TRUE, 
+       dimnames = list(colnames(melt[, -1]),
+       c("Tm", "Height", "Decission")))
+
+resutlts
+       
 pdf("amp_melt.pdf", width = 8, height = 6)
 
 layout(matrix(c(1,2,1,3), 2, 2, byrow = TRUE))
-matplot(qPCR[, 1], qPCR[, -1], type = "l", col = c(rep(1,12), rep(2,12)), lty = 1, xlab = "Cycle", 
-	    ylab = "RFU")
+plot(NA, NA, xlim = c(1, 40), ylim = c(0,60), xlab = "Cycle", ylab = "RFU")
+lapply(2L:ncol(melt), function(i) {lines(qPCR[, 1], CPP(qPCR[, 1], qPCR[, i], trans = TRUE, bg.range = c(10,20))$y.norm)})
 
-matplot(melt[, 1], melt[, -1], type = "l", col = c(rep(1,12), rep(2,12)), lty = 1, xlab = "Temperature", 
+
+matplot(melt[, 1], melt[, -1], type = "l", col = c(rep(1,12), rep(2,12)), lty = 1, xlab = "Temperature [°C]", 
 	    ylab = "RFU")
-plot(NA, NA, xlim = c(70, 93), ylim = c(0,25), xlab = "Temperature", ylab = "-d(RFU)/dT")
-color <- c(rep(1,12), rep(2,12))
-lapply(1L:24, function(i) {lines(res.diffQ[[i]]$xy, col = color[i])})
+plot(NA, NA, xlim = c(35, 95), ylim = c(-15,115), xlab = "Temperature [°C]", ylab = "-d(RFU)/dT")
+color <- c(rep(1,3), rep(2,12))
+lapply(2L:ncol(melt), function(i) {
+		lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
+		      fct = max, inder = TRUE)$xy)
+		      })
 
 dev.off()
 # 
