@@ -117,38 +117,56 @@ melt <- cbind(BioRad[["Melt"]][["Cy5-2"]][["pos"]],
 # is found.
 res.Tm <- apply(melt[, -1], 2, function(x) {
 		res.Tm <- diffQ(cbind(melt[, 1], x), fct = max, inder = TRUE)
-		Decission <- ifelse(res.Tm[1] > 54 & res.Tm[1] < 55, 1, 0)
+		Decission <- ifelse(res.Tm[1] > 54 & res.Tm[1] < 55 & res.Tm[2] > 80, 1, 0)
 		out <- data.frame(res.Tm[c(1,2)], Decission)
 		}
 	      )     
-# Present the results in a tabular output.	      
-resutlts <- matrix(unlist(res.Tm), nrow = length(res.Tm), byrow = TRUE, 
+# Present the results in a tabular output as matrix "results".	      
+resutlts.Tm <- matrix(unlist(res.Tm), nrow = length(res.Tm), byrow = TRUE, 
        dimnames = list(colnames(melt[, -1]),
        c("Tm", "Height", "Decission")))
 
-resutlts
+resutlts.Tm
        
 pdf("amp_melt.pdf", width = 8, height = 6)
 
+# Convert the Decission from the "relsults" object in a color code:
+# Negative, black; Positive, red.
+
+color <- c(resutlts.Tm[, 3] + 1)
+
+# Arrange the results of the calculations in plot.
 layout(matrix(c(1,2,1,3), 2, 2, byrow = TRUE))
+
+# Use the CPP function to preporcess the 
 plot(NA, NA, xlim = c(1, 40), ylim = c(0,60), xlab = "Cycle", ylab = "RFU")
-lapply(2L:ncol(melt), function(i) {lines(qPCR[, 1], CPP(qPCR[, 1], qPCR[, i], trans = TRUE, bg.range = c(10,20))$y.norm)})
+lapply(2L:ncol(qPCR), function(i) {
+    lines(qPCR[, 1], CPP(qPCR[, 1], qPCR[, i], 
+			 trans = TRUE, bg.range = c(10,20))[["y.norm"]],
+			 col = color[i - 1]
+			 )})
 
-
-matplot(melt[, 1], melt[, -1], type = "l", col = c(rep(1,12), rep(2,12)), lty = 1, xlab = "Temperature [°C]", 
-	    ylab = "RFU")
-plot(NA, NA, xlim = c(35, 95), ylim = c(-15,115), xlab = "Temperature [°C]", ylab = "-d(RFU)/dT")
-color <- c(rep(1,3), rep(2,12))
+matplot(melt[, 1], melt[, -1], type = "l", col = color, 
+	lty = 1, xlab = "Temperature [°C]", ylab = "RFU")
+	
+plot(NA, NA, xlim = c(35, 95), ylim = c(-15,115), xlab = "Temperature [°C]", 
+     ylab = "-d(RFU)/dT")
 lapply(2L:ncol(melt), function(i) {
-		lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
-		      fct = max, inder = TRUE)$xy)
+	    lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
+			fct = max, inder = TRUE)$xy, col = color[i - 1])
 		      })
-
 dev.off()
-# 
-# dil <- as.vector(lc96[["Dilutions"]][["FAM"]])
 
-
+res.Cq <- lapply(2L:ncol(qPCR), function(i) {
+	      res <- CPP(qPCR[, 1], qPCR[, i], trans = TRUE, bg.range = c(10,20))[["y.norm"]]
+	      th.cyc <- th.cyc(qPCR[, 1], res, r = 5)[1]
+	      })
+	      
+result.Cq <- matrix(unlist(res.Cq), nrow = length(res.Cq), byrow = TRUE, 
+       dimnames = list(colnames(melt[, -1]),
+       c("Cq")))
+       
+result.Cq
 #################################
 # Example three
 #################################
