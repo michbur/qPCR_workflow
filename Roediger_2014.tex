@@ -288,6 +288,7 @@ but also preserves metadata of saved objects.}.
 
 \begin{example}
 # Load the required packages for the data import and analysis.
+
 # Import the qPCR and melting curve data via the RDML package
 require(RDML)
 
@@ -298,18 +299,28 @@ require(chipPCR)
 # Load the MBmca package for the melting curve analysis.
 require(MBmca)
 
-# Collect information about the R session used for the analysis of the
-# qPCR experiment.
-
+# Collect information about the R session used for the analysis of the qPCR
+# experiment.
 current.session <- sessionInfo()
 
-# Load lc96_bACTXY.rdml dataset form RDML package and assign the data to the 
-# object LC96.dat. The data were measured with CFX96 (Bio-Rad). The 
-# data set contains qPCR data with four targets and two types.
 
-PATH <- path.package("RDML")
-filename <- paste(PATH, "/extdata/", "lc96_bACTXY.rdml", sep ="")
-lc96 <- RDML(filename)
+# Load the BioRad_qPCR_melt.rdml file form RDML package and assign the data to the
+# object BioRad.
+
+path <- path.package("RDML")
+filename <- paste(path, "/extdata/", "BioRad_qPCR_melt.rdml", sep = "")
+BioRad <- RDML(filename, name.pattern = "%TUBE%_%NAME%_%TYPE%_%TARGET%")
+
+# Fetch cycle dependent fluorescence for the Cy5 chanel of the gen
+# katG315 and aggregate the data in the object qPCR. 
+qPCR <- cbind(BioRad[["qPCR"]][["Cy5-2"]][["pos"]], 
+	      BioRad[["qPCR"]][["Cy5-2"]][["unkn"]][, -1], 
+	      BioRad[["qPCR"]][["Cy5-2"]][["ntc"]][, -1])
+
+# Use plotCurves function from the chipPCR package to get an overview of the
+# amplification curve samples.
+
+plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
 \end{example}
 
 Next we inspected and pre-processed a subset of the amplification curve data 
@@ -319,15 +330,40 @@ data indicated a baseline shift in all curves with a slight negative trend
 (Figure~\ref{figure:plotCurves}). Therefore, we used the 
 
 \begin{example}
-# Fetch cycle dependent fluorescence for HEX channel of beta actin (bACT).
-tmp.std <- lc96$qPCR[["FAM@bACT"]]$std
+# Fetch temperature dependent fluorescence for the Cy5 chanel of the gen
+# katG315 and aggregate the data in the object melt.
+melt <- cbind(BioRad[["Melt"]][["Cy5-2"]][["pos"]], 
+	      BioRad[["Melt"]][["Cy5-2"]][["unkn"]][, -1], 
+	      BioRad[["Melt"]][["Cy5-2"]][["ntc"]][, -1])
 
+# Calculate the melting temperature with the diffQ function
+# from the MBmca package. Use as simple logic to test if the
+# a sample with the expexcted Tm of circa 54.5 degree Celsius
+# is found.
+res.Tm <- apply(melt[, -1], 2, function(x) {
+		res.Tm <- diffQ(cbind(melt[, 1], x), fct = max, inder = TRUE)
+		Decission <- ifelse(res.Tm[1] > 54 & res.Tm[1] < 55, 1, 0)
+		out <- data.frame(res.Tm[c(1,2)], Decission)
+		}
+	      )     
+# Present the results in a tabular output.	      
+resutlts <- matrix(unlist(res.Tm), nrow = length(res.Tm), byrow = TRUE, 
+       dimnames = list(colnames(melt[, -1]),
+       c("Tm", "Height", "Decission")))
 
-# Use plotCurves function from the chipPCR package to get an overview of the 
-# amplification curve samples.
+> resutlts
 
-plotCurves(tmp.std[, 1], tmp.std[, -1], type = "l")
-
+                             Tm       Height Decission
+D1_Alm12_pos_Cy5-2     52.09946   0.66704327         0
+D2_Alm12_pos_Cy5-2     52.66936   0.18990160         0
+D3_Alm13_pos_Cy5-2     33.53773  56.08059031         0
+D4_Alm13_pos_Cy5-2     33.84572  62.76151803         0
+D5_Alm14_pos_Cy5-2     38.91839  93.81983093         0
+D6_Alm14_pos_Cy5-2     39.00768  83.94777001         0
+D7_katG 315_unkn_Cy5-2 54.73343 106.26186606         1
+D8_katG 315_unkn_Cy5-2 54.76646  99.49306091         1
+D9_H2O_ntc_Cy5-2       44.85700  -0.08934079         0
+D10_H2O_ntc_Cy5-2      48.18610   0.31836438         0
 \end{example}
 
 
@@ -407,6 +443,23 @@ abline(h = Ct, lty = 2)
 text(10, 0.55, "Cq:")
 legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), bty = "n")
 \end{example}
+
+\begin{example}
+ layout(matrix(c(1,2,1,3), 2, 2, byrow = TRUE))
+plot(NA, NA, xlim = c(1, 40), ylim = c(0,60), xlab = "Cycle", ylab = "RFU")
+lapply(2L:ncol(melt), function(i) {lines(qPCR[, 1], CPP(qPCR[, 1], qPCR[, i], trans = TRUE, bg.range = c(10,20))$y.norm)})
+
+
+matplot(melt[, 1], melt[, -1], type = "l", col = c(rep(1,12), rep(2,12)), lty = 1, xlab = "Temperature [°C]", 
+	    ylab = "RFU")
+plot(NA, NA, xlim = c(35, 95), ylim = c(-15,115), xlab = "Temperature [°C]", ylab = "-d(RFU)/dT")
+color <- c(rep(1,3), rep(2,12))
+lapply(2L:ncol(melt), function(i) {
+		lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
+		      fct = max, inder = TRUE)$xy)
+		      })
+\end{example}
+
 
 
 \begin{figure}[htbp]

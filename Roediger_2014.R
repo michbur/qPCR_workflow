@@ -84,51 +84,93 @@ require(MBmca)
 current.session <- sessionInfo()
 
 
-# Load lc96_bACTXY.rdml dataset form RDML package and assign the data to the
-# object LC96.dat. The data were measured with CFX96 (Bio-Rad). The data set
-# contains qPCR data with four targets and two types.
+# Load the BioRad_qPCR_melt.rdml file form RDML package and assign the data to the
+# object BioRad.
 
 path <- path.package("RDML")
 filename <- paste(path, "/extdata/", "BioRad_qPCR_melt.rdml", sep = "")
 BioRad <- RDML(filename, name.pattern = "%TUBE%_%NAME%_%TYPE%_%TARGET%")
-# 
-# 
-# # Fetch cycle dependent fluorescence for EvaGreen chanel of NAME_GENE_HERE.
-qPCR <- cbind(BioRad$qPCR$EvaGreen$pos, BioRad$qPCR$EvaGreen$ntc[, -1])
-melt <- cbind(BioRad$Melt$EvaGreen$pos, BioRad$Melt$EvaGreen$ntc[, -1])
 
-res.diffQ <- lapply(2:ncol(melt), function(x) {
-						res <- mcaSmoother(melt[, 1], melt[, x], Trange = c(70, 95))
-						diffQ(res, verbose = TRUE, inder = TRUE)
-						}
-	     )
+# Fetch cycle dependent fluorescence for the EvaGreen channel of the 
+# Mycobacterium tuberculosis katG gene and aggregate the data in the 
+# object qPCR. 
+qPCR <- cbind(BioRad[["qPCR"]][["EvaGreen"]][["pos"]], 
+	      BioRad[["qPCR"]][["EvaGreen"]][["unkn"]][, -1], 
+	      BioRad[["qPCR"]][["EvaGreen"]][["ntc"]][, -1])
+# Leave data only from row 'D' that contains target 'Cy5-2' at channel 'Cy5'
+qPCR<-cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
 
-# # Use plotCurves function from the chipPCR package to get an overview of the
-# # amplification curve samples.
-# 
+# Use plotCurves function from the chipPCR package to get an overview of the
+# amplification curve samples.
+
 pdf("plotCurves.pdf", width = 6, height = 4)
 
 plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
 
 dev.off()
+# Fetch temperature dependent fluorescence for the Cy5 channel of the 
+# probe that can hybridize with Mycobacterium tuberculosis katG gene (codon 315)
+# and aggregate the data in the object melt.
+melt <- cbind(BioRad[["Melt"]][["Cy5-2"]][["pos"]], 
+	      BioRad[["Melt"]][["Cy5-2"]][["unkn"]][, -1], 
+	      BioRad[["Melt"]][["Cy5-2"]][["ntc"]][, -1])
 
+# Calculate the melting temperature with the diffQ function
+# from the MBmca package. Use as simple logic to test if a 
+# wild-type sample with the expexcted Tm of circa 54.5 degree 
+# Celsius is found.
+res.Tm <- apply(melt[, -1], 2, function(x) {
+		res.Tm <- diffQ(cbind(melt[, 1], x), fct = max, inder = TRUE)
+		Decission <- ifelse(res.Tm[1] > 54 & res.Tm[1] < 55 & res.Tm[2] > 80, 1, 0)
+		out <- data.frame(res.Tm[c(1,2)], Decission)
+		}
+	      )     
+# Present the results in a tabular output as matrix "results".	      
+resutlts.Tm <- matrix(unlist(res.Tm), nrow = length(res.Tm), byrow = TRUE, 
+       dimnames = list(colnames(melt[, -1]),
+       c("Tm", "Height", "Decission")))
+
+resutlts.Tm
+       
 pdf("amp_melt.pdf", width = 8, height = 6)
 
+# Convert the Decission from the "relsults" object in a color code:
+# Negative, black; Positive, red.
+
+color <- c(resutlts.Tm[, 3] + 1)
+
+# Arrange the results of the calculations in plot.
 layout(matrix(c(1,2,1,3), 2, 2, byrow = TRUE))
-matplot(qPCR[, 1], qPCR[, -1], type = "l", col = c(rep(1,12), rep(2,12)), lty = 1, xlab = "Cycle", 
-	    ylab = "RFU")
 
-matplot(melt[, 1], melt[, -1], type = "l", col = c(rep(1,12), rep(2,12)), lty = 1, xlab = "Temperature", 
-	    ylab = "RFU")
-plot(NA, NA, xlim = c(70, 93), ylim = c(0,25), xlab = "Temperature", ylab = "-d(RFU)/dT")
-color <- c(rep(1,12), rep(2,12))
-lapply(1L:24, function(i) {lines(res.diffQ[[i]]$xy, col = color[i])})
+# Use the CPP function to preporcess the 
+plot(NA, NA, xlim = c(1, 40), ylim = c(0,60), xlab = "Cycle", ylab = "RFU")
+lapply(2L:ncol(qPCR), function(i) {
+    lines(qPCR[, 1], CPP(qPCR[, 1], qPCR[, i], 
+			 trans = TRUE, bg.range = c(10,20))[["y.norm"]],
+			 col = color[i - 1]
+			 )})
 
+matplot(melt[, 1], melt[, -1], type = "l", col = color, 
+	lty = 1, xlab = "Temperature [°C]", ylab = "RFU")
+	
+plot(NA, NA, xlim = c(35, 95), ylim = c(-15,115), xlab = "Temperature [°C]", 
+     ylab = "-d(RFU)/dT")
+lapply(2L:ncol(melt), function(i) {
+	    lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
+			fct = max, inder = TRUE)$xy, col = color[i - 1])
+		      })
 dev.off()
-# 
-# dil <- as.vector(lc96[["Dilutions"]][["FAM"]])
 
-
+res.Cq <- lapply(2L:ncol(qPCR), function(i) {
+	      res <- CPP(qPCR[, 1], qPCR[, i], trans = TRUE, bg.range = c(10,20))[["y.norm"]]
+	      th.cyc <- th.cyc(qPCR[, 1], res, r = 5)[1]
+	      })
+	      
+result.Cq <- matrix(unlist(res.Cq), nrow = length(res.Cq), byrow = TRUE, 
+       dimnames = list(colnames(melt[, -1]),
+       c("Cq")))
+       
+result.Cq
 #################################
 # Example three
 #################################
