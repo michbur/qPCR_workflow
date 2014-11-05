@@ -435,7 +435,7 @@ distributions, commonly used theoretical models of dPCR, statistical data
 analysis methods, plotting facilities and report generation tools are part of 
 the package \citep{pabinger_2014}. Here, we show briefly an example for the 
 \CRANpkg{dpcR}\footnote{Selected functionality was implemented as 
-interactive\CRANpkg{shiny} GUI application to make the software accessible for 
+interactive \CRANpkg{shiny} GUI application to make the software accessible for 
 users who are not fluent in R and but also for experts who which to automatize 
 routine tasks. Details and examples of the \CRANpkg{shiny} web application 
 framework for R can be found at \url{http://shiny.rstudio.com/}. We implemented 
@@ -450,11 +450,22 @@ be found at \url{https://michbur.shinyapps.io/dpcr_density/}. This approach
 enables the automatized outputs of R objects in combined plots, tables and 
 summaries.}.
 
+The number of positive partitions ($k$), total number of partitions ($n$) and the size of 
+the partition are only data required for analysis. The estimate of the mean number of
+template molecules per partition ($\hat \lambda$) is calculated using following equation \citep{huggett_2013}:
+\begin{equation}
+\hat{\lambda} =  -\ln{(1 - \frac{k}{n})}.
+\end{equation}
+
+Since the binomial distribution is used to calculate $\lambda$, we use Wilson method for
+calculation of confidence intervals \citep{brown_2001}. The obtained mean number of template molecules per partition multiplied by the volume of the partitions constitutes concentration of the template in the sample.
+
 \begin{figure}[htbp]
   \centering
 %   \includegraphics[clip=true,trim=0.1cm 0.6cm 1cm 1.8cm, width=16cm]{figures/plotCurves.pdf}
   \includegraphics[clip=true, width=14cm]{figures/dpcR.pdf}
-  \caption{\code{dpcr\_density} function from the \CRANpkg{dpcR} package.}
+  \caption{\code{dpcr\_density} function from the \CRANpkg{dpcR} package used for analysis of droplet digital PCR experiment. From 16800 counted droplets ($n$) 4601 were positive ($k$). Estimated mean number of template molecules per partition ($\lambda$) is 0.32
+}
   \label{figure:dpcR}
 \end{figure}
 
