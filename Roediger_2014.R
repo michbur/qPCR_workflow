@@ -91,11 +91,14 @@ path <- path.package("RDML")
 filename <- paste(path, "/extdata/", "BioRad_qPCR_melt.rdml", sep = "")
 BioRad <- RDML(filename, name.pattern = "%TUBE%_%NAME%_%TYPE%_%TARGET%")
 
-# Fetch cycle dependent fluorescence for the Cy5 chanel of the gen
-# katG315 and aggregate the data in the object qPCR. 
-qPCR <- cbind(BioRad[["qPCR"]][["Cy5-2"]][["pos"]], 
-	      BioRad[["qPCR"]][["Cy5-2"]][["unkn"]][, -1], 
-	      BioRad[["qPCR"]][["Cy5-2"]][["ntc"]][, -1])
+# Fetch cycle dependent fluorescence for the EvaGreen channel of the 
+# Mycobacterium tuberculosis katG gene and aggregate the data in the 
+# object qPCR. 
+qPCR <- cbind(BioRad[["qPCR"]][["EvaGreen"]][["pos"]], 
+	      BioRad[["qPCR"]][["EvaGreen"]][["unkn"]][, -1], 
+	      BioRad[["qPCR"]][["EvaGreen"]][["ntc"]][, -1])
+# Leave data only from row 'D' that contains target 'Cy5-2' at channel 'Cy5'
+qPCR<-cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
 
 # Use plotCurves function from the chipPCR package to get an overview of the
 # amplification curve samples.
@@ -105,16 +108,17 @@ pdf("plotCurves.pdf", width = 6, height = 4)
 plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
 
 dev.off()
-# Fetch temperature dependent fluorescence for the Cy5 chanel of the gen
-# katG315 and aggregate the data in the object melt.
+# Fetch temperature dependent fluorescence for the Cy5 channel of the 
+# probe that can hybridize with Mycobacterium tuberculosis katG gene (codon 315)
+# and aggregate the data in the object melt.
 melt <- cbind(BioRad[["Melt"]][["Cy5-2"]][["pos"]], 
 	      BioRad[["Melt"]][["Cy5-2"]][["unkn"]][, -1], 
 	      BioRad[["Melt"]][["Cy5-2"]][["ntc"]][, -1])
 
 # Calculate the melting temperature with the diffQ function
-# from the MBmca package. Use as simple logic to test if the
-# a sample with the expexcted Tm of circa 54.5 degree Celsius
-# is found.
+# from the MBmca package. Use as simple logic to test if a 
+# wild-type sample with the expexcted Tm of circa 54.5 degree 
+# Celsius is found.
 res.Tm <- apply(melt[, -1], 2, function(x) {
 		res.Tm <- diffQ(cbind(melt[, 1], x), fct = max, inder = TRUE)
 		Decission <- ifelse(res.Tm[1] > 54 & res.Tm[1] < 55, 1, 0)
