@@ -172,10 +172,12 @@ result.Cq
 #################################
 # Example three
 #################################
+# Load the dpcR package for the analysis of the digital PCR experiment.
 require(dpcR)
 
-# Analysis of a digital PCR experiment. The density estimation
-# analysis of results of biorad experiment; of 16800 counted droplets (n) 4601 were positive (k).
+# Analysis of a digital PCR experiment. The density estimation.
+# In our in-silico experiment we counted in tatal 16800 droplets (n). 
+# Thereof, 4601 were positive (k).
 pdf("dpcR.pdf")
 
 (dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))

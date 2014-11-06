@@ -210,42 +210,52 @@ research can be further improved by using dedicated tools. For example,
 but preserves metadata of saved objects.}.
 
 \begin{example}
+# Load the required packages for the data import and analysis.
+# Load the chipPCR package for the pre-processing and curve data quality
+# analysis.
+require(chipPCR)
+
 # Collect information about the R session used for the analysis of the qPCR
 # experiment.
 current.session <- sessionInfo()
 
 # Next we load the 'guescini1' dataset from the qpcR package the to
-# workspace and assign it to the object tmp.
+# workspace and assign it to the object gue.
 require(qpcR)
-tmp <- guescini1
-
-# Define the threshold value for the th.cyc function
-Ct <- 0.05
+gue <- guescini1
 
 # Define the diltuion of the sample DNA quantity for
 # the calibration curve.
 
-dil <- sapply((2:-4), function(i) {10^i})
+dil <- 10^(2:-4)
 
-# Preporcess the amplification curve data with the CPP function from the chipPCR
+# Preprocess the amplification curve data with the CPP function from the chipPCR
 # package.
-res.CPP <- cbind(tmp[, 1], apply(tmp[, -1], 2, function(x) {
-    CPP(tmp[, 1], x, trans = TRUE, method.norm = "minm", bg.range = c(1,7))\$y.norm
+res.CPP <- cbind(gue[, 1], apply(gue[, -1], 2, function(x) {
+    CPP(gue[, 1], x, trans = TRUE, method.norm = "minm", bg.range = c(1,7))[["y.norm"]]
 }))
 
-Cq.Ct <- apply(tmp[, -1], 2, function(x) {th.cyc(res.CPP[, 1], x, r = Ct)[1]})
-Cq.SDM <- apply(tmp[, -1], 2, function(x) {summary(inder(res.CPP[, 1], x))[2]})
+# Use the th.cyc function from the chipPCR package to calculate the Cq values
+# by the cycle threshold method. The threshold level r was set to 0.05.
+
+Cq.Ct <- apply(gue[, -1], 2, function(x) 
+  th.cyc(res.CPP[, 1], x, r = 0.05)[1])
+Cq.SDM <- apply(gue[, -1], 2, function(x) 
+  summary(inder(res.CPP[, 1], x))[2])
+
+res.Cq <- lm(Cq.Ct ~ Cq.SDM)
+
 
 layout(matrix(c(1,2,3,3,4,5), 3, 2, byrow = TRUE))
 
-matplot(tmp[, -1], type = "l", lty = 1, col = 1, xlab = "Cycle", 
+matplot(gue[, -1], type = "l", lty = 1, col = 1, xlab = "Cycle", 
 	    ylab = "RFU", main = "Raw data")
 legend("topleft", "A", cex = 3, bty = "n")
 
 matplot(res.CPP[, -1], type = "l", lty = 1, col = 1, xlab = "Cycle", 
 	ylab = "RFU", main = "Pre-processed data")
 legend("topleft", "B", cex = 3, bty = "n")
-abline(h = Ct, col = "red", lwd = 2)
+abline(h = 0.05, col = "red", lwd = 2)
 
 plot(Cq.SDM, Cq.Ct, xlab = "Ct method", ylab = "SDM method", 
      main = "Comparison of Cq methods")
@@ -446,14 +456,11 @@ labelled in black.}
 
 \subsection{Example three - Isothermal Amplification}
 
-An alternative to PCR offer isothermal amplification (IA) methods 
-\citep{rodiger_nucleic_2014}. IA methods use a constant temperature rather than 
-cycling through denaturation, annealing and extension steps. The corresponding 
-signal is monitored depending on the time instead of cycles. We performed a 
-quantitative isothermal amplification by Helicase Dependent Amplification (HDA). 
-The enzyme DNA Helicase unwinds DNA. Therefore, no thermal denaturation is 
-needed. We performed the HDA in the VideoScan platform 
-\citep{rodiger_highly_2013} at 65~\textcelsius for the target 
+Isothermal amplification is an alternative to PCR \citep{rodiger_nucleic_2014}. 
+In contrast to PCR use isothermal amplification methods a constant temperature 
+rather than cycling through denaturation, annealing and extension steps. The 
+corresponding signal is monitored depending on the time instead of cycles. We 
+performed a quantitative isothermal amplification (qIA) for the target 
 \textit{pCNG1}\footnote{The HDA conditions were taken from the ``IsoAmp III 
 Universal tHDA Kit'', Biohelix Corp, as described by the vendor. In detail, the 
 reaction was composed of ``mix A)'' 10 $\mu$L A. bidest, 1.25 $\mu$L 10xbuffer, 
@@ -464,8 +471,12 @@ ice. Reaction ``mix B)'' contained 5 $\mu$L A. bidest., 1.25 $\mu$L 10x buffer,
 (Biotium), 1 $\mu$L enzyme mix. The mix was covered with 50 $\mu$L mineral oil 
 (Roth). The fluorescence measurement in VideoScan HCU started directly after 
 adding ``mix B)'' at 65\textcelsius. A $1x$ (D1) and a $1:10$ dilution (D2) were 
-tested.}. The resulting dataset \texttt{C81} is part of the \CRANpkg{chipPCR} 
-package. Two concentrations of input DNA were used in the HDA.
+tested.} by using a Helicase Dependent Amplification (HDA). The enzyme DNA 
+Helicase unwinds DNA. Therefore, no thermal denaturation is needed. Our 
+previously reported VideoScan platform \citep{rodiger_highly_2013} was used 
+during the experiment. The resulting dataset \texttt{C81} is part of the 
+\CRANpkg{chipPCR} package. Two concentrations (stock and 1:10 diluted stock) of 
+input DNA were used in the HDA.
 
 \begin{example}
 # Drawn in an 2-by-1 array on the device by two columns and one row.
@@ -537,21 +548,9 @@ scientific community. Simulations and predictions of binomial and Poisson
 distributions, commonly used theoretical models of dPCR, statistical data 
 analysis methods, plotting facilities and report generation tools are part of 
 the package \citep{pabinger_2014}. Here, we show briefly an example for the 
-\CRANpkg{dpcR}\footnote{Selected functionality was implemented as 
-interactive \CRANpkg{shiny} GUI application to make the software accessible for 
-users who are not fluent in R and for experts who wish to automatize 
-routine tasks. Details and examples of the \CRANpkg{shiny} web application 
-framework for R can be found at \url{http://shiny.rstudio.com/}. We implemented 
-flexible yet simple user interfaces, which run the analyses and graphical 
-representation into interactive web applications either as service on a web 
-severer or on a local machine without knowledge of HTML or ECMAScript (see 
-\CRANpkg{dpcR} manual). The interface is designed in a cascade workflow approach 
-(Data import $\rightarrow$ Analysis $\rightarrow$ Output $\rightarrow$ Export) 
-with interactive users choice on input data, methods and parameters using 
-typical GUI elements such as sliders, drop-downs and text fields. An example can 
-be found at \url{https://michbur.shinyapps.io/dpcr_density/}. This approach 
-enables the automatized outputs of R objects in combined plots, tables and 
-summaries.}.
+\CRANpkg{dpcR}. In detail, we performed an in-silico experiment, which mimicked 
+a droplet digital PCR (e.g., Bio-Rad QX100 systems). The aim was to do a density 
+estimation. The average droplet value was assumed to be 5 nL. 
 
 The number of positive partitions ($k$), total number of partitions ($n$) and 
 the size of the partition are only data required for analysis. The estimate of 
@@ -566,6 +565,35 @@ Since the binomial distribution is used to calculate $\lambda$, we use Wilson
 method for calculation of confidence intervals \citep{brown_2001}. The obtained 
 mean number of template molecules per partition multiplied by the volume of the 
 partitions constitutes concentration of the template in the sample.
+
+\begin{example}
+# Load the dpcR package for the analysis of the digital PCR experiment.
+require(dpcR)
+
+# In our in-silica experiment we counted in total 16800 droplets (n). 
+# Thereof, 4601 were positive (k).
+
+(dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
+
+# Let us assume, that every droplet has roughly 5 nl 
+# total concentration (and its confidence intervals) in molecules/ml
+dens[4:6] / 5 * 1e-6
+\end{example}
+
+Selected functionality was implemented as interactive \CRANpkg{shiny} GUI 
+application to make the software accessible for users who are not fluent in R 
+and for experts who wish to automatize routine tasks. Details and examples of 
+the \CRANpkg{shiny} web application framework for R can be found at 
+\url{http://shiny.rstudio.com/}. We implemented flexible yet simple user 
+interfaces, which run the analyses and graphical representation into interactive 
+web applications either as service on a web severer or on a local machine 
+without knowledge of HTML or ECMAScript (see \CRANpkg{dpcR} manual). The 
+interface is designed in a cascade workflow approach (Data import $\rightarrow$ 
+Analysis $\rightarrow$ Output $\rightarrow$ Export) with interactive users 
+choice on input data, methods and parameters using typical GUI elements such as 
+sliders, drop-downs and text fields. An example can be found at 
+\url{https://michbur.shinyapps.io/dpcr_density/}. This approach enables the 
+automatized outputs of R objects in combined plots, tables and summaries.
 
 \begin{figure}[htbp]
   \centering
@@ -603,16 +631,14 @@ qPCR. Therefore, we argue that R may provide a structure for standardized
 nomenclature and serve as reference in qPCR and dPCR analysis. Speaking about 
 openness, it is important to emphasize that main advantage is the software is 
 transparent at any time for anybody. Thus, it is possible to track numerical 
-errors. 
-
-\url{http://michbur.github.io/pcRuniveRsum/}
-
-A serve disadvantage of R is the lack of comprehensive GUIs for qPCR analysis. 
-Other and we believe that a graphical user interface (GUI) is a key technology 
-to spread the use of R in bioanalytical sciences. The command-line structure 
-makes R ``inaccessible'' for many novices. This we support the attempt that 
-automatic routines are made accessible via GUIs \citep{rodiger_rkward_2012}. 
-However, work in this has recently started and is still under development.
+errors.  A serve disadvantage of R is the lack of comprehensive GUIs for qPCR 
+analysis. Other and we believe that a graphical user interface (GUI) is a key 
+technology to spread the use of R in bioanalytical sciences. Currently, we are 
+establishing the ``pcRuniveRsum'' (\url{http://michbur.github.io/pcRuniveRsum/}) 
+as an on-line resource for interested users. The command-line structure makes R 
+``inaccessible'' for many novices. This we support the attempt that automatic 
+routines are made accessible via GUIs \citep{rodiger_rkward_2012}. However, work 
+in this has recently started and is still under development.
 
 \begin{figure}[htbp]
   \centering
