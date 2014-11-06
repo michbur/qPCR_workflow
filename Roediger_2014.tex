@@ -399,9 +399,9 @@ distinguish between true positive and true negative samples by MCA.
 # Fetch temperature dependent fluorescence for the Cy5 channel of the 
 # probe that can hybridize with Mycobacterium tuberculosis katG gene (codon 315)
 # and aggregate the data in the object melt.
-melt <- cbind(BioRad[["Melt"]][["EvaGreen"]][["pos"]], 
-	      BioRad[["Melt"]][["EvaGreen"]][["unkn"]][, -1], 
-	      BioRad[["Melt"]][["EvaGreen"]][["ntc"]][, -1])
+melt <- cbind(BioRad[["Melt"]][["Cy5-2"]][["pos"]],
+              BioRad[["Melt"]][["Cy5-2"]][["unkn"]][, -1],
+              BioRad[["Melt"]][["Cy5-2"]][["ntc"]][, -1])
 
 # Calculate the melting temperature with the diffQ function
 # from the MBmca package. Use simple logical conditions to find out
