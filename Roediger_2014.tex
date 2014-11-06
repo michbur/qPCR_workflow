@@ -318,8 +318,19 @@ read the qPCR experiment. The example file \file{BioRad\_qPCR\_melt.rdml} for
 analysis was taken from the \CRANpkg{RDML} package. Within this qPCR experiment 
 we amplified the \textit{Mycobacterium tuberculosis} 
 \textit{katG}\footnote{\url{https://www.wikigenes.org/e/gene/e/923602.html}} 
-gene to detect mutation at codon 315. Experiment was separated for two parts: detection of overall \textit{M.tuberculosis} DNA (wild-type and mutant) by intercalating dye EvaGreen® within qPCR and specific detection of wild-type \textit{M.tuberculosis} by melting of TaqMan probe (quencher -- BHQ2, fluorescent reporter -- Cy5) with amplified DNA (similar assay is described at \citet{luo_multiplex_2011}). Real time amplification were conducted using Syntol EvaGreen Master Mix according to the manufacturer's instructions, with 500 nM of primers and probe in a 25 $\mu$L final reaction volume. Thermocycling was conducted using a CFX96 (BioRad) initiated by 3 min incubation at 95~\textcelsius, followed by 41 cycles (95~\textcelsius for 15 s; 65~\textcelsius for 40 s) with a single fluorescent reading taken at the end of each cycle. Probe melting was conducted by decreasing temperature from 95~\textcelsius to 35~\textcelsius by 1~\textcelsius at 1 s steps.
-
+gene to detect mutation at codon 315. Experiment was separated for two parts: 
+detection of overall \textit{M.tuberculosis} DNA (wild-type and mutant) by 
+intercalating dye EvaGreen® within qPCR and specific detection of wild-type 
+\textit{M.tuberculosis} by melting of TaqMan probe (quencher -- BHQ2, 
+fluorescent reporter -- Cy5) with amplified DNA (similar assay is described in 
+\citet{luo_multiplex_2011}). Real time amplification were conducted using Syntol 
+EvaGreen Master Mix according to the manufacturer's instructions, with 500 nM of 
+primers and probe in a 25 $\mu$L final reaction volume. Thermocycling was 
+conducted using a CFX96 (BioRad) initiated by 3 min incubation at 
+95~\textcelsius, followed by 41 cycles (95~\textcelsius for 15 s; 
+65~\textcelsius for 40 s) with a single fluorescent reading taken at the end of 
+each cycle. Probe melting was conducted by decreasing temperature from 
+95~\textcelsius to 35~\textcelsius by 1~\textcelsius at 1 s steps.
 \begin{example}
 # Load the required packages for the data import and analysis.
 
