@@ -329,8 +329,8 @@ primers and probe in a 25 $\mu$L final reaction volume. Thermocycling was
 conducted using a CFX96 (BioRad) initiated by 3 min incubation at 
 95~\textcelsius, followed by 41 cycles (15 s at 95~\textcelsius; 
 40 s at 65~\textcelsius) with a single fluorescent reading taken at the end of 
-each cycle. Probe melting was conducted by decreasing temperature from 
-95~\textcelsius to 35~\textcelsius by 1~\textcelsius at 1 s steps.
+each cycle. Probe melting was conducted between 35~\textcelsius and 95~\textcelsius 
+by 1~\textcelsius at 1 s steps.
 \begin{example}
 # Load the required packages for the data import and analysis.
 
@@ -378,9 +378,22 @@ using a linear regression model (cycles x - y; ($bg.range = c(x, y)$) in the
 # amplification curve samples.
 
 plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
+
+# Detect positive samples - calculate Cq values
+# by the cycle threshold method. The threshold level r was set to 50.
+Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
+{
+  res <- CPP(qPCR[, 1], x, trans = TRUE, bg.range = c(2, 8))[["y.norm"]]
+  th.cyc <- th.cyc(qPCR[, 1], res, r = 50)[1]
+  cq <- as.numeric(th.cyc)
+  pos <- !is.na(cq)
+  c(Cq=cq, M.Tub_positive = pos)
+}
+))
+Cq.Positive
 \end{example}
 
-Since the qPCR indicated that selected samples are positive, we started to 
+Since the qPCR indicated that selected samples (except no template control) are positive, we started to 
 distinguish between true positive and true negative samples by MCA.
 \begin{example}
 # Fetch temperature dependent fluorescence for the Cy5 channel of the 
@@ -392,18 +405,40 @@ melt <- cbind(BioRad[["Melt"]][["EvaGreen"]][["pos"]],
 
 # Calculate the melting temperature with the diffQ function
 # from the MBmca package. Use simple logical conditions to find out
-# if a wild-type sample with the expected Tm of circa 54.5 degree 
+# if a positive sample with the expected Tm of circa 54.5 degree 
 # Celsius is found.
-res.Tm <- apply(melt[, -1], 2, function(x) {
-  res <- mcaSmoother(melt[, 1], x, Trange = c(70, 95))
-  res.Tm <- diffQ(res, fct = max, inder = TRUE)
-  Decission <- ifelse(res.Tm[1] > 82 & res.Tm[1] < 87 & res.Tm[2] > 10, 1, 0)
-  out <- data.frame(res.Tm[c(1,2)], Decission)
-})     
-# Present the results in a tabular output as matrix "results".	      
-(results.Tm <- matrix(unlist(res.Tm), nrow = length(res.Tm), byrow = TRUE, 
-       dimnames = list(colnames(melt[, -1]),
-       c("Tm", "Height", "Decission"))))
+Tm.Positive <- matrix(nrow = length(melt[, -1]),
+                      byrow = TRUE,
+                      dimnames = list(names(melt)[-1]),
+                      unlist(apply(melt[, -1], 2, function(x) {
+  res.Tm <- diffQ(cbind(melt[, 1], x), fct = max, inder = TRUE)
+  positive <- ifelse(res.Tm[1] > 54 & res.Tm[1] < 55 & res.Tm[2] > 80, 1, 0)
+  c(res.Tm[1], res.Tm[2], positive)
+})))
+
+# Present the results in a tabular output as data.frame "results.tab".
+# Result of analysis logic is:
+# Cq.Positive && Tm.Positive = Wild-type
+# Cq.Positive && !Tm.Positive = Mutant
+# !Cq.Positive && !Tm.Positive = NTC
+# !Cq.Positive && Tm.Positive = Error
+results <- sapply(1:length(Cq.Positive[,1]), function(i) {
+  if(Cq.Positive[i, 2] == 1 && Tm.Positive[i, 3] == 1)
+    return("Wild-type")
+  if(Cq.Positive[i, 2] == 1 && Tm.Positive[i, 3] == 0)
+    return("Mutant")
+  if(Cq.Positive[i, 2] == 0 && Tm.Positive[i, 3] == 0)
+    return("NTC")
+  if(Cq.Positive[i, 2] == 0 && Tm.Positive[i, 3] == 1)
+    return("Error")
+})
+results.tab <- data.frame(cbind(Cq.Positive, Tm.Positive, results))
+names(results.tab) <- c("Cq", "M.Tub DNA", "Tm", "Height", "Tm positive", "Result") 
+results.tab[["M.Tub DNA"]] <- factor(results.tab[["M.Tub DNA"]], labels=c("Not Detected",
+                                                                  "Detected"))
+results.tab[["Tm positive"]] <- factor(results.tab[["Tm positive"]], labels=c(TRUE,
+                                                                  FALSE))
+results.tab
 \end{example}
 
 Finally, we plotted and printed the output of our analysis.
@@ -412,13 +447,13 @@ Finally, we plotted and printed the output of our analysis.
 # Convert the Decission from the "relsults" object in a color code:
 # Negative, black; Positive, red.
 
-color <- c(results.Tm[, 3] + 1)
+color <- c(Tm.Positive[, 3] + 1)
 
 # Arrange the results of the calculations in plot.
 layout(matrix(c(1,2,1,3), 2, 2, byrow = TRUE))
 
 # Use the CPP function to preporcess the amplification curve data.
-plot(NA, NA, xlim = c(1, 40), ylim = c(0,200), xlab = "Cycle", ylab = "RFU")
+plot(NA, NA, xlim = c(1, 41), ylim = c(0,200), xlab = "Cycle", ylab = "RFU")
 mtext("A", cex = 2, side = 3, adj = 0, font = 2)
 lapply(2L:ncol(qPCR), function(i) 
   lines(qPCR[, 1], 
@@ -426,26 +461,16 @@ lapply(2L:ncol(qPCR), function(i)
             bg.range = c(1,9))[["y.norm"]],
         col = color[i - 1]))
 matplot(melt[, 1], melt[, -1], type = "l", col = color, 
-	lty = 1, xlab = "Temperature [°C]", ylab = "RFU")
+	lty = 1, xlab = "Temperature [Â°C]", ylab = "RFU")
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 	
-plot(NA, NA, xlim = c(35, 95), ylim = c(-15,30), xlab = "Temperature [°C]", 
+plot(NA, NA, xlim = c(35, 95), ylim = c(-15, 120), xlab = "Temperature [Â°C]", 
      ylab = "-d(RFU)/dT")
 mtext("C", cex = 2, side = 3, adj = 0, font = 2)
 lapply(2L:ncol(melt), function(i)
   lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
               fct = max, inder = TRUE)[["xy"]], col = color[i - 1]))
-
-res.Cq <- lapply(2L:ncol(qPCR), function(i) {
-	      res <- CPP(qPCR[, 1], qPCR[, i], trans = TRUE, bg.range = c(10, 20))[["y.norm"]]
-	      th.cyc <- th.cyc(qPCR[, 1], res, r = 5)[1]
-	      })
-	      
-result.Cq <- matrix(unlist(res.Cq), nrow = length(res.Cq), byrow = TRUE, 
-       dimnames = list(colnames(qPCR[, -1]),
-       "Cq"))
-       
-result.Cq
+              
 \end{example}
 
 
