@@ -206,7 +206,7 @@ the needs for (I) data analysis and presentation in research, (II) as software
 frame-work for novel technical developments, (III) as platform for teaching this 
 new technology and (IV) serves as reference for statistical methods.
 
-\subsection{Example one - qPCR and Amplification Efficiency Calculation}
+\subsection{Example one -- qPCR and Amplification Efficiency Calculation}
 
 The goal of our fist example was to calculate the Cq values and the $AE$ from a 
 qPCR experiment. We used the ``guescini1'' dataset from the \CRANpkg{qcpR} 
@@ -302,7 +302,7 @@ automatically analysed with the \code{effcalc} (\CRANpkg{chipPCR}) function.}
   \label{figure:dilution_Cq}
 \end{figure}
 
-\subsection{Example two - qPCR and Melting Curve Analysis}
+\subsection{Example two -- qPCR and Melting Curve Analysis}
 
 A common task during the analysis of qPCR experiments is to distinguish between 
 positive and negative samples (compare Figure~\ref{figure:plotCurves}). Provided 
@@ -317,10 +317,7 @@ read the qPCR experiment. The example file \file{BioRad\_qPCR\_melt.rdml} for
 analysis was taken from the \CRANpkg{RDML} package. Within this qPCR experiment 
 we amplified the \textit{Mycobacterium tuberculosis} 
 \textit{katG}\footnote{\url{https://www.wikigenes.org/e/gene/e/923602.html}} 
-gene (codon 315).
-
-@Konstantin: Please provide some more details (..., 
-maybe PCR conditions) on the experiment.
+gene to detect mutation at codon 315. Experiment was separated for two parts: detection of overall \textit{M.tuberculosis} DNA (wild-type and mutant) by intercalating dye EvaGreen® within qPCR and specific detection of wild-type \textit{M.tuberculosis} by melting of TaqMan probe (quencher -- BHQ2, fluorescent reporter -- Cy5) with amplified DNA (similar assay is described at \citet{luo_multiplex_2011}). Real time amplification were conducted using Syntol EvaGreen Master Mix according to the manufacturer's instructions, with 500 nM of primers and probe in a 25 $\mu$L final reaction volume. Thermocycling was conducted using a CFX96 (BioRad) initiated by 3 min incubation at 95~\textcelsius, followed by 41 cycles (95~\textcelsius for 15 s; 65~\textcelsius for 40 s) with a single fluorescent reading taken at the end of each cycle. Probe melting was conducted by decreasing temperature from 95~\textcelsius to 35~\textcelsius by 1~\textcelsius at 1 s steps.
 
 \begin{example}
 # Load the required packages for the data import and analysis.
@@ -465,7 +462,7 @@ labelled in black.}
 \label{figure:amp_melt}
 \end{figure}
 
-\subsection{Example three - Isothermal Amplification}
+\subsection{Example three -- Isothermal Amplification}
 
 Isothermal amplification is an alternative to PCR \citep{rodiger_nucleic_2014}. 
 In contrast to PCR use isothermal amplification methods a constant temperature 
