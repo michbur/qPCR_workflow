@@ -15,7 +15,7 @@ source software or as monolithic block with little freedom to perform highly
 customized analysis procedures. Others and we argue that R is an excellent 
 environment for a reproducible and transparent analysis of data. However, for 
 newcomers it is often very challenging to master R from reading the manuals and 
-FAQs the not so obvious steps. Here we describe exemplary work-flows for the 
+FAQs the not obvious steps. Here we describe exemplary work-flows for the 
 analysis of dPCR, qIA or qPCR experiments including the analysis of melting curve 
 data. Our analysis relies entirely on R packages available from public 
 repositories.
@@ -168,12 +168,12 @@ the number of cycles needed to reach a user defined threshold fluorescence
 signal level. Typically Cq are determined identically the exponential phase of a 
 qPCR reaction. Several Cq methods have been described \citep{ruijter_2013}. In 
 this study we have chosen the second derivative maximum method ($Cq_{SDM}$). Due to 
-the ubiquitous use we used in a example also the ``Cycle threshold'' ($Cq_{Ct}$) method.
+the ubiquitous use we used in a example the ``Cycle threshold'' ($Cq_{Ct}$) method.
 
 In a perfect qPCR reaction, the amount of amplicon doubles ($2^{n}$; n = cycle 
-number) at each cycle. Here the amplification efficiency (AE) is 100~\%. 
+number) at each cycle. Here the amplification efficiency ($AE$) is 100~\%. 
 However, in reality, numerous factors cause an inhibition of the amplification 
-(AE < 100~\%).  The AE can determined be the relation of the Cq value depending 
+($AE$ < 100~\%).  The $AE$ can determined be the relation of the Cq value depending 
 on the sample input quantity as detailed described in \citep{roediger_chippcr_2014}.
 
 In \citet{roediger_RJ_2013} we described the application of R for the analysis of 
@@ -197,7 +197,7 @@ new technology and (IV) serves as reference for statistical methods.
 
 \subsection{Example one - qPCR and Amplification Efficiency Calculation}
 
-The goal of our fist example was to calculate the Cq values and the AE from a 
+The goal of our fist example was to calculate the Cq values and the $AE$ from a 
 qPCR experiment. Therefore, we used the ``guescini1'' dataset\footnote{Details 
 of the experiment are described in \citet{guescini_2008}.} from the 
 \CRANpkg{qcpR} package.
@@ -229,7 +229,6 @@ res.CPP <- cbind(tmp[, 1], apply(tmp[, -1], 2, function(x) {
 Cq.Ct <- apply(tmp[, -1], 2, function(x) {th.cyc(res.CPP[, 1], x, r = Ct)[1]})
 Cq.SDM <- apply(tmp[, -1], 2, function(x) {summary(inder(res.CPP[, 1], x))[2]})
 
-pdf("dilution_Cq.pdf", width = 9.5, height = 12)
 layout(matrix(c(1,2,3,3,4,5), 3, 2, byrow = TRUE))
 
 matplot(tmp[, -1], type = "l", lty = 1, col = 1, xlab = "Cycle", 
@@ -265,26 +264,33 @@ for the calculation of the Cq by the ``cycle threshold'' method. \strong{(B)}
 the \code{CPP} function from the \CRANpkg{chipPCR} was sued to baseline the 
 data, to smooth the data with Savitzky-Golay smoothing filter and to normalize 
 the data between 0 and 1. \strong{(C)} The Cq values were calculated for the 
-second derivative maximum (SDM) method (\code{inder}, \CRANpkg{chipPCR}) and the 
-cycle threshold method (Ct) (\code{th.cyc}, \CRANpkg{chipPCR}). The threshold 
-value was set to $r~=~0.05$. The Cq values from the SDM and Ct method were 
-plotted and analysed by a linear regression $R^{2}~=~0.9945$ ($P < 2.2^{-16}$) 
-and Pearson's $r~=~0.9972605$ ($P < 2.2^{-16}$). The Cq values from \strong{(D)} 
-the Ct method and \strong{(E)} the SDM method were automatically analysed with 
-the \code{effcalc} (\CRANpkg{chipPCR}) function.}
+second derivative maximum ($Cq_{SDM}$) method (\code{inder}, \CRANpkg{chipPCR}) 
+and the cycle threshold method ($Cq_{Ct}$) (\code{th.cyc}, \CRANpkg{chipPCR}). 
+The threshold value was set to $r~=~0.05$. The $Cq_{SDM}$ and $Cq_{Ct}$ values 
+were plotted and analysed by a linear regression ($R^{2}~=~0.9945$; $P < 
+2.2^{-16}$) and Pearson's ($r~=~0.9972605$; $P < 2.2^{-16}$). The $AE$ based on 
+\strong{(D)} $Cq_{Ct}$ values and \strong{(E)} $Cq_{SDM}$ values were 
+automatically analysed with the \code{effcalc} (\CRANpkg{chipPCR}) function.}
   \label{figure:dilution_Cq}
 \end{figure}
 
 \subsection{Example two - qPCR and Melting Curve Analysis}
-In this study we used the \CRANpkg{RDML} package to read the qPCR experiment. A 
-good practice for reproducible research is to track the package versions and 
-environment used during the analysis. The function $sessionInfo()$ from the 
-\CRANpkg{utils} package provides this information. Assuming that the analysis 
-starts with a clean R session it is possible to assign the required packages to 
-an object only, as shown in our example below\footnote{The reproducibility of 
-research can be further improved by using dedicated tools. For example, 
-\CRANpkg{archivist} package allows not only stores and recovers crucial data, 
-but also preserves metadata of saved objects.}.
+
+A common task during the analysis of qPCR experiments is to distinguish between 
+positive and negative samples. Provided that the melting temperature of a sample 
+is known it is possible to automatize the melting curve analysis (MCA). As shown 
+in \citet{roediger_RJ_2013} this can be done by interrogating the $T_{M}$. 
+Therefore, we used a simple logic, which checks if $T_{M}$ is within a tight 
+temperature range and signal height. In this study we used the \CRANpkg{RDML} 
+package to read the qPCR experiment. A good practice for reproducible research 
+is to track the package versions and environment used during the analysis. The 
+function $sessionInfo()$ from the \CRANpkg{utils} package provides this 
+information. Assuming that the analysis starts with a clean R session it is 
+possible to assign the required packages to an object only, as shown in our 
+example below\footnote{The reproducibility of research can be further improved 
+by using dedicated tools. For example, \CRANpkg{archivist} package allows not 
+only stores and recovers crucial data, but preserves metadata of saved 
+objects.}.
 
 \begin{example}
 # Load the required packages for the data import and analysis.
@@ -307,20 +313,17 @@ current.session <- sessionInfo()
 # Load the BioRad_qPCR_melt.rdml file form RDML package and assign the data to the
 # object BioRad.
 
-path <- path.package("RDML")
-filename <- paste(path, "/extdata/", "BioRad_qPCR_melt.rdml", sep = "")
+filename <- paste(path.package("RDML"), "/extdata/", "BioRad_qPCR_melt.rdml", sep = "")
 BioRad <- RDML(filename, name.pattern = "%TUBE%_%NAME%_%TYPE%_%TARGET%")
 
-# Fetch cycle dependent fluorescence for the Cy5 chanel of the gen
-# katG315 and aggregate the data in the object qPCR. 
-qPCR <- cbind(BioRad[["qPCR"]][["Cy5-2"]][["pos"]], 
-	      BioRad[["qPCR"]][["Cy5-2"]][["unkn"]][, -1], 
-	      BioRad[["qPCR"]][["Cy5-2"]][["ntc"]][, -1])
-
-# Use plotCurves function from the chipPCR package to get an overview of the
-# amplification curve samples.
-
-plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
+# Fetch cycle dependent fluorescence for the EvaGreen channel of the 
+# Mycobacterium tuberculosis katG gene and aggregate the data in the 
+# object qPCR. 
+qPCR <- cbind(BioRad[["qPCR"]][["EvaGreen"]][["pos"]], 
+	      BioRad[["qPCR"]][["EvaGreen"]][["unkn"]][, -1], 
+	      BioRad[["qPCR"]][["EvaGreen"]][["ntc"]][, -1])
+# Leave data only from row 'D' that contains target 'Cy5-2' at channel 'Cy5'
+qPCR <- cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
 \end{example}
 
 Next we inspected and pre-processed a subset of the amplification curve data 
@@ -330,40 +333,78 @@ data indicated a baseline shift in all curves with a slight negative trend
 (Figure~\ref{figure:plotCurves}). Therefore, we used the 
 
 \begin{example}
-# Fetch temperature dependent fluorescence for the Cy5 chanel of the gen
-# katG315 and aggregate the data in the object melt.
-melt <- cbind(BioRad[["Melt"]][["Cy5-2"]][["pos"]], 
-	      BioRad[["Melt"]][["Cy5-2"]][["unkn"]][, -1], 
-	      BioRad[["Melt"]][["Cy5-2"]][["ntc"]][, -1])
+# Use plotCurves function from the chipPCR package to get an overview of the
+# amplification curve samples.
+
+plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
+\end{example}
+
+Since the qPCR indicated that selected samples are positive, we started to distinguish between true positive and true negative samples by MCA.
+
+\begin{example}
+# Fetch temperature dependent fluorescence for the Cy5 channel of the 
+# probe that can hybridize with Mycobacterium tuberculosis katG gene (codon 315)
+# and aggregate the data in the object melt.
+melt <- cbind(BioRad[["Melt"]][["EvaGreen"]][["pos"]], 
+	      BioRad[["Melt"]][["EvaGreen"]][["unkn"]][, -1], 
+	      BioRad[["Melt"]][["EvaGreen"]][["ntc"]][, -1])
 
 # Calculate the melting temperature with the diffQ function
-# from the MBmca package. Use as simple logic to test if the
-# a sample with the expexcted Tm of circa 54.5 degree Celsius
-# is found.
+# from the MBmca package. Use simple logical conditions to find out
+# if a wild-type sample with the expected Tm of circa 54.5 degree 
+# Celsius is found.
 res.Tm <- apply(melt[, -1], 2, function(x) {
-		res.Tm <- diffQ(cbind(melt[, 1], x), fct = max, inder = TRUE)
-		Decission <- ifelse(res.Tm[1] > 54 & res.Tm[1] < 55, 1, 0)
-		out <- data.frame(res.Tm[c(1,2)], Decission)
-		}
-	      )     
-# Present the results in a tabular output.	      
-resutlts <- matrix(unlist(res.Tm), nrow = length(res.Tm), byrow = TRUE, 
+  res <- mcaSmoother(melt[, 1], x, Trange = c(70, 95))
+  res.Tm <- diffQ(res, fct = max, inder = TRUE)
+  Decission <- ifelse(res.Tm[1] > 82 & res.Tm[1] < 87 & res.Tm[2] > 10, 1, 0)
+  out <- data.frame(res.Tm[c(1,2)], Decission)
+})     
+# Present the results in a tabular output as matrix "results".	      
+(results.Tm <- matrix(unlist(res.Tm), nrow = length(res.Tm), byrow = TRUE, 
        dimnames = list(colnames(melt[, -1]),
-       c("Tm", "Height", "Decission")))
+       c("Tm", "Height", "Decission"))))
+\end{example}
 
-> resutlts
+Finally, we plotted and printed the output of our analysis.
 
-                             Tm       Height Decission
-D1_Alm12_pos_Cy5-2     52.09946   0.66704327         0
-D2_Alm12_pos_Cy5-2     52.66936   0.18990160         0
-D3_Alm13_pos_Cy5-2     33.53773  56.08059031         0
-D4_Alm13_pos_Cy5-2     33.84572  62.76151803         0
-D5_Alm14_pos_Cy5-2     38.91839  93.81983093         0
-D6_Alm14_pos_Cy5-2     39.00768  83.94777001         0
-D7_katG 315_unkn_Cy5-2 54.73343 106.26186606         1
-D8_katG 315_unkn_Cy5-2 54.76646  99.49306091         1
-D9_H2O_ntc_Cy5-2       44.85700  -0.08934079         0
-D10_H2O_ntc_Cy5-2      48.18610   0.31836438         0
+\begin{example}
+# Convert the Decission from the "relsults" object in a color code:
+# Negative, black; Positive, red.
+
+color <- c(results.Tm[, 3] + 1)
+
+# Arrange the results of the calculations in plot.
+layout(matrix(c(1,2,1,3), 2, 2, byrow = TRUE))
+
+# Use the CPP function to preporcess the amplification curve data.
+plot(NA, NA, xlim = c(1, 40), ylim = c(0,200), xlab = "Cycle", ylab = "RFU")
+mtext("A", cex = 2, side = 3, adj = 0, font = 2)
+lapply(2L:ncol(qPCR), function(i) 
+  lines(qPCR[, 1], 
+        CPP(qPCR[, 1], qPCR[, i], trans = TRUE, 
+            bg.range = c(1,9))[["y.norm"]],
+        col = color[i - 1]))
+matplot(melt[, 1], melt[, -1], type = "l", col = color, 
+	lty = 1, xlab = "Temperature [°C]", ylab = "RFU")
+mtext("B", cex = 2, side = 3, adj = 0, font = 2)
+	
+plot(NA, NA, xlim = c(35, 95), ylim = c(-15,30), xlab = "Temperature [°C]", 
+     ylab = "-d(RFU)/dT")
+mtext("C", cex = 2, side = 3, adj = 0, font = 2)
+lapply(2L:ncol(melt), function(i)
+  lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
+              fct = max, inder = TRUE)[["xy"]], col = color[i - 1]))
+
+res.Cq <- lapply(2L:ncol(qPCR), function(i) {
+	      res <- CPP(qPCR[, 1], qPCR[, i], trans = TRUE, bg.range = c(10, 20))[["y.norm"]]
+	      th.cyc <- th.cyc(qPCR[, 1], res, r = 5)[1]
+	      })
+	      
+result.Cq <- matrix(unlist(res.Cq), nrow = length(res.Cq), byrow = TRUE, 
+       dimnames = list(colnames(qPCR[, -1]),
+       "Cq"))
+       
+result.Cq
 \end{example}
 
 
@@ -378,8 +419,14 @@ samples by the \code{plotCurves} function from the \CRANpkg{chipPCR} package.}
 \begin{figure}[htbp]
   \centering
   \includegraphics[clip=true, width=16cm]{figures/amp_melt.pdf}
-  \caption{by the \code{diffQ} function from the \CRANpkg{MBmca} package.}
-  \label{figure:amp_melt}
+  \caption{Graphical presentation of the amplification curve data and melting 
+curve data. \strong{(A)} The raw amplification curve data were pre-process with 
+the \code{CPP} function prior to visualization. To calculate the $T_{M}$ values 
+from the raw melting curve data \strong{(B)} we used the \code{diffQ} function 
+from the \CRANpkg{MBmca} package. \strong{(C)} In our setting we adjusted the algorithm to 
+plot the positive melting peaks in red, while negative melting peaks were 
+labelled in black.} 
+\label{figure:amp_melt}
 \end{figure}
 
 \subsection{Example three - Isothermal Amplification}
@@ -418,46 +465,34 @@ lapply(c(2, 4), function(i) {
 })
 legend(10, 0.8, c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 3), 
     bty = "n")
+\end{example}
 
+\begin{example}
 # Prepare a plot on the second array for the pre-proccessed data.
 plot(NA, NA, xlim = c(0, 120), ylim = c(0, 0.8), xlab = "Time (min)", ylab = "RFU")
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 
 # Apply the CPP functions to pro-process the raw data.
+# 1) Basline data to zero, 2) Smooth data with spline,
+# 3) Remove outliers in background range between 
+# entry 1 and 190.
 res <- lapply(c(2, 4), function(i) {
-    y.s <- CPP(C81[, i]/60, C81[, i + 1],
-    		trans = TRUE,		# Basline to zero
-		method = "spline",	# Smooth data with spline
-		bg.outliers = TRUE,	# Remove outliers
-		bg.range = c(1, 190))	# Define range of background singnal
-    lines(C81[, i]/60, y.s[["y.norm"]], type = "b", pch = 20, col = i - 1)
-# Use the th.cyc function to calculate the cycle threshold time. 
-# The threshold level r was set to 0.05.
-    paste(round(th.cyc(C81[, i]/60, y.s[["y.norm"]], r = 0.05)[1], 2), "min")
+  y.s <- CPP(C81[, i]/60, C81[, i + 1],
+             trans = TRUE, 
+             method = "spline",
+             bg.outliers = TRUE,
+             bg.range = c(1, 190))
+  lines(C81[, i]/60, y.s[["y.norm"]], type = "b", pch = 20, col = i - 1)
+  # Use the th.cyc function to calculate the cycle threshold time. 
+  # The threshold level r was set to 0.05.
+  paste(round(th.cyc(C81[, i]/60, y.s[["y.norm"]], r = 0.05)[1], 2), "min")
 })
 
 # Add the cycle threshold time and the threshold level to plot.
 
-abline(h = Ct, lty = 2)
+abline(h = 0.05, lty = 2)
 text(10, 0.55, "Cq:")
 legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), bty = "n")
-dev.off()
-\end{example}
-
-\begin{example}
- layout(matrix(c(1,2,1,3), 2, 2, byrow = TRUE))
-plot(NA, NA, xlim = c(1, 40), ylim = c(0,60), xlab = "Cycle", ylab = "RFU")
-lapply(2L:ncol(melt), function(i) {lines(qPCR[, 1], CPP(qPCR[, 1], qPCR[, i], trans = TRUE, bg.range = c(10,20))$y.norm)})
-
-
-matplot(melt[, 1], melt[, -1], type = "l", col = c(rep(1,12), rep(2,12)), lty = 1, xlab = "Temperature [°C]", 
-	    ylab = "RFU")
-plot(NA, NA, xlim = c(35, 95), ylim = c(-15,115), xlab = "Temperature [°C]", ylab = "-d(RFU)/dT")
-color <- c(rep(1,3), rep(2,12))
-lapply(2L:ncol(melt), function(i) {
-		lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
-		      fct = max, inder = TRUE)$xy)
-		      })
 \end{example}
 
 
@@ -489,7 +524,7 @@ analysis methods, plotting facilities and report generation tools are part of
 the package \citep{pabinger_2014}. Here, we show briefly an example for the 
 \CRANpkg{dpcR}\footnote{Selected functionality was implemented as 
 interactive \CRANpkg{shiny} GUI application to make the software accessible for 
-users who are not fluent in R and but also for experts who which to automatize 
+users who are not fluent in R and for experts who wish to automatize 
 routine tasks. Details and examples of the \CRANpkg{shiny} web application 
 framework for R can be found at \url{http://shiny.rstudio.com/}. We implemented 
 flexible yet simple user interfaces, which run the analyses and graphical 
@@ -531,14 +566,14 @@ partition ($\lambda$) is 0.32.
 \section{Discussion and Conclusion}
 
 This study gave a brief introduction how to perform a qPCR, qIA or dPCR analysis 
-with R based on packages available from CRAN. In addition we briefly referenced 
+with R based on packages available from CRAN. In addition, we briefly referenced 
 to a vast collection of additional packages available from CRAN and 
 Bioconductor. The packages may be considered building blocks (libraries) to 
-create what users want and need. We showed that an automatic research with R 
+create what users want and need. We showed that automatized research with R 
 offers powerful means for statistical analysis and visualization. The software 
-is not tied to a vendor or specific application (e.g, chamber or droplet based 
+is not tied to a vendor or specific application (e.g., chamber or droplet based 
 digital PCR, capillary or plate qPCR). It should be quite easy even for an 
-inexperienced user to define a workflow and to setup environment for specific 
+inexperienced user to define a workflow and to set up environment for specific 
 needs in a broad range of technical settings (Figure~\ref{figure:options}). R 
 enforces no monolithic integration. We claim that the modular structure of R 
 packages allows user to perform flexible data analysis adjusted to their needs 
@@ -562,14 +597,14 @@ Other and we believe that a graphical user interface (GUI) is a key technology
 to spread the use of R in bioanalytical sciences. The command-line structure 
 makes R ``inaccessible'' for many novices. This we support the attempt that 
 automatic routines are made accessible via GUIs \citep{rodiger_rkward_2012}. 
-However, work in this has has recently started and is still under development.
+However, work in this has recently started and is still under development.
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[clip=true, width=10cm]{figures/options.png}
   \caption{Deployment of R applications for the qPCR and dPCR experiments. 
 \strong{(A)} R is typically run from a desktop computer an operated by an 
-GUI/IDE application such a \pkg{Rstudio} or \pkg{RKWard}. This approach is 
+GUI/IDE application such as \pkg{Rstudio} or \pkg{RKWard}. This approach is 
 provides a flexible workflow for individuals. \strong{(B)} Another approach is 
 to run R with specific applications on a local server. Such scenarios are useful 
 for the deployment within research departments or cooperate units. \strong{(C)} 

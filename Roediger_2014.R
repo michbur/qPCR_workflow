@@ -156,7 +156,7 @@ plot(NA, NA, xlim = c(35, 95), ylim = c(-15,30), xlab = "Temperature [°C]",
 mtext("C", cex = 2, side = 3, adj = 0, font = 2)
 lapply(2L:ncol(melt), function(i)
   lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
-              fct = max, inder = TRUE)$xy, col = color[i - 1]))
+              fct = max, inder = TRUE)[["xy"]], col = color[i - 1]))
 dev.off()
 
 res.Cq <- lapply(2L:ncol(qPCR), function(i) {
