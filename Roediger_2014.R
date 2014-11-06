@@ -21,13 +21,13 @@ gue <- guescini1
 
 # Define the diltuion of the sample DNA quantity for
 # the calibration curve.
-
 dil <- 10^(2:-4)
 
 # Preprocess the amplification curve data with the CPP function from the chipPCR
 # package.
 res.CPP <- cbind(gue[, 1], apply(gue[, -1], 2, function(x) {
-    CPP(gue[, 1], x, trans = TRUE, method.norm = "minm", bg.range = c(1,7))[["y.norm"]]
+  CPP(gue[, 1], x, trans = TRUE, method.norm = "minm", 
+      bg.range = c(1,7))[["y.norm"]]
 }))
 
 # Use the th.cyc function from the chipPCR package to calculate the Cq values
@@ -35,26 +35,38 @@ res.CPP <- cbind(gue[, 1], apply(gue[, -1], 2, function(x) {
 
 Cq.Ct <- apply(gue[, -1], 2, function(x) 
   th.cyc(res.CPP[, 1], x, r = 0.05)[1])
+
 Cq.SDM <- apply(gue[, -1], 2, function(x) 
   summary(inder(res.CPP[, 1], x))[2])
 
+# Fit a linear model to carry out a regression analysis.
 res.Cq <- lm(Cq.Ct ~ Cq.SDM)
 
+summary(res.Cq)
+
 pdf("dilution_Cq.pdf", width = 9.5, height = 14)
+
+# Arrange and plot the results in a convenient way.
 layout(matrix(c(1,2,3,3,4,5), 3, 2, byrow = TRUE))
 
+# Plot the raw amplification curve data.
 matplot(gue[, -1], type = "l", lty = 1, col = 1, xlab = "Cycle", 
-	    ylab = "RFU", main = "Raw data")
+        ylab = "RFU", main = "Raw data")
 legend("topleft", "A", cex = 3, bty = "n")
 
+# Plot the pre-processed amplification curve data.
 matplot(res.CPP[, -1], type = "l", lty = 1, col = 1, xlab = "Cycle", 
-	ylab = "RFU", main = "Pre-processed data")
+        ylab = "RFU", main = "Pre-processed data")
 legend("topleft", "B", cex = 3, bty = "n")
 abline(h = 0.05, col = "red", lwd = 2)
+
+# Plot Cq.SDM against Cq.Ct and add the trendline from the linear regression
+# analysis.
 
 plot(Cq.SDM, Cq.Ct, xlab = "Ct method", ylab = "SDM method", 
      main = "Comparison of Cq methods")
 abline(res.Cq)
+
 legend("topleft", "C", cex = 3, bty = "n")
 
 plot(effcalc(dil, t(matrix(Cq.Ct, nrow = 12, ncol = 7))), CI = TRUE)
@@ -69,24 +81,19 @@ dev.off()
 #################################
 # Load the required packages for the data import and analysis.
 
-# Import the qPCR and melting curve data via the RDML package
-require(RDML)
-
+# Import the qPCR and melting curve data via the RDML package.
 # Load the chipPCR package for the pre-processing and curve data quality
-# analysis.
+# analysis and the MBmca package for the melting curve analysis.
+require(RDML)
 require(chipPCR)
-
-# Load the MBmca package for the melting curve analysis.
 require(MBmca)
 
 # Collect information about the R session used for the analysis of the qPCR
 # experiment.
 current.session <- sessionInfo()
 
-
 # Load the BioRad_qPCR_melt.rdml file form RDML package and assign the data to the
 # object BioRad.
-
 filename <- paste(path.package("RDML"), "/extdata/", "BioRad_qPCR_melt.rdml", sep = "")
 BioRad <- RDML(filename, name.pattern = "%TUBE%_%NAME%_%TYPE%_%TARGET%")
 
@@ -94,81 +101,113 @@ BioRad <- RDML(filename, name.pattern = "%TUBE%_%NAME%_%TYPE%_%TARGET%")
 # Mycobacterium tuberculosis katG gene and aggregate the data in the 
 # object qPCR. 
 qPCR <- cbind(BioRad[["qPCR"]][["EvaGreen"]][["pos"]], 
-	      BioRad[["qPCR"]][["EvaGreen"]][["unkn"]][, -1], 
-	      BioRad[["qPCR"]][["EvaGreen"]][["ntc"]][, -1])
+              BioRad[["qPCR"]][["EvaGreen"]][["unkn"]][, -1], 
+              BioRad[["qPCR"]][["EvaGreen"]][["ntc"]][, -1])
+
 # Leave data only from row 'D' that contains target 'Cy5-2' at channel 'Cy5'
 qPCR <- cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
 
 # Use plotCurves function from the chipPCR package to get an overview of the
 # amplification curve samples.
-
 pdf("plotCurves.pdf", width = 6, height = 4)
 
 plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
 
 dev.off()
+# Detect positive samples - calculate Cq values
+# by the cycle threshold method. The threshold level r was set to 50.
+Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
+{
+  res <- CPP(qPCR[, 1], x, trans = TRUE, bg.range = c(1, 9))[["y.norm"]]
+  th.cyc <- th.cyc(qPCR[, 1], res, r = 50)[1]
+  cq <- as.numeric(th.cyc)
+  pos <- !is.na(cq)
+  c(Cq = cq, M.Tub_positive = pos)
+}
+))
+
 # Fetch temperature dependent fluorescence for the Cy5 channel of the 
 # probe that can hybridize with Mycobacterium tuberculosis katG gene (codon 315)
 # and aggregate the data in the object melt.
-melt <- cbind(BioRad[["Melt"]][["EvaGreen"]][["pos"]], 
-	      BioRad[["Melt"]][["EvaGreen"]][["unkn"]][, -1], 
-	      BioRad[["Melt"]][["EvaGreen"]][["ntc"]][, -1])
+melt <- cbind(BioRad[["Melt"]][["Cy5-2"]][["pos"]],
+              BioRad[["Melt"]][["Cy5-2"]][["unkn"]][, -1],
+              BioRad[["Melt"]][["Cy5-2"]][["ntc"]][, -1])
 
 # Calculate the melting temperature with the diffQ function
 # from the MBmca package. Use simple logical conditions to find out
-# if a wild-type sample with the expected Tm of circa 54.5 degree 
+# if a positive sample with the expected Tm of circa 54.5 degree 
 # Celsius is found.
-res.Tm <- apply(melt[, -1], 2, function(x) {
-  res <- mcaSmoother(melt[, 1], x, Trange = c(70, 95))
-  res.Tm <- diffQ(res, fct = max, inder = TRUE)
-  Decission <- ifelse(res.Tm[1] > 82 & res.Tm[1] < 87 & res.Tm[2] > 10, 1, 0)
-  out <- data.frame(res.Tm[c(1,2)], Decission)
-})     
-# Present the results in a tabular output as matrix "results".	      
-(results.Tm <- matrix(unlist(res.Tm), nrow = length(res.Tm), byrow = TRUE, 
-       dimnames = list(colnames(melt[, -1]),
-       c("Tm", "Height", "Decission"))))
-       
+Tm.Positive <- matrix(nrow = length(melt[, -1]),
+                      byrow = TRUE,
+                      dimnames = list(names(melt)[-1]),
+                      unlist(apply(melt[, -1], 2, function(x) {
+                        res.Tm <- diffQ(cbind(melt[, 1], x), fct = max, inder = TRUE)
+                        positive <- ifelse(res.Tm[1] > 54 & 
+                                             res.Tm[1] < 55 & 
+                                             res.Tm[2] > 80, 1, 0)
+                        c(res.Tm[1], res.Tm[2], positive)
+                      })))
+
+# Present the results in a tabular output as data.frame "results.tab".
+# Result of analysis logic is:
+# Cq.Positive && Tm.Positive = Wild-type
+# Cq.Positive && !Tm.Positive = Mutant
+# !Cq.Positive && !Tm.Positive = NTC
+# !Cq.Positive && Tm.Positive = Error
+results <- sapply(1:length(Cq.Positive[,1]), function(i) {
+  if(Cq.Positive[i, 2] == 1 && Tm.Positive[i, 3] == 1)
+    return("Wild-type")
+  if(Cq.Positive[i, 2] == 1 && Tm.Positive[i, 3] == 0)
+    return("Mutant")
+  if(Cq.Positive[i, 2] == 0 && Tm.Positive[i, 3] == 0)
+    return("NTC")
+  if(Cq.Positive[i, 2] == 0 && Tm.Positive[i, 3] == 1)
+    return("Error")
+})
+results.tab <- data.frame(cbind(Cq.Positive, Tm.Positive, results))
+names(results.tab) <- c("Cq", "M.Tub DNA", "Tm", "Height", 
+                        "Tm positive", "Result")
+
+results.tab[["M.Tub DNA"]] <- factor(results.tab[["M.Tub DNA"]], 
+                                     labels=c("Not Detected", "Detected"))
+
+results.tab[["Tm positive"]] <- factor(results.tab[["Tm positive"]], 
+                                       labels=c(TRUE, FALSE))
+results.tab
+
 pdf("amp_melt.pdf", width = 8, height = 6)
 
 # Convert the Decission from the "relsults" object in a color code:
 # Negative, black; Positive, red.
 
-color <- c(results.Tm[, 3] + 1)
+color <- c(Tm.Positive[, 3] + 1)
 
 # Arrange the results of the calculations in plot.
 layout(matrix(c(1,2,1,3), 2, 2, byrow = TRUE))
 
 # Use the CPP function to preporcess the amplification curve data.
-plot(NA, NA, xlim = c(1, 40), ylim = c(0,200), xlab = "Cycle", ylab = "RFU")
+plot(NA, NA, xlim = c(1, 41), ylim = c(0,200), xlab = "Cycle", ylab = "RFU")
 mtext("A", cex = 2, side = 3, adj = 0, font = 2)
 lapply(2L:ncol(qPCR), function(i) 
   lines(qPCR[, 1], 
         CPP(qPCR[, 1], qPCR[, i], trans = TRUE, 
             bg.range = c(1,9))[["y.norm"]],
         col = color[i - 1]))
+
 matplot(melt[, 1], melt[, -1], type = "l", col = color, 
-	lty = 1, xlab = "Temperature [°C]", ylab = "RFU")
+        lty = 1, xlab = "Temperature [°C]", ylab = "RFU")
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
-	
-plot(NA, NA, xlim = c(35, 95), ylim = c(-15,30), xlab = "Temperature [°C]", 
+
+plot(NA, NA, xlim = c(35, 95), ylim = c(-15, 120), xlab = "Temperature [°C]", 
      ylab = "-d(RFU)/dT")
 mtext("C", cex = 2, side = 3, adj = 0, font = 2)
+
 lapply(2L:ncol(melt), function(i)
   lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
               fct = max, inder = TRUE)[["xy"]], col = color[i - 1]))
+
 dev.off()
 
-res.Cq <- lapply(2L:ncol(qPCR), function(i) {
-	      res <- CPP(qPCR[, 1], qPCR[, i], trans = TRUE, bg.range = c(10, 20))[["y.norm"]]
-	      th.cyc <- th.cyc(qPCR[, 1], res, r = 5)[1]
-	      })
-	      
-result.Cq <- matrix(unlist(res.Cq), nrow = length(res.Cq), byrow = TRUE, 
-       dimnames = list(colnames(qPCR[, -1]),
-       "Cq"))
-       
-result.Cq
 #################################
 # Example three
 #################################
@@ -202,10 +241,10 @@ par(mfrow = c(2, 1))
 plot(NA, NA, xlim = c(0, 120), ylim = c(0.4, 1.2), xlab = "Time (min)", ylab = "RFU")
 mtext("A", cex = 2, side = 3, adj = 0, font = 2)
 lapply(c(2, 4), function(i) {
-    lines(C81[, i]/60, C81[, i + 1], type = "b", pch = 20, col = i - 1)
+  lines(C81[, i] / 60, C81[, i + 1], type = "b", pch = 20, col = i - 1)
 })
 legend(10, 0.8, c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 3), 
-    bty = "n")
+       bty = "n")
 
 # Prepare a plot on the second array for the pre-proccessed data.
 plot(NA, NA, xlim = c(0, 120), ylim = c(0, 0.8), xlab = "Time (min)", ylab = "RFU")
@@ -216,15 +255,15 @@ mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 # 3) Remove outliers in background range between 
 # entry 1 and 190.
 res <- lapply(c(2, 4), function(i) {
-  y.s <- CPP(C81[, i]/60, C81[, i + 1],
+  y.s <- CPP(C81[, i] / 60, C81[, i + 1],
              trans = TRUE, 
              method = "spline",
              bg.outliers = TRUE,
              bg.range = c(1, 190))
-  lines(C81[, i]/60, y.s[["y.norm"]], type = "b", pch = 20, col = i - 1)
+  lines(C81[, i] / 60, y.s[["y.norm"]], type = "b", pch = 20, col = i - 1)
   # Use the th.cyc function to calculate the cycle threshold time. 
   # The threshold level r was set to 0.05.
-  paste(round(th.cyc(C81[, i]/60, y.s[["y.norm"]], r = 0.05)[1], 2), "min")
+  paste(round(th.cyc(C81[, i] / 60, y.s[["y.norm"]], r = 0.05)[1], 2), "min")
 })
 
 # Add the cycle threshold time and the threshold level to plot.
@@ -237,14 +276,14 @@ dev.off()
 ##################
 # dPCR demo
 ##################
-# # Generate an amplitude plot for the first fluorescence channel (e.g., FAM)
+# Generate an amplitude plot for the first fluorescence channel (e.g., FAM)
 # fluos1 <- sim_ddpcr(m = 7, n = 20, times = 100, pos_sums = FALSE, n_exp = 1,
 #   fluo = list(0.1, 0))
 # 
 # # Generate an amplitude plot for the second fluorescence channel (e.g., VIC)
 # fluos2 <- sim_ddpcr(m = 10, n = 20, times = 100, pos_sums = FALSE, n_exp = 1,
 #   fluo = list(0.1, 0))
-# pdf("dpcR_sim.pdf", width = 12, height = 8)
+# pdf("dpcR_sim.pdf", width = 12, height = 6.5)
 # # Plot the amplitudes of both fluorescence channel in an aligned fashion
 # plot_vic_fam(fam = fluos1, vic = fluos2, col_vic = "green", col_fam = "pink")
 # dev.off()
