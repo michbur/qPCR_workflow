@@ -48,8 +48,15 @@
 \backcite {roediger_RJ_2013}{{5}{2.3.2}{subsection.2.3.2}}
 \backcite {luo_multiplex_2011}{{5}{2.3.2}{subsection.2.3.2}}
 \backcite {rodiger_nucleic_2014}{{8}{2.3.3}{subsection.2.3.3}}
+<<<<<<< HEAD
 \backcite {rodiger_highly_2013}{{9}{2.3.3}{subsection.2.3.3}}
 \backcite {pabinger_2014}{{11}{2.3.4}{subsection.2.3.4}}
 \backcite {huggett_2013}{{11}{2.3.4}{subsection.2.3.4}}
 \backcite {brown_2001}{{11}{2.3.4}{equation.2.3.1}}
+=======
+\backcite {rodiger_highly_2013}{{8}{2.3.3}{subsection.2.3.3}}
+\backcite {pabinger_2014}{{12}{2.3.4}{subsection.2.3.4}}
+\backcite {huggett_2013}{{12}{2.3.4}{subsection.2.3.4}}
+\backcite {brown_2001}{{12}{2.3.4}{equation.2.3.1}}
+>>>>>>> 52b457a861fd49af9e44d8d31830bf06e896f98f
 \backcite {rodiger_rkward_2012}{{14}{2.4}{section.2.4}}
