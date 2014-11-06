@@ -59,8 +59,8 @@ Figure~\ref{figure:dpcR_sim}). Selected technologies (e.g.,
 OpenArray\textregistered Real-Time PCR System) monitor amplification reactions 
 in the chambers in real-time. Cq values are calculated from the amplification 
 curves and converted into discrete events by means of positive and negative 
-partitions and the absolute quantification of nucleic acids is done by Poisson 
-statistics (see \CRANpkg{dpcR} for details).
+partitions and the absolute quantification of nucleic acids is done using Poisson 
+distribution (see \CRANpkg{dpcR} for details).
 
 \begin{figure}[htbp]
   \centering
@@ -309,8 +309,8 @@ A common task during the analysis of qPCR experiments is to distinguish between
 positive and negative samples (compare Figure~\ref{figure:plotCurves}). Provided 
 that the melting temperature of a sample is known it is possible to automatize 
 the melting curve analysis (MCA). As shown in \citet{roediger_RJ_2013} this can 
-be done by interrogating the $T_{M}$. Therefore, we used a simple logic, which 
-checks if $T_{M}$ is within a tight temperature range and signal height. In line 
+be done by interrogating the $T_{M}$. Therefore, we used a simple logic statement, 
+which checks if $T_{M}$ is within a tight temperature range and signal height. In line 
 with ``Example one'' we used function $sessionInfo()$ to track the packages used 
 for the analysis. Reproducible research is greatly enhanced of open data 
 exchange formats are used. In this study we used the \CRANpkg{RDML} package to 
@@ -457,7 +457,7 @@ samples by the \code{plotCurves} function from the \CRANpkg{chipPCR} package.
 The green color code indicates that the data contains no missing values. 
 However, the visual inspection revealed that the data are noisy. All samples 
 (``D1\_Alm12\ldots'' - ``D8\_Alm12\ldots'') appeared to be positive. One 
-negative control (``D10\_H20\_ntc\_EvaGreen'') appeared to be a contamination.}
+negative control (``D10\_H20\_ntc\_EvaGreen'') appeared to be contaminated.}
   \label{figure:plotCurves}
 \end{figure}
 
