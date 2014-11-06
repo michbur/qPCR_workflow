@@ -183,7 +183,7 @@ pdf("dpcR.pdf")
 (dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
 
 dev.off()
-# Let us assume, that every droplet has roughly 5 nl 
+# Let us assume, that every droplet has roughly 5 nL 
 # total concentration (and its confidence intervals) in molecules/ml
 dens[4:6] / 5 * 1e-6
 
@@ -233,3 +233,18 @@ abline(h = 0.05, lty = 2)
 text(10, 0.55, "Cq:")
 legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), bty = "n")
 dev.off()
+
+##################
+# dPCR demo
+##################
+# # Generate an amplitude plot for the first fluorescence channel (e.g., FAM)
+# fluos1 <- sim_ddpcr(m = 7, n = 20, times = 100, pos_sums = FALSE, n_exp = 1,
+#   fluo = list(0.1, 0))
+# 
+# # Generate an amplitude plot for the second fluorescence channel (e.g., VIC)
+# fluos2 <- sim_ddpcr(m = 10, n = 20, times = 100, pos_sums = FALSE, n_exp = 1,
+#   fluo = list(0.1, 0))
+# pdf("dpcR_sim.pdf", width = 12, height = 8)
+# # Plot the amplitudes of both fluorescence channel in an aligned fashion
+# plot_vic_fam(fam = fluos1, vic = fluos2, col_vic = "green", col_fam = "pink")
+# dev.off()

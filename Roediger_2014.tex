@@ -50,16 +50,27 @@ package based on R for the analysis of digital PCR (dPCR) experiments. The dPCR
 Technology breaks fundamentally with the previous concept of nucleic acid 
 quantification and can be seen as a next generation nucleic acid quantification. 
 The key difference between dPCR and traditional PCR lies in the method of 
-measuring (absolute) nucleic acids amounts, which yields discrete information
+measuring (absolute) nucleic acids amounts, which yields discrete information 
 instead of the continuous signal. This is possible after ``clonal DNA 
 amplification'' in thousands of small separated partitions (e.g., droplets, nano 
 chambers) \citep{huggett_2013, milbury_2014, morley_2014}. Partitions with no 
-nucleic acid remain negative and the others turn positive. Selected technologies 
-(e.g., OpenArray\textregistered Real-Time PCR System) monitor amplification 
-reactions in the chambers in real-time. Cq values are calculated from the 
-amplification curves and converted into discrete events by means of positive and 
-negative partitions and the absolute quantification of nucleic acids is done by 
-Poisson statistics (see \CRANpkg{dpcR} for details).
+nucleic acid remain negative and the others turn positive (e.g., 
+Figure~\ref{figure:dpcR_sim}). Selected technologies (e.g., 
+OpenArray\textregistered Real-Time PCR System) monitor amplification reactions 
+in the chambers in real-time. Cq values are calculated from the amplification 
+curves and converted into discrete events by means of positive and negative 
+partitions and the absolute quantification of nucleic acids is done by Poisson 
+statistics (see \CRANpkg{dpcR} for details).
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[clip=true, width=12cm]{figures/dpcR_sim.png}
+  \caption{Scheme of droplet digital PCR experiment. \strong{(A)} A droplet 
+digital PCR reaction was performed in a Bio-Rad QX100 systems. \strong{(B)} The 
+droplets (circa 100 $\mu$m in diameter) were subjected to the VideoScan platform 
+for detection and analysis analysis.}
+\label{figure:dpcR_sim}
+\end{figure}
 
 Most of the commercial and experimental hardware platforms provide means to 
 analyse the amplification curve data. Yet, in case of closed source software the 
@@ -548,11 +559,10 @@ scientific community. Simulations and predictions of binomial and Poisson
 distributions, commonly used theoretical models of dPCR, statistical data 
 analysis methods, plotting facilities and report generation tools are part of 
 the package \citep{pabinger_2014}. Here, we show briefly an example for the 
-\CRANpkg{dpcR}. In detail, we performed an in-silico experiment, which mimicked 
-a droplet digital PCR (e.g., Bio-Rad QX100 systems). The aim was to do a density 
-estimation. The average droplet value was assumed to be 5 nL. 
+\CRANpkg{dpcR}. Figure~\ref{figure:dpcR_sim}.
 
-The number of positive partitions ($k$), total number of partitions ($n$) and 
+In detail, we mimicked an in-silico experiment for a droplet digital PCR. The aim was to do a density 
+estimation. The number of positive partitions ($k$), total number of partitions ($n$) and 
 the size of the partition are only data required for analysis. The estimate of 
 the mean number of template molecules per partition ($\hat \lambda$) is 
 calculated using following equation \citep{huggett_2013}:
@@ -561,11 +571,13 @@ calculated using following equation \citep{huggett_2013}:
 \hat{\lambda} =  -\ln{(1 - \frac{k}{n})}.
 \end{equation}
 
-Since the binomial distribution of positive and negative partitions is used to 
-define $\lambda$, we use Wilson method for calculation of confidence intervals 
-\citep{brown_2001}. The obtained mean number of template molecules per 
-partition multiplied by the volume of the partitions constitutes concentration 
-of  atemplate in the sample.
+The average droplet value in our experiment was assumed to be 5 nL. We counted 
+$n$ = 16800 droplets in total and $k$ = 4601 droplets were positive. Since the 
+binomial distribution of positive and negative partitions is used to define 
+$\lambda$, we use Wilson method for calculation of confidence intervals 
+\citep{brown_2001}. The obtained mean number of template molecules per partition 
+multiplied by the volume of the partitions constitutes concentration of a 
+template in the sample.
 
 \begin{example}
 # Load the dpcR package for the analysis of the digital PCR experiment.
@@ -576,8 +588,8 @@ require(dpcR)
 
 (dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
 
-# Let us assume, that every droplet has roughly 5 nl 
-# total concentration (and its confidence intervals) in molecules/ml
+# Let us assume, that every droplet has roughly 5 nL 
+# total concentration (and its confidence intervals) in molecules/mL
 dens[4:6] / 5 * 1e-6
 \end{example}
 
