@@ -15,7 +15,7 @@ source software or as monolithic block with little freedom to perform highly
 customized analysis procedures. Others and we argue that R is an excellent 
 environment for a reproducible and transparent analysis of data. However, for 
 newcomers it is often very challenging to master R from reading the manuals and 
-FAQs the not obvious steps. Here we describe exemplary work-flows for the 
+FAQs the not obvious steps. Here we describe exemplary workflows for the 
 analysis of dPCR, qIA or qPCR experiments including the analysis of melting curve 
 data. Our analysis relies entirely on R packages available from public 
 repositories.
@@ -488,7 +488,7 @@ plot(NA, NA, xlim = c(0, 120), ylim = c(0, 0.8), xlab = "Time (min)", ylab = "RF
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 
 # Apply the CPP functions to pro-process the raw data.
-# 1) Basline data to zero, 2) Smooth data with spline,
+# 1) Baseline data to zero, 2) Smooth data with spline,
 # 3) Remove outliers in background range between 
 # entry 1 and 190.
 res <- lapply(c(2, 4), function(i) {
@@ -562,10 +562,11 @@ calculated using following equation \citep{huggett_2013}:
 \hat{\lambda} =  -\ln{(1 - \frac{k}{n})}.
 \end{equation}
 
-Since the binomial distribution is used to calculate $\lambda$, we use Wilson 
-method for calculation of confidence intervals \citep{brown_2001}. The obtained 
-mean number of template molecules per partition multiplied by the volume of the 
-partitions constitutes concentration of the template in the sample.
+Since the binomial distribution of positive and negative partitions is used to 
+define $\lambda$, we use Wilson method for calculation of confidence intervals 
+\citep{brown_2001}. The obtained mean number of template molecules per 
+partition multiplied by the volume of the partitions constitutes concentration 
+of  atemplate in the sample.
 
 \begin{figure}[htbp]
   \centering
@@ -651,7 +652,8 @@ Center for collective use ``Biotechnology'' at All-Russia Research Institute of 
 
 \address{Micha\l{} Burdukiewicz\\
   University of Wroclaw\\
-  Department of Biotechnoloy\\
+  Faculty of Biotechnoloy\\
+  Department of Genomics\\
   Wroclaw\\
   Poland}
 \email{michalburdukiewicz@gmail.com}
