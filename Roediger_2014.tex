@@ -23,8 +23,7 @@ analysis relies entirely on R packages available from public repositories.
 \section{Introduction}
 
 The qPCR is the method of choice when a precise quantification of minute DNA 
-traces of pathogens or the analysis of gene expression is required 
-\citep{peirson_2003}. Numerous commercial and experimental monitoring platforms 
+traces of pathogens or the analysis of gene expression is required \citep{peirson_2003}. Numerous commercial and experimental monitoring platforms 
 have been developed in the past years. This includes standard plate cyclers, 
 capillary cyclers, microfluidic platforms and related technologies 
 \citep{rodiger_highly_2013, devonshire_2013, viturro_2014, rodiger_nucleic_2014, 
@@ -57,9 +56,9 @@ OpenArray\textregistered Real-Time PCR System) monitor amplification reactions
 in the chambers in real-time. Cq values are calculated from the amplification 
 curves and converted into discrete events by means of positive and negative 
 partitions and the absolute quantification of nucleic acids is done using 
-Poisson distribution. Recently we published the \CRANpkg{dpcR} package at CRAN, which is the first 
-open source software package based on R for the analysis of digital PCR (dPCR) 
-experiments (see \CRANpkg{dpcR} for details).
+Poisson distribution. Recently we published the \CRANpkg{dpcR} package at CRAN, 
+which is the first open source software package based on R for the analysis of 
+digital PCR (dPCR) experiments (see \CRANpkg{dpcR} for details).
 
 \begin{figure}[htbp]
   \centering
@@ -78,12 +77,14 @@ analysis happens in most cases in a blackbox fashion tied to a specific
 platforms. Often such systems have limitation in the data processing and force 
 the used to suboptimal analysis algorithm as discussed by \citet{ruijter_2013}. 
 The visualization options are usually limited by the software and not in 
-acceptable publication quality. The data processing in spreadsheets is not advisable 
-for research purposes. Often lacking tools to validate input, debug implemented procedures
-and automatize worflow spreadsheets are prone to errors and not well suited for more
-complicated analysis\footnote{For more elaborated critique see 
-\url{http://www.burns-stat.com/documents/tutorials/spreadsheet-addiction/} 
-and \citet{mccullough_2008}.}.
+acceptable publication quality. Aside from closed source software, analysis of 
+PCR reactions is generally performed in spreadsheets. This approach of data 
+processing is not advisable for research purposes. Spreadsheets often lack (or 
+do not use) tools to validate input, debug implemented procedures and automatize 
+workflow. These traits make them prone to errors and not well suited for 
+complicated tasks\footnote{For more elaborated critique see 
+\url{http://www.burns-stat.com/documents/tutorials/spreadsheet-addiction/} and 
+\citet{mccullough_2008}.}.
 
 The complexity of hardware, wetware and software requires expertise to master a 
 technical workflow comprising standards for experimental design, generation and 
@@ -127,7 +128,7 @@ manipulation, restructuring and reshaping of data to make the readily-available
 for further processing. This is of particular importance on the human to machine 
 interface \citep{Oh_2014}.
 
-The aim of this paper is to show two simple examples. In 
+The aim of this paper is to show two simple case studies. In 
 particular, we describe how to:
 \begin{itemize}
  \item read-in data from a standardized file format,
@@ -147,7 +148,6 @@ insight for novices in the analysis of qPCR experiments with R.
 
 \begin{figure}[htbp]
   \centering
-%   \includegraphics[clip=true,trim=0.1cm 0.6cm 1cm 1.8cm, width=16cm]{figures/plotCurves.pdf}
   \includegraphics{figures/workflow.png}
   \caption{Exemplary workflow for qPCR experiments in R. Core functionality is 
 provided by the R software environment for statistical computing and graphics. 
@@ -173,7 +173,7 @@ auto completion and function references for rapid prototyping of workflows.
 Typically the qPCR analysis will start with data from a commercial platform. 
 Most platforms have an option to export a CSV file or spreadsheets application 
 file (e.g., *.xls, *.odt). The details for the import data has been described 
-elsewhere \citep{RDCT2010c, rodiger_rkward_2012}. To keep the example sections 
+elsewhere \citep{RDCT2010c, rodiger_rkward_2012}. To keep the case study sections 
 compact we have chosen to load datasets from the \CRANpkg{qcpR} package 
 \citep{ritz_2008, spiess_2008} (v.~1.4.0) and \CRANpkg{RDML} package to our 
 workspace. In this study we used the \CRANpkg{RDML} package (v.~0.4-2) for data 
@@ -185,7 +185,7 @@ the number of cycles needed to reach a user defined threshold fluorescence
 signal level. Typically Cq are determined identically the exponential phase of a 
 qPCR reaction. Several Cq methods have been described \citep{ruijter_2013}. In 
 this study we have chosen the second derivative maximum method ($Cq_{SDM}$). Due to 
-the ubiquitous use we used in a example the ``Cycle threshold'' ($Cq_{Ct}$) method.
+the ubiquitous use we used in a case study the ``Cycle threshold'' ($Cq_{Ct}$) method.
 
 In a perfect qPCR reaction, the amount of amplicon doubles ($2^{n}$; n = cycle 
 number) at each cycle. Here the amplification efficiency ($AE$) is 100~\%. 
@@ -201,7 +201,7 @@ we applied the functions from the \CRANpkg{MBmca} package
 temperature ($T_{M}$) in our qPCR experiment. We used the \CRANpkg{MBmca} 
 package (0.0.3-4) for analysis of melting curve data.
 
-We complete our study with a simple example for the analysis of dPCR experiment. 
+We complete our study with a simple case study for the analysis of dPCR experiment. 
 In particular, we used the \CRANpkg{dpcR} (0.1.3.1) to estimate the number of 
 molecules in a sample.
 
@@ -212,19 +212,20 @@ the needs for (I) data analysis and presentation in research, (II) as software
 frame-work for novel technical developments, (III) as platform for teaching this 
 new technology and (IV) serves as reference for statistical methods.
 
-\subsection{Example one -- qPCR and Amplification Efficiency Calculation}
+\subsection{Case study one -- qPCR and Amplification Efficiency Calculation}
 
-The goal of our fist example was to calculate the Cq values and the $AE$ from a 
+The goal of our fist case study was to calculate the Cq values and the $AE$ from a 
 qPCR experiment. We used the ``guescini1'' dataset from the \CRANpkg{qcpR} 
 package. Details of the experiment are described in \citet{guescini_2008}. A 
 good practice for reproducible research is to track the package versions and 
 environment used during the analysis. The function $sessionInfo()$ from the 
 \CRANpkg{utils} package provides this information. Assuming that the analysis 
 starts with a clean R session it is possible to assign the required packages to 
-an object only, as shown in our example below\footnote{The reproducibility of 
+an object only, as shown in our case study below\footnote{The reproducibility of 
 research can be further improved by using dedicated tools. For example, 
 \CRANpkg{archivist} package allows not only stores and recovers crucial data, 
-but preserves metadata of saved objects.}.
+but preserves metadata of saved objects. All settings of R session can be 
+easily saved and/or restored using \CRANpkg{settings} package.}.
 
 \begin{example}
 # Load the required packages for the data import and analysis.
@@ -331,7 +332,7 @@ automatically analysed with the \code{effcalc} (\CRANpkg{chipPCR}) function.}
   \label{figure:dilution_Cq}
 \end{figure}
 
-\subsection{Example two -- qPCR and Melting Curve Analysis}
+\subsection{Case study two -- qPCR and Melting Curve Analysis}
 
 A common task during the analysis of qPCR experiments is to distinguish between 
 positive and negative samples (compare Figure~\ref{figure:plotCurves}). Provided 
@@ -339,7 +340,7 @@ that the melting temperature of a sample is known it is possible to automatize
 the melting curve analysis (MCA). As shown in \citet{roediger_RJ_2013} this can 
 be done by interrogating the $T_{M}$. Therefore, we used a simple logic statement, 
 which checks if $T_{M}$ is within a tight temperature range and signal height. In line 
-with ``Example one'' we used function $sessionInfo()$ to track the packages used 
+with ``Case study one'' we used function $sessionInfo()$ to track the packages used 
 for the analysis. Reproducible research is greatly enhanced of open data 
 exchange formats are used. In this study we used the \CRANpkg{RDML} package to 
 read the qPCR experiment. The example file \file{BioRad\_qPCR\_melt.rdml} for 
@@ -421,8 +422,8 @@ Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
 Cq.Positive
 \end{example}
 
-Since the qPCR indicated that selected samples (except no template control) are positive, we started to 
-distinguish between true positive and true negative samples by MCA.
+Since the qPCR indicated that selected samples (except no template control) are positive, 
+we distinguished between true positive and true negative samples by MCA.
 \begin{example}
 # Fetch temperature dependent fluorescence for the Cy5 channel of the 
 # probe that can hybridize with Mycobacterium tuberculosis katG gene (codon 315)
@@ -472,7 +473,7 @@ results.tab
 Finally, we plotted and printed the output of our analysis.
 
 \begin{example}
-# Convert the Decission from the "relsults" object in a color code:
+# Convert the decision from the "relsults" object in a color code:
 # Negative, black; Positive, red.
 
 color <- c(Tm.Positive[, 3] + 1)
@@ -527,7 +528,7 @@ labelled in black.}
 \label{figure:amp_melt}
 \end{figure}
 
-\subsection{Example three -- Isothermal Amplification}
+\subsection{Case study three -- Isothermal Amplification}
 
 Isothermal amplification is an alternative to PCR \citep{rodiger_nucleic_2014}. 
 In contrast to PCR use isothermal amplification methods a constant temperature 
@@ -612,7 +613,7 @@ was set to $r = 0.05$ ($--$).}
   \label{figure:qIA}
 \end{figure}
 
-\subsection{Example four - digital PCR}
+\subsection{Case study four - digital PCR}
 
 We have developed the \CRANpkg{dpcR} package for analysis and presentation of 
 digital PCR experiments. The \CRANpkg{dpcR} package can be used to build 
@@ -620,7 +621,7 @@ custom-made analysers and provides structures to be openly extended by the
 scientific community. Simulations and predictions of binomial and Poisson 
 distributions, commonly used theoretical models of dPCR, statistical data 
 analysis methods, plotting facilities and report generation tools are part of 
-the package \citep{pabinger_2014}. Here, we show briefly an example for the 
+the package \citep{pabinger_2014}. Here, we show briefly a case study for the 
 \CRANpkg{dpcR}. Figure~\ref{figure:dpcR_sim}.
 
 In detail, we mimicked an in-silico experiment for a droplet digital PCR. The aim was to do a density 
@@ -655,7 +656,7 @@ require(dpcR)
 dens[4:6] / 5 * 1e-6
 #results: 
 #concentration        lower       upper
-#6.400498e-08  6.217049e-08 6.58852e-08
+# 6.400498e-08  6.217049e-08 6.58852e-08
 \end{example}
 
 Selected functionality was implemented as interactive \CRANpkg{shiny} GUI 

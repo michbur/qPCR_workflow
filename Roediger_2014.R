@@ -177,7 +177,7 @@ results.tab
 
 pdf("amp_melt.pdf", width = 8, height = 6)
 
-# Convert the Decission from the "relsults" object in a color code:
+# Convert the decision from the "results" object in a color code:
 # Negative, black; Positive, red.
 
 color <- c(Tm.Positive[, 3] + 1)
@@ -246,7 +246,7 @@ lapply(c(2, 4), function(i) {
 legend(10, 0.8, c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 3), 
        bty = "n")
 
-# Prepare a plot on the second array for the pre-proccessed data.
+# Prepare a plot on the second array for the pre-processed data.
 plot(NA, NA, xlim = c(0, 120), ylim = c(0, 0.8), xlab = "Time (min)", ylab = "RFU")
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 
