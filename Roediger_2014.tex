@@ -221,7 +221,8 @@ starts with a clean R session it is possible to assign the required packages to
 an object only, as shown in our example below\footnote{The reproducibility of 
 research can be further improved by using dedicated tools. For example, 
 \CRANpkg{archivist} package allows not only stores and recovers crucial data, 
-but preserves metadata of saved objects.}.
+but preserves metadata of saved objects. All settings of R session can be 
+easily saved and/or restored using \CRANpkg{settings} package.}.
 
 \begin{example}
 # Load the required packages for the data import and analysis.
@@ -418,8 +419,8 @@ Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
 Cq.Positive
 \end{example}
 
-Since the qPCR indicated that selected samples (except no template control) are positive, we started to 
-distinguish between true positive and true negative samples by MCA.
+Since the qPCR indicated that selected samples (except no template control) are positive, 
+we distinguished between true positive and true negative samples by MCA.
 \begin{example}
 # Fetch temperature dependent fluorescence for the Cy5 channel of the 
 # probe that can hybridize with Mycobacterium tuberculosis katG gene (codon 315)
@@ -652,7 +653,7 @@ require(dpcR)
 dens[4:6] / 5 * 1e-6
 #results: 
 #concentration        lower       upper
-#6.400498e-08  6.217049e-08 6.58852e-08
+# 6.400498e-08  6.217049e-08 6.58852e-08
 \end{example}
 
 Selected functionality was implemented as interactive \CRANpkg{shiny} GUI 
