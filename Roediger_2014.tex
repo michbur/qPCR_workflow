@@ -12,11 +12,10 @@ Novel amplification strategies based on quantitative isothermal amplification
 (qIA) become more prominent in life sciences and diagnostics. Several software 
 solutions have been developed, which are either distributed as closed source 
 software or as monolithic block with little freedom to perform highly 
-customized 
-analysis procedures. Others and we argue that R is an excellent environment for 
-a reproducible and transparent analysis of data. However, for newcomers it is 
-often very challenging to master R from reading the manuals and FAQs the not 
-obvious steps. Here we describe exemplary workflows for the analysis of dPCR, 
+customized analysis procedures. Others and we argue that R is an excellent environment 
+for a reproducible and transparent analysis of data. However, for newcomers it is 
+often very challenging to master R or learn capabilities of less known packages. 
+Here we describe exemplary workflows for the analysis of dPCR, 
 qIA or qPCR experiments including the analysis of melting curve data. Our 
 analysis relies entirely on R packages available from public repositories.
 }
@@ -698,19 +697,18 @@ calculated using following equation \citep{huggett_2013}:
 \end{equation}
 
 The average droplet value in our experiment was assumed to be 5 nL. We counted 
-$n$ = 16800 droplets in total and $k$ = 4601 droplets were positive. Since the 
+$n = 16800$ droplets in total from which $k = 4601$ droplets were positive. Since the 
 binomial distribution of positive and negative partitions is used to define 
-$\lambda$, we use Wilson method for calculation of confidence intervals 
+$\hat \lambda$, we use Wilson method for calculation of confidence intervals 
 \citep{brown_2001}. The obtained mean number of template molecules per 
-partition 
-multiplied by the volume of the partitions constitutes concentration of a 
+partition multiplied by the volume of the partitions constitutes concentration of a 
 template in the sample.
 
 \begin{example}
 # Load the dpcR package for the analysis of the digital PCR experiment.
 require(dpcR)
 
-# In our in-silica experiment we counted in total 16800 droplets (n). 
+# In our in-silico experiment we counted in total 16800 droplets (n). 
 # Thereof, 4601 were positive (k).
 
 (dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
@@ -744,8 +742,8 @@ automatized outputs of R objects in combined plots, tables and summaries.
   \includegraphics[clip=true, width=14cm]{figures/dpcR.pdf}
   \caption{\code{dpcr\_density} function from the \CRANpkg{dpcR} package used 
 for analysis of droplet digital PCR experiment. From 16800 counted droplets 
-($n$) 4601 were positive ($k$). Estimated mean number of template molecules per 
-partition ($\lambda$) is 0.32.
+($n$) 4601 were positive ($k$). The chart presents distribution of mean number of 
+template molecules per partition ($\hat \lambda$). 
 }
   \label{figure:dpcR}
 \end{figure}
