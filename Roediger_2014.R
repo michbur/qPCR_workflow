@@ -3,40 +3,40 @@ if(!grepl("figures", getwd()))
 # Supplement to 'R as Platform for the Analysis of qPCR experiments' for the R
 # Journal by Rödiger et al. 2014
 #################################
-# Example one
+# Case study one
 #################################
 # Load the required packages for the data import and analysis.
 # Load the chipPCR package for the pre-processing and curve data quality
-# analysis.
+# analysis and load the qpcR package as data resource.
 require(chipPCR)
+require(qpcR)
 
-# Collect information about the R session used for the analysis of the qPCR
+# Collect information about the R session used for the analysis of the
 # experiment.
 current.session <- sessionInfo()
 
 # Next we load the 'guescini1' dataset from the qpcR package the to
 # workspace and assign it to the object gue.
-require(qpcR)
 gue <- guescini1
 
-# Define the diltuion of the sample DNA quantity for
-# the calibration curve.
+# Define the dilution of the sample DNA quantity for the calibration curve.
 dil <- 10^(2:-4)
 
-# Preprocess the amplification curve data with the CPP function from the chipPCR
-# package.
+# Pre-process the amplification curve data with the CPP function from the 
+# chipPCR package. The trans parameter was set TRUE to perform a baselining and 
+# the method.norm parameter was set to minm for a min-maximum normalization.
+
 res.CPP <- cbind(gue[, 1], apply(gue[, -1], 2, function(x) {
   CPP(gue[, 1], x, trans = TRUE, method.norm = "minm", 
       bg.range = c(1,7))[["y.norm"]]
 }))
 
 # Use the th.cyc function from the chipPCR package to calculate the Cq values
-# by the cycle threshold method. The threshold level r was set to 0.05.
-
+# by the cycle threshold method at a threshold level "r" of 0.05.
 Cq.Ct <- apply(gue[, -1], 2, function(x) 
   th.cyc(res.CPP[, 1], x, r = 0.05)[1])
 
-Cq.SDM <- apply(gue[, -1], 2, function(x) 
+Cq.SDM <- apply(gue[, -1], 2, function(x)
   summary(inder(res.CPP[, 1], x))[2])
 
 # Fit a linear model to carry out a regression analysis.
@@ -69,6 +69,8 @@ abline(res.Cq)
 
 legend("topleft", "C", cex = 3, bty = "n")
 
+# Use the effcalc function from the chipPCR package to calculate the
+# amplification efficiency.
 plot(effcalc(dil, t(matrix(Cq.Ct, nrow = 12, ncol = 7))), CI = TRUE)
 legend("topright", "D", cex = 3, bty = "n")
 
@@ -77,7 +79,7 @@ legend("topright", "E", cex = 3, bty = "n")
 
 dev.off()
 #################################
-# Example two
+# Case study two
 #################################
 # Load the required packages for the data import and analysis.
 
@@ -209,7 +211,7 @@ lapply(2L:ncol(melt), function(i)
 dev.off()
 
 #################################
-# Example three
+# Case study three
 #################################
 # Load the dpcR package for the analysis of the digital PCR experiment.
 require(dpcR)
@@ -228,7 +230,7 @@ dens[4:6] / 5 * 1e-6
 
 
 #################################
-# Example four
+# Case study four
 #################################
 
 pdf("qIA.pdf")
