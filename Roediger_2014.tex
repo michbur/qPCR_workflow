@@ -8,123 +8,121 @@ Blagodatskikh and Peter Schierack}
 \abstract{
 There is an ever-increasing number of applications, which use quantitative PCR 
 (qPCR) or digital PCR (dPCR) to elicit fundamentals of biological processes. 
-Novel amplification strategies based on quantitative isothermal amplification 
-(qIA) become more prominent in life sciences and point-of-care-diagnostics. 
-Several software packages have been developed, which are either distributed as 
-closed source software or as monolithic block with little freedom to perform 
-highly customized analysis procedures. Others and we argue that R is an 
-excellent foundation for a reproducible and transparent analysis of data, which 
-offers a highly customizable environment. However, for newcomers it is often 
-challenging to master R or learn capabilities of the vast number of packages 
-available. Here we describe exemplary workflows for the analysis of dPCR, qIA or 
-qPCR experiments including the analysis of melting curve data. Our analysis 
-relies entirely on R packages available from public repositories. In addition, 
-we provide information related to standardization and reproducible research with 
-R.
+Moreover, novel amplification strategies based on quantitative isothermal 
+amplification (qIA) become more prominent in life sciences and 
+point-of-care-diagnostics. Several software packages have been developed, which 
+are either distributed as closed source software or as monolithic block with 
+little freedom to perform highly customized analysis procedures. Others and we 
+argue that R is an excellent foundation for reproducible and transparent 
+data analysis in a highly customizable cross-platform environment. However, for 
+newcomers it is often challenging to master R or learn capabilities of the vast 
+number of packages available. Here we describe exemplary workflows for the 
+analysis of dPCR, qIA or qPCR experiments including the analysis of melting 
+curve data. Our analysis relies entirely on R packages available from public 
+repositories. In addition, we provide information related to standardization and 
+reproducible research with R.
 }
 
 \section{Introduction}
 
-The qPCR is the method of choice when a precise quantification of minute DNA 
-traces of pathogens or the analysis of gene expression is required 
+The quantitative Polymerase Chain Reaction (qPCR) is the method of choice when a 
+precise quantification of minute DNA traces is required. Applications include 
+the detection and quantification of pathogens or gene expression analysis 
 \citep{peirson_2003}. Numerous commercial and experimental monitoring platforms 
 have been developed in the past years. This includes standard plate cyclers, 
 capillary cyclers, microfluidic platforms and related technologies 
 \citep{rodiger_highly_2013, devonshire_2013, viturro_2014, rodiger_nucleic_2014, 
 khodakov_2014, wu_2014}. Only few bioanalytical applications had such a 
 significant impact on the progress of life sciences and medical sciences as the 
-quantitative Polymerase Chain Reaction (qPCR). The scientific community work 
-hard in the past two decades to uncover pitfalls of qPCR experiments. This lead 
-finally to the development of peer-reviewed quantification cycle (Cq) analysis 
-algorithms \citep{ruijter_2013}, throughout analysed qPCR chemistries 
-\citep{ruijter_2014} and guidelines for a proper conduct of qPCR experiments as 
-implemented in the MIQE guidelines (minimum information for publication of 
-quantitative real-time PCR experiments) \citep{bustin_miqe_2009, huggett_2013}. 
-In the past decades emerged several isothermal amplification technologies, such 
-as helicase dependent amplification (HDA), as alternative to PCR. Isothermal 
-amplification was readily combined with real-time monitoring technologies (qIA) 
-and is used nowadays in various fields like diagnostics and 
-point-of-care-testing \citep{rodiger_nucleic_2014}.
+qPCR. Scientific misconduct and fraud have shaken the scientific community on 
+several occasions \citep{fang_2012}. In particular, the scientific community 
+work hard to uncover pitfalls of qPCR experiments. This lead finally to the 
+development of peer-reviewed quantification cycle (Cq) analysis algorithms 
+\citep{ruijter_2013}, throughout analysed qPCR chemistries \citep{ruijter_2014} 
+and guidelines for a proper conduct of qPCR experiments as implemented in the 
+MIQE guidelines (minimum information for publication of quantitative real-time 
+PCR experiments) \citep{bustin_miqe_2009, huggett_2013}. In the past decades 
+emerged several isothermal amplification technologies, such as helicase 
+dependent amplification (HDA), as alternative to PCR. Isothermal amplification 
+was readily combined with real-time monitoring technologies (qIA) and is used 
+nowadays in various fields like diagnostics and point-of-care-testing 
+\citep{rodiger_nucleic_2014}.
 
 Digital PCR (dpcR) is a novel approach for detection and quantification of 
 nucleic acids. The dPCR Technology breaks fundamentally with the previous 
 concept of nucleic acid quantification and can be seen as a next generation 
-nucleic acid quantification method. The key difference between dPCR and traditional 
-PCR lies in the method of measuring (absolute) nucleic acids amounts, which 
-yields discrete information instead of the continuous signal. This is possible 
-after ``clonal DNA amplification'' in thousands of small separated partitions 
-(e.g., droplets, nano chambers) \citep{huggett_2013, milbury_2014, 
-morley_2014}. Partitions with no nucleic acid remain negative and the others 
-turn positive (e.g., Figure~\ref{figure:dpcR_sim}). Selected technologies 
-(e.g., OpenArray\textregistered Real-Time PCR System) monitor amplification 
-reactions in the chambers in real-time. Cq values are calculated from the 
-amplification curves and converted into discrete events by means of positive and 
-negative partitions. Finally, the absolute quantification of nucleic acids is done 
-using Poisson statistics. Recently we published the \CRANpkg{dpcR} package at 
-CRAN, which is the first open source software package based on R for the 
-analysis of digital PCR (dPCR) experiments (see \CRANpkg{dpcR} for details).
+nucleic acid quantification method. The key difference between dPCR and 
+traditional qPCR lies in the method of measuring (absolute) nucleic acids 
+amounts, which yields discrete information instead of the continuous signal. 
+This is possible after ``clonal DNA amplification'' in thousands of small 
+separated partitions (e.g., droplets, nano chambers) \citep{huggett_2013, 
+milbury_2014, morley_2014}. Partitions with no nucleic acid remain negative and 
+the others turn positive (e.g., Figure~\ref{figure:dpcR_sim}). Selected 
+technologies (e.g., OpenArray\textregistered Real-Time PCR System) monitor 
+amplification reactions in the chambers (``partition'') in real-time. Finally, 
+all Cq values are calculated from the amplification curves and converted into 
+discrete events by means of positive and negative chambers. Finally, the 
+absolute quantification of nucleic acids is done using Poisson statistics. 
+Recently we published the \CRANpkg{dpcR} package at CRAN, which is the first 
+open source software package based on R for the analysis of digital PCR (dPCR) 
+experiments (see \CRANpkg{dpcR} for details).
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[clip=true, width=14cm]{figures/dpcR_sim.pdf}
   \caption{Scheme of droplet digital PCR experiment. \strong{A)} A droplet 
 digital PCR reaction mix was formed in a Bio-Rad QX100 system. The droplets 
-(circa 100 $\mu$m in diameter) were subjected to the VideoScan platform for 
-detection and analysis. \strong{(B)} Subsequently the samples can be digitalized 
-by counting number of positive and total number of droplets. The plot was 
-generated with the \code{sim\_ddpcr} function from the \CRANpkg{dpcR} package.}
+(circa 100 $\mu$m in diameter) were subjected to custom made slide chambers for the 
+detection and analysis in fully automatized imaging platform ``VideoScan''. 
+\strong{(B)} Subsequently the samples can be digitalized by counting number of 
+positive and total number of droplets. The plot was generated with the 
+\code{sim\_ddpcr} function from the \CRANpkg{dpcR} package.}
 \label{figure:dpcR_sim}
 \end{figure}
 
-Most of the commercial and experimental hardware platforms provide means to 
-analyse the amplification curve data. Yet, in case of closed source software the 
-analysis happens in most cases in a blackbox fashion tied to a specific platform 
-\citep{roediger_RJ_2013}. Often such systems have limitation in the data 
-processing and force the used to suboptimal analysis algorithm 
-\citep{ruijter_2013}. The visualization options are usually limited by the 
-software and not in acceptable publication quality. Aside from closed source 
-software, analysis of of data is often performed in spreadsheets. However, this 
-data processing approach is not advisable for research purposes. Spreadsheets 
-often lack (or do not use) tools to validate input, debug implemented procedures 
-and automatize workflow. These traits make them prone to errors and not well 
-suited for complicated tasks\footnote{For more elaborated critique see 
-\url{http://www.burns-stat.com/documents/tutorials/spreadsheet-addiction/} and 
-\citet{mccullough_2008}.}.
+Many of the commercial and experimental hardware platforms provide means to 
+analyse the data. The complexity of hardware, wetware and software 
+requires expertise to master a workflow. This comprises standards for experiment 
+design, generation and analysis of data, interpretation, reporting and storage 
+of results \citep{huggett_BDQ_2014}. Yet, in case of closed source software the 
+analysis happens in most cases in a black~box fashion tied to a specific 
+platform \citep{roediger_RJ_2013}. We agree that black~boxes are not necessarily 
+a bad thing, but should be avoided if possible. Studies by 
+\citet{mccullough_2008, Almiron_2010, Duran_2014} exemplified where the 
+black~box approach might fail in science. But the same holds true for the 
+open~source software. However, open~source gives at least an option to track and 
+eliminate  the error by an individual entity. Often such systems have 
+limitations in the data processing and force the user to process the data with 
+suboptimal analysis algorithms \citep{ruijter_2013}. The visualization options 
+are usually limited by the software and not in acceptable publication quality. 
+Users who have no access to the commercial software are barred. Aside from 
+closed source software, analysis of data is often performed in spreadsheets. 
+However, this data processing approach is not advisable for research purposes. 
+Spreadsheets often lack (or do not use) tools to validate the input, to debug 
+implemented procedures and to automatize the workflow. These traits make them 
+prone to errors and not well suited for complicated tasks\footnote{For more 
+elaborated critique see \citet{mccullough_2008, burns_2014}.}.
 
-The complexity of hardware, wetware and software requires expertise to master a 
-technical workflow comprising standards for experimental design, generation and 
-analysis of data, interpretation of results and reporting 
-\citep{huggett_BDQ_2014}. We argue that blackboxs are not necessarily a bad 
-thing, but should be avoided wherever possible. Studies by 
-\citet{mccullough_2008, Almiron_2010, Duran_2014} exemplified this. Scientific 
-misconduct and fraud have shaken the scientific community on several occasions 
-\citep{fang_2012}.
-
-R is one of the most used tools in 
-bioinformatics and is known as an early adopter of emerging technologies 
-\citep{pabinger_2014} for several reasons. R provides essential packages to 
-build a highly customized workflows, covering: data read-in, data 
-preprocessing, 
-analysis, post-processing, visualization and storage. As recently briefly 
-reviewed in \citet{pabinger_2014}, numerous R packages have been developed for 
-the analysis of qPCR experiments, including: \CRANpkg{kulife}, 
-\CRANpkg{MCMC.qpcr}, \CRANpkg{qPCR.CT}, \CRANpkg{DivMelt}, \CRANpkg{qpcR}, 
-\CRANpkg{dpcR}, \CRANpkg{chipPCR}, \CRANpkg{MBmca}, \CRANpkg{RDML}, 
-\BIOpkg{nondetects}, \BIOpkg{qpcrNorm}, \BIOpkg{HTqPCR}, \BIOpkg{SLqPCR}, 
-\BIOpkg{ddCt}, \BIOpkg{EasyqpcR}, \BIOpkg{unifiedWMWqPCR}, \BIOpkg{ReadqPCR}, 
-\BIOpkg{NormqPCR}. All the packages are either available from CRAN or 
-Bioconductor \citep{gentleman_2004}. The packages can be freely combined in a 
-plugin-like architecture. R is instrument independent, cross-platform and 
-provides a wide spectrum of calculation options. In particular, visualization 
-of 
+R is one of the most used tools in bioinformatics and is known as an early 
+adopter of emerging technologies \citep{pabinger_2014} for several reasons. R 
+provides essential packages to build a highly customized workflows, covering: 
+data read-in, data preprocessing, analysis, post-processing, visualization and 
+storage. As recently briefly reviewed in \citet{pabinger_2014}, numerous R 
+packages have been developed for the analysis of qPCR experiments, including: 
+\CRANpkg{kulife}, \CRANpkg{MCMC.qpcr}, \CRANpkg{qPCR.CT}, \CRANpkg{DivMelt}, 
+\CRANpkg{qpcR}, \CRANpkg{dpcR}, \CRANpkg{chipPCR}, \CRANpkg{MBmca}, 
+\CRANpkg{RDML}, \BIOpkg{nondetects}, \BIOpkg{qpcrNorm}, \BIOpkg{HTqPCR}, 
+\BIOpkg{SLqPCR}, \BIOpkg{ddCt}, \BIOpkg{EasyqpcR}, \BIOpkg{unifiedWMWqPCR}, 
+\BIOpkg{ReadqPCR}, \BIOpkg{NormqPCR}. All the packages are either available from 
+CRAN or Bioconductor \citep{gentleman_2004}. The packages can be freely combined 
+in a plugin-like architecture. R is instrument independent, cross-platform and 
+provides a wide spectrum of calculation options. In particular, visualization of 
 experiments is one of R pinnacles. Though the intrinsic properties of R such as 
 the naming convention \citep{Baaaath_2012} and use of R's class systems (e.g., 
 \strong{S3}, \strong{S4}, reference classes and \strong{R6}) vary considerable 
 depending on the package developer preferences there is the common ground to 
-track numerical errors in R due to the open source approach. In addition, 
-offers 
-the R environment several data sets. R offers various methods for a 
-standardized 
+track numerical errors in R due to the open source approach. In addition, offers 
+the R environment several data sets. R offers various methods for a standardized 
 data import/export and exchange. Workflows can be embedded in structures for 
 models (e.g., Predictive Model Markup Language (PMML) as proposed by 
 \citet{Guazzelli_2009}, open data exchange formats (e.g., XML-based Real-Time 
@@ -134,8 +132,7 @@ Therefore, others and we argue that R is suitable for reproducible research
 \citep{Gesmann_2011, Murrell_2012, gandrud_2013, hofmann_2013, Leeper_2014, 
 liu_2014}. In addition, several software R packages enable an efficient 
 manipulation, restructuring and reshaping of data to make the readily-available 
-for further processing. This is of particular importance on the human to 
-machine 
+for further processing. This is of particular importance on the human to machine 
 interface \citep{Oh_2014}.
 
 The aim of this paper is to show two simple case studies. In 
