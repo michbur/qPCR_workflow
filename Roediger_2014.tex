@@ -78,16 +78,16 @@ generated with the \code{sim\_ddpcr} function from the \CRANpkg{dpcR} package.}
 
 Most of the commercial and experimental hardware platforms provide means to 
 analyse the amplification curve data. Yet, in case of closed source software the 
-analysis happens in most cases in a blackbox fashion tied to a specific 
-platform. Often such systems have limitation in the data processing and force 
-the used to suboptimal analysis algorithm \citep{ruijter_2013}. The 
-visualization options are usually limited by the software and not in acceptable 
-publication quality. Aside from closed source software, analysis of of data is 
-often performed in spreadsheets. However, this data processing approach is not 
-advisable for research purposes. Spreadsheets often lack (or do not use) tools 
-to validate input, debug implemented procedures and automatize workflow. These 
-traits make them prone to errors and not well suited for complicated 
-tasks\footnote{For more elaborated critique see 
+analysis happens in most cases in a blackbox fashion tied to a specific platform 
+\citep{roediger_RJ_2013}. Often such systems have limitation in the data 
+processing and force the used to suboptimal analysis algorithm 
+\citep{ruijter_2013}. The visualization options are usually limited by the 
+software and not in acceptable publication quality. Aside from closed source 
+software, analysis of of data is often performed in spreadsheets. However, this 
+data processing approach is not advisable for research purposes. Spreadsheets 
+often lack (or do not use) tools to validate input, debug implemented procedures 
+and automatize workflow. These traits make them prone to errors and not well 
+suited for complicated tasks\footnote{For more elaborated critique see 
 \url{http://www.burns-stat.com/documents/tutorials/spreadsheet-addiction/} and 
 \citet{mccullough_2008}.}.
 
@@ -98,11 +98,11 @@ analysis of data, interpretation of results and reporting
 thing, but should be avoided wherever possible. Studies by 
 \citet{mccullough_2008, Almiron_2010, Duran_2014} exemplified this. Scientific 
 misconduct and fraud have shaken the scientific community on several occasions 
-\citep{fang_2012}. In particular qPCR is a sensible topic.
+\citep{fang_2012}.
 
 R is one of the most used tools in 
 bioinformatics and is known as an early adopter of emerging technologies 
-\citep{pabinger_2014} due to several reasons. R provides essential packages to 
+\citep{pabinger_2014} for several reasons. R provides essential packages to 
 build a highly customized workflows, covering: data read-in, data 
 preprocessing, 
 analysis, post-processing, visualization and storage. As recently briefly 
@@ -184,26 +184,24 @@ Typically the qPCR analysis will start with data from a commercial platform.
 Most platforms have an option to export a CSV file or spreadsheets application 
 file (e.g., *.xls, *.odt). The details for the import data has been described 
 elsewhere \citep{RDCT2010c, rodiger_rkward_2012}. To keep the case study 
-sections 
-compact we have chosen to load datasets from the \CRANpkg{qcpR} package 
-\citep{ritz_2008, spiess_2008} (v.~1.4.0) and \CRANpkg{RDML} package to our 
+sections compact we have chosen to load datasets from the \CRANpkg{qcpR} package 
+\citep{ritz_2008, spiess_2008} (v.~1.4.0) and the \CRANpkg{RDML} package to our 
 workspace. In this study we used the \CRANpkg{RDML} package (v.~0.4-2) for data 
 read-in. The data were measured with a CFX96 System (Bio-Rad) and then exported 
 as RDML v1.1 format file. The \CRANpkg{chipPCR} package (v.~0.0.8-3) was used 
 for data preprocessing, quality control and  the calculation of the 
 quantification cycle (Cq). The Cq is a quantitative measure, which represents 
 the number of cycles needed to reach a user defined threshold fluorescence 
-signal level. Typically Cq are determined identically the exponential phase of 
-a qPCR reaction. Several Cq methods have been described \citep{ruijter_2013}. 
-In this study we have chosen the second derivative maximum method ($Cq_{SDM}$) 
-and the ``Cycle threshold'' ($Cq_{Ct}$) method.
+signal level. Typically Cq are determined identically the exponential phase of a 
+qPCR reaction. Several Cq methods have been described \citep{ruijter_2013}. In 
+this study we have chosen the second derivative maximum method ($Cq_{SDM}$) and 
+the ``Cycle threshold'' ($Cq_{Ct}$) method.
 
 In a perfect qPCR reaction, the amount of amplicon doubles ($2^{n}$; n = cycle 
 number) at each cycle. Here the amplification efficiency ($AE$) is 100~\%. 
 However, in reality, numerous factors cause an inhibition of the amplification 
 ($AE$ < 100~\%).  The $AE$ can determined be the relation of the Cq value 
-depending 
-on the sample input quantity as detailed described in 
+depending on the sample input quantity as detailed described in 
 \citep{roediger_chippcr_2014}.
 
 In \citet{roediger_RJ_2013} we described the application of R for the analysis 
@@ -214,10 +212,9 @@ all platforms we applied the functions from the \CRANpkg{MBmca} package
 temperature ($T_{M}$) in our qPCR experiment. We used the \CRANpkg{MBmca} 
 package (0.0.3-4) for analysis of melting curve data.
 
-We complete our study with a simple case study for the analysis of dPCR 
-experiment. 
-In particular, we used the \CRANpkg{dpcR} (0.1.3.1) to estimate the number of 
-molecules in a sample.
+We complete our study with a case study for the analysis of dPCR 
+experiment. In particular, we used the \CRANpkg{dpcR} (0.1.3.1) to estimate the 
+number of molecules in a sample.
 
 \section{Results}
 
@@ -378,7 +375,7 @@ positive and negative samples (compare Figure~\ref{figure:plotCurves}).
 Provided 
 that the melting temperature of a sample is known it is possible to automatize 
 the melting curve analysis (MCA). As shown in \citet{roediger_RJ_2013} this can 
-be done by interrogating the $T_{M}$. Therefore, we used a simple logic 
+be done by interrogating the $T_{M}$. Therefore, we used a logical 
 statement, 
 which checks if $T_{M}$ is within a tight temperature range and signal height. 
 In line 
@@ -722,7 +719,7 @@ Selected functionality was implemented as interactive \CRANpkg{shiny} GUI
 application to make the software accessible for users who are not fluent in R 
 and for experts who wish to automatize routine tasks. Details and examples of 
 the \CRANpkg{shiny} web application framework for R can be found at 
-\url{http://shiny.rstudio.com/}. We implemented flexible yet simple user 
+\url{http://shiny.rstudio.com/}. We implemented flexible user 
 interfaces, which run the analyses and graphical representation into interactive 
 web applications either as service on a web severer or on a local machine 
 without knowledge of HTML or ECMAScript (see \CRANpkg{dpcR} manual). The 
