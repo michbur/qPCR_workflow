@@ -680,23 +680,23 @@ the package \citep{pabinger_2014}. Here, we show briefly a case study for the
 \CRANpkg{dpcR}.
 
 In detail, we mimicked an in-silico experiment for a droplet digital PCR similar 
-to Figure~\ref{figure:dpcR_sim}. The aim was to do a density estimation. The 
-number of positive partitions ($k$), total number of partitions ($n$) and the 
-size of the partition are only data required for analysis. The estimate of the 
-mean number of template molecules per partition ($\hat \lambda$) is calculated 
+to Figure~\ref{figure:dpcR_sim}. The aim was to asses a real concentration of the 
+template sample. The number of positive partitions ($k$), total number of partitions 
+($n$) and the size of the partition are only data required for analysis. The estimate 
+of the mean number of template molecules per partition ($\hat \lambda$) is calculated 
 using following equation \citep{huggett_2013}:
 
 \begin{equation}
 \hat{\lambda} =  -\ln{(1 - \frac{k}{n})}.
 \end{equation}
 
-The average droplet value in our experiment was assumed to be 5 nL. We counted 
+The average droplet volume in our experiment was assumed to be 5 nL. We counted 
 $n = 16800$ droplets in total from which $k = 4601$ droplets were positive. 
-Since the binomial distribution of positive and negative partitions is used to 
-define $\hat \lambda$, we use Wilson method for calculation of confidence 
-intervals \citep{brown_2001}. The obtained mean number of template molecules per 
-partition multiplied by the volume of the partitions constitutes the sample 
-concentration.
+The binomial distribution of positive and negative partitions is used to 
+determine $\hat \lambda$. R allows both easy estimation of a density of
+the parameter and calculation of confidence intervals using Wilson method \citep{brown_2001}. 
+The obtained mean number of template molecules per partition multiplied
+by the volume of the partitions constitutes the sample concentration.
 
 \begin{example}
 # Load the dpcR package for the analysis of the digital PCR experiment.
