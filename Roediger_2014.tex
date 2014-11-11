@@ -9,15 +9,18 @@ Blagodatskikh and Peter Schierack}
 There is an ever-increasing number of applications, which use quantitative PCR 
 (qPCR) or digital PCR (dPCR) to elicit fundamentals of biological processes. 
 Novel amplification strategies based on quantitative isothermal amplification 
-(qIA) become more prominent in life sciences and diagnostics. Several software 
-solutions have been developed, which are either distributed as closed source 
-software or as monolithic block with little freedom to perform highly 
-customized analysis procedures. Others and we argue that R is an excellent environment 
-for a reproducible and transparent analysis of data. However, for newcomers it is 
-often very challenging to master R or learn capabilities of less known packages. 
-Here we describe exemplary workflows for the analysis of dPCR, 
-qIA or qPCR experiments including the analysis of melting curve data. Our 
-analysis relies entirely on R packages available from public repositories.
+(qIA) become more prominent in life sciences and point-of-care-diagnostics. 
+Several software packages have been developed, which are either distributed as 
+closed source software or as monolithic block with little freedom to perform 
+highly customized analysis procedures. Others and we argue that R is an 
+excellent foundation for a reproducible and transparent analysis of data, which 
+offers a highly customizable environment. However, for newcomers it is often 
+challenging to master R or learn capabilities of the vast number of packages 
+available. Here we describe exemplary workflows for the analysis of dPCR, qIA or 
+qPCR experiments including the analysis of melting curve data. Our analysis 
+relies entirely on R packages available from public repositories. In addition, 
+we provide information related to standardization and reproducible research with 
+R.
 }
 
 \section{Introduction}
@@ -27,29 +30,26 @@ traces of pathogens or the analysis of gene expression is required
 \citep{peirson_2003}. Numerous commercial and experimental monitoring platforms 
 have been developed in the past years. This includes standard plate cyclers, 
 capillary cyclers, microfluidic platforms and related technologies 
-\citep{rodiger_highly_2013, devonshire_2013, viturro_2014, 
-rodiger_nucleic_2014, 
-khodakov_2014}. Only few bioanalytical applications had such a significant 
-impact on the progress of life sciences and medical sciences as the 
-quantitative 
-Polymerase Chain Reaction (qPCR). The scientific community work hard in the 
-past 
-two decades to uncover pitfalls of qPCR experiments. This lead finally to the 
-development of peer-reviewed analysis algorithms \citep{ruijter_2013}, 
-throughout analysed qPCR chemistries \citep{ruijter_2014} and guidelines for a 
-proper conduct of qPCR experiments as implemented in the MIQE guidelines 
-(minimum information for publication of quantitative real-time PCR experiments) 
-\citep{bustin_miqe_2009, huggett_2013}. In the past decades 
-emerged several isothermal amplification technologies, such as helicase 
-dependent amplification (HDA), as alternative to PCR. Isothermal amplification 
-was readily combined with real-time monitoring technologies (qIA) and is used 
-nowadays in various fields like diagnostics and point of care testing 
-\citep{rodiger_nucleic_2014}.
+\citep{rodiger_highly_2013, devonshire_2013, viturro_2014, rodiger_nucleic_2014, 
+khodakov_2014, wu_2014}. Only few bioanalytical applications had such a 
+significant impact on the progress of life sciences and medical sciences as the 
+quantitative Polymerase Chain Reaction (qPCR). The scientific community work 
+hard in the past two decades to uncover pitfalls of qPCR experiments. This lead 
+finally to the development of peer-reviewed quantification cycle (Cq) analysis 
+algorithms \citep{ruijter_2013}, throughout analysed qPCR chemistries 
+\citep{ruijter_2014} and guidelines for a proper conduct of qPCR experiments as 
+implemented in the MIQE guidelines (minimum information for publication of 
+quantitative real-time PCR experiments) \citep{bustin_miqe_2009, huggett_2013}. 
+In the past decades emerged several isothermal amplification technologies, such 
+as helicase dependent amplification (HDA), as alternative to PCR. Isothermal 
+amplification was readily combined with real-time monitoring technologies (qIA) 
+and is used nowadays in various fields like diagnostics and 
+point-of-care-testing \citep{rodiger_nucleic_2014}.
 
 Digital PCR (dpcR) is a novel approach for detection and quantification of 
 nucleic acids. The dPCR Technology breaks fundamentally with the previous 
 concept of nucleic acid quantification and can be seen as a next generation 
-nucleic acid quantification. The key difference between dPCR and traditional 
+nucleic acid quantification method. The key difference between dPCR and traditional 
 PCR lies in the method of measuring (absolute) nucleic acids amounts, which 
 yields discrete information instead of the continuous signal. This is possible 
 after ``clonal DNA amplification'' in thousands of small separated partitions 
@@ -59,8 +59,8 @@ turn positive (e.g., Figure~\ref{figure:dpcR_sim}). Selected technologies
 (e.g., OpenArray\textregistered Real-Time PCR System) monitor amplification 
 reactions in the chambers in real-time. Cq values are calculated from the 
 amplification curves and converted into discrete events by means of positive and 
-negative partitions and the absolute quantification of nucleic acids is done 
-using Poisson distribution. Recently we published the \CRANpkg{dpcR} package at 
+negative partitions. Finally, the absolute quantification of nucleic acids is done 
+using Poisson statistics. Recently we published the \CRANpkg{dpcR} package at 
 CRAN, which is the first open source software package based on R for the 
 analysis of digital PCR (dPCR) experiments (see \CRANpkg{dpcR} for details).
 
@@ -77,17 +77,17 @@ generated with the \code{sim\_ddpcr} function from the \CRANpkg{dpcR} package.}
 \end{figure}
 
 Most of the commercial and experimental hardware platforms provide means to 
-analyse the amplification curve data. Yet, in case of closed source software 
-the analysis happens in most cases in a blackbox fashion tied to a specific 
-platforms. Often such systems have limitation in the data processing and force 
-the used to suboptimal analysis algorithm as discussed by \citet{ruijter_2013}. 
-The visualization options are usually limited by the software and not in 
-acceptable publication quality. Aside from closed source software, analysis of 
-PCR reactions is generally performed in spreadsheets. This approach of data 
-processing is not advisable for research purposes. Spreadsheets often lack (or 
-do not use) tools to validate input, debug implemented procedures and 
-automatize workflow. These traits make them prone to errors and not well suited 
-for complicated tasks\footnote{For more elaborated critique see 
+analyse the amplification curve data. Yet, in case of closed source software the 
+analysis happens in most cases in a blackbox fashion tied to a specific 
+platform. Often such systems have limitation in the data processing and force 
+the used to suboptimal analysis algorithm \citep{ruijter_2013}. The 
+visualization options are usually limited by the software and not in acceptable 
+publication quality. Aside from closed source software, analysis of of data is 
+often performed in spreadsheets. However, this data processing approach is not 
+advisable for research purposes. Spreadsheets often lack (or do not use) tools 
+to validate input, debug implemented procedures and automatize workflow. These 
+traits make them prone to errors and not well suited for complicated 
+tasks\footnote{For more elaborated critique see 
 \url{http://www.burns-stat.com/documents/tutorials/spreadsheet-addiction/} and 
 \citet{mccullough_2008}.}.
 
