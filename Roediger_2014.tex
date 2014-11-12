@@ -72,50 +72,53 @@ experiments (see \CRANpkg{dpcR} for details).
   \includegraphics[clip=true, width=14cm]{figures/dpcR_sim.pdf}
   \caption{Scheme of droplet digital PCR experiment. \strong{A)} A droplet 
 digital PCR reaction mix was formed in a Bio-Rad QX100 system. The droplets 
-(circa 100 $\mu$m in diameter) were subjected to custom made slide chambers for the 
-detection and analysis in fully automatized imaging platform ``VideoScan''. 
-\strong{(B)} Subsequently the samples can be digitalized by counting number of 
-positive and total number of droplets. The plot was generated with the 
-\code{sim\_ddpcr} function from the \CRANpkg{dpcR} package.}
+(circa 100 $\mu$m in diameter) were subjected to custom made slide chambers for 
+the detection and analysis in fully automatized imaging platform ``VideoScan'' 
+\citep{rodiger_highly_2013}. \strong{(B)} Subsequently the samples can be 
+digitalized by counting number of positive and total number of droplets. The 
+plot was generated with the \code{sim\_ddpcr} function from the \CRANpkg{dpcR} 
+package.}
 \label{figure:dpcR_sim}
 \end{figure}
 
 Many of the commercial and experimental hardware platforms provide means to 
-analyse the data. The complexity of hardware, wetware and software 
-requires expertise to master a workflow. This comprises standards for experiment 
-design, generation and analysis of data, interpretation, reporting and storage 
-of results \citep{huggett_BDQ_2014}. Yet, in case of closed source software the 
+analyse the data. The complexity of hardware, wetware and software requires 
+expertise to master a workflow. This comprises standards for experiment design, 
+generation and analysis of data, interpretation, reporting and storage of 
+results \citep{huggett_BDQ_2014}. Yet, in case of closed source software the 
 analysis happens in most cases in a black~box fashion tied to a specific 
-platform \citep{roediger_RJ_2013}. We agree that black~boxes are not necessarily 
+platform \citep{roediger_RJ_2013, Spiess_2014}. We agree that black~boxes are not necessarily 
 a bad thing, but should be avoided if possible. Studies by 
 \citet{mccullough_2008, Almiron_2010, Duran_2014} exemplified where the 
 black~box approach might fail in science. But the same holds true for the 
-open~source software. However, open~source gives at least an option to track and 
-eliminate  the error by an individual entity. Often such systems have 
-limitations in the data processing and force the user to process the data with 
-suboptimal analysis algorithms \citep{ruijter_2013}. The visualization options 
-are usually limited by the software and not in acceptable publication quality. 
-Users who have no access to the commercial software are barred. Aside from 
-closed source software, analysis of data is often performed in spreadsheets. 
-However, this data processing approach is not advisable for research purposes. 
-Spreadsheets often lack (or do not use) tools to validate the input, to debug 
-implemented procedures and to automatize the workflow. These traits make them 
-prone to errors and not well suited for complicated tasks\footnote{For more 
-elaborated critique see \citet{mccullough_2008, burns_2014}.}.
+open~source software since software bugs are independent of a development model. 
+However, open~source gives at least the possibility to track and eliminate  the 
+error by an individual entity. Often such systems have limitations in the data 
+processing and force the user to process the data with suboptimal analysis 
+algorithms \citep{ruijter_2013}. The visualization options are usually limited 
+by the software and not in acceptable publication quality. Users who have no 
+access to the commercial software are barred. Aside from closed source software, 
+analysis of data is often performed in spreadsheets. However, this data 
+processing approach is not advisable for research purposes. Spreadsheets often 
+lack (or do not use) tools to validate the input, to debug implemented 
+procedures and to automatize the workflow. These traits make them prone to 
+errors and not well suited for complicated tasks\footnote{For more elaborated 
+critique see \citet{mccullough_2008, burns_2014}.}.
 
 R is one of the most used tools in bioinformatics and is known as an early 
 adopter of emerging technologies \citep{pabinger_2014} for several reasons. R 
 provides essential packages to build a highly customized workflows, covering: 
 data read-in, data preprocessing, analysis, post-processing, visualization and 
 storage. As recently briefly reviewed in \citet{pabinger_2014}, numerous R 
-packages have been developed for the analysis of qPCR experiments, including: 
-\CRANpkg{kulife}, \CRANpkg{MCMC.qpcr}, \CRANpkg{qPCR.CT}, \CRANpkg{DivMelt}, 
-\CRANpkg{qpcR}, \CRANpkg{dpcR}, \CRANpkg{chipPCR}, \CRANpkg{MBmca}, 
-\CRANpkg{RDML}, \BIOpkg{nondetects}, \BIOpkg{qpcrNorm}, \BIOpkg{HTqPCR}, 
-\BIOpkg{SLqPCR}, \BIOpkg{ddCt}, \BIOpkg{EasyqpcR}, \BIOpkg{unifiedWMWqPCR}, 
-\BIOpkg{ReadqPCR}, \BIOpkg{NormqPCR}. All the packages are either available from 
-CRAN or Bioconductor \citep{gentleman_2004}. The packages can be freely combined 
-in a plugin-like architecture. R is instrument independent, cross-platform and 
+packages have been developed for the analysis of qPCR, dPCR, qIA and melting 
+curve analysis experiments, including: \CRANpkg{kulife}, \CRANpkg{MCMC.qpcr}, 
+\CRANpkg{qPCR.CT}, \CRANpkg{DivMelt}, \CRANpkg{qpcR}, \CRANpkg{dpcR}, 
+\CRANpkg{chipPCR}, \CRANpkg{MBmca}, \CRANpkg{RDML}, \BIOpkg{nondetects}, 
+\BIOpkg{qpcrNorm}, \BIOpkg{HTqPCR}, \BIOpkg{SLqPCR}, \BIOpkg{ddCt}, 
+\BIOpkg{EasyqpcR}, \BIOpkg{unifiedWMWqPCR}, \BIOpkg{ReadqPCR}, 
+\BIOpkg{NormqPCR}. All the packages are either available from CRAN or 
+Bioconductor \citep{gentleman_2004}. The packages can be freely combined in a 
+plugin-like architecture. R is instrument independent, cross-platform and 
 provides a wide spectrum of calculation options. In particular, visualization of 
 experiments is one of R pinnacles. Though the intrinsic properties of R such as 
 the naming convention \citep{Baaaath_2012} and use of R's class systems (e.g., 
@@ -678,38 +681,38 @@ the package \citep{pabinger_2014}. Here, we show briefly a case study for the
 
 In detail, we mimicked an in-silico experiment for a droplet digital PCR similar 
 to Figure~\ref{figure:dpcR_sim}. The aim was to asses the concentration of the 
-template sample. The number of positive partitions ($k$), total number of partitions 
-($n$) and the size of the partition are only data required for the analysis. The estimate 
-of the mean number of template molecules per partition ($\hat \lambda$) is calculated 
-using following equation \citep{huggett_2013}:
+template sample. The number of positive partitions ($k$), total number of 
+partitions ($n$) and the size of the partition are only data required for the 
+analysis. The estimate of the mean number of template molecules per partition 
+($\hat \lambda$) is calculated using following equation \citep{huggett_2013}:
 
 \begin{equation}
 \hat{\lambda} =  -\ln{(1 - \frac{k}{n})}.
 \end{equation}
 
 The average droplet volume in our experiment was assumed to be 5 nL. We counted 
-$n = 16800$ droplets in total from which $k = 4601$ droplets were positive. 
-The binomial distribution of positive and negative partitions is used to 
-determine $\hat \lambda$. R allows both easy estimation of a density of
-the parameter and calculation of confidence intervals using Wilson method \citep{brown_2001}. 
-The obtained mean number of template molecules per partition multiplied
-by the volume of the partitions constitutes the sample concentration.
+$n = 16800$ droplets in total from which $k = 4601$ droplets were positive. The 
+binomial distribution of positive and negative partitions was used to determine 
+$\hat \lambda$. R allows both easy estimation of a density of the parameter and 
+calculation of confidence intervals using Wilson method \citep{brown_2001}. The 
+obtained mean number of template molecules per partition multiplied by the 
+volume of the partitions ($ 16800 * 5~nL$) constitutes the sample concentration.
 
 \begin{example}
 # Load the dpcR package for the analysis of the digital PCR experiment.
 require(dpcR)
 
-# In our in-silico experiment we counted in total 16800 droplets (n). 
+# Analysis of a digital PCR experiment. The density estimation.
+# In our in-silico experiment we counted in tatal 16800 droplets (n). 
 # Thereof, 4601 were positive (k).
+pdf("dpcR.pdf")
 
 (dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
 
-# Let us assume, that every droplet has roughly 5 nL 
-# total concentration (and its confidence intervals) in molecules/mL
+dev.off()
+# Let us assume, that every droplet has roughly a volume of 5 nL.
+# The total concentration (and its confidence intervals) in molecules/ml is:
 dens[4:6] / 5 * 1e-6
-#results: 
-#concentration        lower       upper
-# 6.400498e-08  6.217049e-08 6.58852e-08
 \end{example}
 
 Selected functionality was implemented as interactive \CRANpkg{shiny} GUI 
@@ -791,7 +794,7 @@ capacity (e.g., computing capacity, application software) and storage capacity
 categories include: Infrastructure-as-a-Service (IaaS), Platform-as-a-Service 
 (PaaS) and Software-as-a-Service (SaaS) over a network. Providers of CC manage 
 the infrastructure and resources to achieve coherence and economies of scale 
-similar to a utility over a network (typically the Internet) \citep{R_cloud}.}
+similar to a utility over a network (i.~p., Internet) \citep{R_cloud}.}
   \label{figure:options}
 \end{figure} 
 

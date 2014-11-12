@@ -224,11 +224,9 @@ pdf("dpcR.pdf")
 (dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
 
 dev.off()
-# Let us assume, that every droplet has roughly 5 nL 
-# total concentration (and its confidence intervals) in molecules/ml
+# Let us assume, that every droplet has roughly a volume of 5 nL.
+# The total concentration (and its confidence intervals) in molecules/ml is:
 dens[4:6] / 5 * 1e-6
-
-
 #################################
 # Case study four
 #################################
