@@ -142,7 +142,7 @@ Tm.Positive <- matrix(nrow = length(melt[, -1]),
                       dimnames = list(names(melt)[-1]),
                       unlist(apply(melt[, -1], 2, function(x) {
                         res.Tm <- diffQ(cbind(melt[, 1], x), 
-					fct = max, inder = TRUE)
+                                        fct = max, inder = TRUE)
                         positive <- ifelse(res.Tm[1] > 54 & 
                                              res.Tm[1] < 55 & 
                                              res.Tm[2] > 80, 1, 0)
