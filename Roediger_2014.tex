@@ -165,15 +165,15 @@ to:
 \begin{figure}[htbp]
   \centering
   \includegraphics{figures/workflow.png}
-  \caption{Exemplary workflow for qPCR experiments in R. Core functionality is 
-provided by the R software environment for statistical computing and graphics. 
-In our scenario we used the \CRANpkg{RDML} package to read-in data in 
-standardized format. However, any format supported by R could be used. Further 
-processing of amplification curve data was performed with the \CRANpkg{chipPCR} 
-package and amplification curve data were analysed with the \CRANpkg{MBmca} 
-package. Cq, quantification cycle; $T_{M}$, melting temperature. The 
-\CRANpkg{dpcR} package can be embedded in the analysis 
-of digital PCR experiments.
+  \caption{Exemplary workflow for qPCR, dPCR, qIA and MCA experiments in R. Core 
+functionality is provided by the R software environment for statistical 
+computing and graphics. In our scenario we used the \CRANpkg{RDML} package to 
+read-in data in standardized format. However, any format supported by R could be 
+used. Further processing of amplification curve data was performed with the 
+\CRANpkg{chipPCR} package and amplification curve data were analysed with the 
+\CRANpkg{MBmca} package. Cq, quantification cycle; $T_{M}$, melting temperature. 
+The \CRANpkg{dpcR} package can be embedded in the analysis of digital PCR 
+experiments.
 } \label{figure:workflow}
 \end{figure}
 
@@ -201,12 +201,12 @@ reaction. Several Cq methods have been described \citep{ruijter_2013}. In this
 study we have chosen the second derivative maximum method ($Cq_{SDM}$) and the 
 ``Cycle threshold'' ($Cq_{Ct}$) method.
 
-In a perfect qPCR reaction, the amount of amplicon doubles ($2^{n}$; n = cycle 
+In a perfect qPCR reaction, the target DNA doubles ($2^{n}$; n = cycle 
 number) at each cycle. Here the amplification efficiency ($AE$) is 100~\%. 
 However, in reality, numerous factors cause an inhibition of the amplification 
 ($AE$ < 100~\%).  The $AE$ can determined be the relation of the Cq value 
 depending on the sample input quantity as detailed described in 
-\citep{roediger_chippcr_2014}.
+\citet{roediger_chippcr_2014}.
 
 In \citet{roediger_RJ_2013} we described the application of R for the analysis 
 of melting curve experiments from microbead-based assays. Since the mathematical 
@@ -221,8 +221,8 @@ number of molecules in a sample.
 
 \section{Results}
 
-In the following sections we will show how R can be used as an unified open 
-software, which can be used for (I) data analysis and presentation in research, 
+In the following sections we show how R can be used as an unified open 
+software for (I) data analysis and presentation in research, 
 (II) as software frame-work for novel technical developments, (III) as platform 
 for teaching of new technologies and (IV) as reference for statistical methods.
 
