@@ -33,7 +33,7 @@ res.CPP <- cbind(gue[, 1], apply(gue[, -1], 2, function(x) {
 }))
 
 # Use the th.cyc function from the chipPCR package to calculate the Cq values
-# by the cycle threshold method at a threshold level "r" of 0.05.
+# by the cycle threshold method at a threshold signal level "r" of 0.05.
 Cq.Ct <- apply(gue[, -1], 2, function(x) 
   th.cyc(res.CPP[, 1], x, r = 0.05)[1])
 
@@ -115,7 +115,7 @@ plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
 
 dev.off()
 # Detect positive samples - calculate Cq values
-# by the cycle threshold method. The threshold level r was set to 50.
+# by the cycle threshold method. The threshold signal level r was set to 50.
 Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
 {
   res <- CPP(qPCR[, 1], x, trans = TRUE, bg.range = c(1, 9))[["y.norm"]]
@@ -244,11 +244,11 @@ res <- lapply(c(2, 4), function(i) {
              bg.range = c(1, 190))
   lines(C81[, i] / 60, y.s[["y.norm"]], type = "b", pch = 20, col = i - 1)
   # Use the th.cyc function to calculate the cycle threshold time (Cq.t). 
-  # The threshold level r was set to 0.05.
+  # The threshold signal level r was set to 0.05.
   paste(round(th.cyc(C81[, i] / 60, y.s[["y.norm"]], r = 0.05)[1], 2), "min")
 })
 
-# Add the cycle threshold time and the threshold level to plot.
+# Add the cycle threshold time and the threshold signal level to plot.
 
 abline(h = 0.05, lty = 2)
 text(10, 0.55, "Cq.t:")
