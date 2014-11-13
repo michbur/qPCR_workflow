@@ -18,7 +18,7 @@ to perform highly customized analysis procedures. Others and we argue that R is
 an excellent foundation for reproducible and transparent data analysis in a 
 highly customizable cross-platform environment. However, for novices it is 
 often challenging to master R or learn capabilities of the vast number of 
-packages available. Here we describe exemplary work-flows for the analysis of 
+packages available. Here we describe exemplary workflows for the analysis of 
 dPCR, qIA or qPCR experiments including the analysis of melting curve data. Our 
 analysis relies entirely on R packages available from public repositories. In 
 addition, we provide information related to standardized and reproducible 
@@ -80,7 +80,7 @@ package.}
 
 Many of the commercial and experimental hardware platforms provide means to 
 analyse the data. The complexity of hardware, wetware and software requires 
-expertise to master a work-flow. This comprises standards for experiment design, 
+expertise to master a workflow. This comprises standards for experiment design, 
 generation and analysis of data, interpretation, reporting and storage of 
 results \citep{huggett_BDQ_2014}. Scientific misconduct and fraud have shaken 
 the scientific community on several occasions \citep{fang_2012}. In particular, 
@@ -112,13 +112,13 @@ software are barred. Aside from closed source software, often analysis of data
 performed in spreadsheets. However, this data processing approach is not 
 advisable for research purposes. Frequently spreadsheets  lack (or do not use) 
 tools to validate the input, to debug implemented procedures and to automatize 
-the work-flow. These traits make them prone to errors and not well suited for 
+the workflow. These traits make them prone to errors and not well suited for 
 complicated tasks. For more elaborated critique see \citet{mccullough_2008, 
 burns_2014}.
 
 For several reasons is R one of the most used tools in bioinformatics and is 
 known as an early adopter of emerging technologies \citep{pabinger_2014}. R 
-provides packages to build a highly customized work-flows, covering: data 
+provides packages to build a highly customized workflows, covering: data 
 read-in, data preprocessing, analysis, post-processing, visualization and 
 storage. As recently briefly reviewed in \citet{pabinger_2014}, numerous R 
 packages have been developed for the analysis of qPCR, dPCR, qIA and melting 
@@ -139,7 +139,7 @@ such as the naming convention \citep{Baaaath_2012} and class systems (e.g.,
 \strong{S3}, \strong{S4}, reference classes and \strong{R6}) vary considerable 
 depending on the package developer preferences. But due to the open source 
 approach there is the common ground to track numerical errors. R offers various 
-methods for a standardized data import/export and exchange. Work-flows can embed 
+methods for a standardized data import/export and exchange. workflows can embed 
 structured models \citet{Guazzelli_2009}, open data exchange formats (e.g., RDML) , binary 
 formats \citep{michna_2013} or tools provided by the R workspace 
 \citep{RDCT2010c}. In addition, the R environment offers several data sets, 
@@ -148,7 +148,7 @@ R is suitable for reproducible research \citep{Gesmann_2011, Murrell_2012,
 gandrud_2013, hofmann_2013, Leeper_2014, liu_2014}. 
 
 The aim of this paper is to show case studies for qPCR, dPCR, qIA and melting 
-curve analysis experiments. Our work-flow effectively follows the principle 
+curve analysis experiments. Our workflow effectively follows the principle 
 illustrated in Figure~\ref{figure:workflow}. We intent to aggregate 
 functionalities dispersed between various packages and offer a fast insight in 
 the analysis of nucleic acid experiments with R. In particular, we describe how 
@@ -165,7 +165,7 @@ to:
 \begin{figure}[htbp]
   \centering
   \includegraphics{figures/workflow.png}
-  \caption{Exemplary work-flow for qPCR, dPCR, qIA and MCA experiments in R. Core 
+  \caption{Exemplary workflow for qPCR, dPCR, qIA and MCA experiments in R. Core 
 functionality is provided by the R software environment for statistical 
 computing and graphics. In our scenario we used the \CRANpkg{RDML} package to 
 read-in data in standardized format. However, any format supported by R can be 
@@ -184,7 +184,7 @@ environment (IDE) and graphical user interface (GUI) such as \pkg{RKWard}
 \citep{rodiger_rkward_2012}, 
 \pkg{Rstudio}\footnote{\url{http://www.rstudio.com/}} or related technologies 
 \citep{Valero_2012}. Benefits of IDE's with GUI include syntax-highlighting, 
-auto completion and function references for rapid prototyping of work-flows.
+auto completion and function references for rapid prototyping of workflows.
 
 Typically the analysis will start with data from a commercial platform. 
 Most platforms have an option to export a CSV file or spreadsheets application 
@@ -381,7 +381,7 @@ $Cq_{SDM}$ values were automatically analysed with the \code{effcalc}
   \label{figure:dilution_Cq}
 \end{figure}
 
-As shown in this case study, it is easy to set-up a streamlined work-flow for data 
+As shown in this case study, it is easy to set-up a streamlined workflow for data 
 read-in, pre-processing and analysis with a few functions.
 
 \subsection{Case study two -- qPCR and Melting Curve Analysis}
@@ -756,7 +756,7 @@ the \CRANpkg{shiny} web application framework for R can be found at
 flexible user interfaces, which run the analyses and graphical representation 
 into interactive web applications either as service on a web severer or on a 
 local machine without knowledge of HTML or ECMAScript (see \CRANpkg{dpcR} 
-manual). The interface is designed in a cascade work-flow approach (Data import 
+manual). The interface is designed in a cascade workflow approach (Data import 
 $\rightarrow$ Analysis $\rightarrow$ Output $\rightarrow$ Export) with 
 interactive users choice on input data, methods and parameters using typical GUI 
 elements such as sliders, drop-downs and text fields. An example can be found at 
@@ -784,7 +784,7 @@ create what users want and need. We showed that automatized research with R
 offers powerful means for statistical analysis and visualization. The software 
 is not tied to a vendor or specific application (e.g., chamber or droplet based 
 digital PCR, capillary or plate qPCR). It should be quite easy even for an 
-inexperienced user to define a work-flow and to set up environment for specific 
+inexperienced user to define a workflow and to set up environment for specific 
 needs in a broad range of technical settings (Figure~\ref{figure:options}). R 
 enforces no monolithic integration. We claim that the modular structure of R 
 packages allows user to perform flexible data analysis adjusted to their needs 
@@ -814,7 +814,7 @@ and is still under development.
   \caption{Deployment of R applications for the qPCR and dPCR experiments. 
 \strong{(A)} R is typically run from a desktop computer an operated by an 
 GUI/IDE application such as \pkg{Rstudio} or \pkg{RKWard}. This approach 
-provides a flexible work-flow for individuals. \strong{(B)} Another approach is 
+provides a flexible workflow for individuals. \strong{(B)} Another approach is 
 to run R with specific applications on a local server. Such scenarios are useful 
 for the deployment within research departments or cooperate units \citep{R_web}. 
 \strong{(C)} Cloud computing (CC) provides shared and scalable computing 
