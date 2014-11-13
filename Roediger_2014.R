@@ -221,16 +221,16 @@ par(mfrow = c(2, 1))
 # Plot the raw data from the C81 dataset to the first array and add
 # a legend. Note: The abcsissa values (time in seconds) was divided 
 # by 60 to (C81[, i] / 60) to convert to minutes.
-plot(NA, NA, xlim = c(0, 120), ylim = c(0.4, 1.2), xlab = "Time (min)", ylab = "RFU")
+plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "RFU")
 mtext("A", cex = 2, side = 3, adj = 0, font = 2)
 lapply(c(2, 4), function(i) {
   lines(C81[, i] / 60, C81[, i + 1], type = "b", pch = 20, col = i - 1)
 })
-legend(10, 0.8, c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 3), 
+legend(0, 0.35, c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 3), 
        bty = "n")
 
 # Prepare a plot on the second array for the pre-processed data.
-plot(NA, NA, xlim = c(0, 120), ylim = c(0, 0.8), xlab = "Time (min)", ylab = "RFU")
+plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "RFU")
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 
 # Apply the CPP functions to pro-process the raw data.1) Baseline data to zero, 
@@ -251,7 +251,7 @@ res <- lapply(c(2, 4), function(i) {
 # Add the cycle threshold time and the threshold level to plot.
 
 abline(h = 0.05, lty = 2)
-text(10, 0.55, "Cq:")
+text(10, 0.55, "Cq.t:")
 legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), 
        bty = "n")
 dev.off()
