@@ -243,7 +243,7 @@ res <- lapply(c(2, 4), function(i) {
              bg.outliers = TRUE,
              bg.range = c(1, 190))
   lines(C81[, i] / 60, y.s[["y.norm"]], type = "b", pch = 20, col = i - 1)
-  # Use the th.cyc function to calculate the cycle threshold time. 
+  # Use the th.cyc function to calculate the cycle threshold time (Cq.t). 
   # The threshold level r was set to 0.05.
   paste(round(th.cyc(C81[, i] / 60, y.s[["y.norm"]], r = 0.05)[1], 2), "min")
 })

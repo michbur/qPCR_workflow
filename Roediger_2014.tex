@@ -39,10 +39,10 @@ several occasions \citep{fang_2012}. In particular, the scientific community
 work hard to uncover pitfalls of qPCR experiments. Finnaly this leads to the 
 development of peer-reviewed quantification cycle (Cq) analysis algorithms 
 \citep{ruijter_2013}, throughout analysed qPCR chemistries \citep{ruijter_2014} 
-and guidelines for a proper conduction of qPCR experiments as implemented in the 
+and guidelines for a proper conduct of qPCR experiments as implemented in the 
 MIQE guidelines (minimum information for publication of quantitative real-time 
 PCR experiments) \citep{bustin_miqe_2009, huggett_2013}. In the past decades 
-were emerged several isothermal amplification technologies, such as helicase 
+emerged several isothermal amplification technologies, such as helicase 
 dependent amplification (HDA), as alternative to PCR. Isothermal amplification 
 was readily combined with real-time monitoring technologies (qIA) and is used 
 nowadays in various fields like diagnostics and point-of-care-testing 
@@ -96,7 +96,7 @@ However, at least open~source gives the possibility to track and eliminate
 errors by an individual entity. Often black~box systems have limitations in the data 
 processing and force the user to process the data by suboptimal analysis 
 algorithms \citep{ruijter_2013}. The visualization options are usually limited 
-by the software and does not meet publication quality. Users who have no 
+by the software and does not attain publication quality. Users who have no 
 access to the commercial software are barred. Aside from closed source software, 
 often analysis of data performed in spreadsheets. However, this data 
 processing approach is not advisable for research purposes. Frequently spreadsheets  
@@ -597,17 +597,18 @@ as described by the vendor. In detail, the reaction was composed of ``mix A)''
 10 $\mu$L A. bidest, 1.25 $\mu$L 10xb~uffer, 0.75 $\mu$L primer(150 nM final), 
 0.5 $\mu$L template plasmid. Preincubation: The mixture was incubated for 2 min 
 at 95\textcelsius~and immediately placed on ice. Reaction ``mix B)'' contained 5 
-$\mu$L A. bidest., 1.25 $\mu$L 10x buffer, 2 $\mu$L NaCl, 1.25 $\mu$L $MgSO_{4}$, 
-1,75 $\mu$L dNTPs, 0.25 $\mu$L EvaGreen (Biotium), 1 $\mu$L enzyme mix. The mix 
-was covered with 50 $\mu$L mineral oil (Roth). The fluorescence measurement in 
-VideoScan HCU started directly after adding ``mix B)'' at 65\textcelsius. A $1x$ 
-(D1) and a $1:10$ dilution (D2) were tested. Our previously reported VideoScan 
-platform \citep{rodiger_highly_2013} was used to measure the samples. The 
-resulting dataset \texttt{C81} is part of the \CRANpkg{chipPCR} package. Two 
-concentrations (stock and 1:10 diluted stock) of input DNA were used in the HDA.
-
-Similar to the previous case studies, we first prepared the plot of 
-the data.
+$\mu$L A. bidest., 1.25 $\mu$L 10x buffer, 2 $\mu$L NaCl, 1.25 $\mu$L 
+$MgSO_{4}$, 1,75 $\mu$L dNTPs, 0.25 $\mu$L EvaGreen (Biotium), 1 $\mu$L enzyme 
+mix. The mix was covered with 50 $\mu$L mineral oil (Roth). The fluorescence 
+measurement in VideoScan HCU started directly after adding ``mix B)'' at 
+65\textcelsius. A $1x$ (D1) and a $1:10$ dilution (D2) were tested. Our 
+previously reported VideoScan platform \citep{rodiger_highly_2013} was used to 
+measure the samples. The resulting dataset \texttt{C81} is part of the 
+\CRANpkg{chipPCR} package. Two concentrations (stock and 1:10 diluted stock) of 
+input DNA were used in the HDA. Similar to the previous case studies, we first 
+prepared the plot of the data. Since the raw 
+data showed a slight negative trend and an off-set of circa 0.4 RFU 
+it was necessary to pre-process the raw data (Figure~\ref{figure:qIA}A).
 
 \begin{example}
 # Drawn in an 2-by-1 array on the device by two columns and one row.
@@ -629,13 +630,13 @@ plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "RF
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 \end{example}
 
-Next we used the \code{CPP} function to pre-process the raw data. Since the raw 
-data showed a slight negative trend and an off-set of circa 0.4 RFU 
-(Figure~\ref{figure:qIA}A). Similar to the other case studies we baselined and 
-smoothed the data. In addition, outliers were automatically removed in the 
-baseline region (Figure~\ref{figure:qIA}A~and~B).
+Again, we used the \code{CPP} function to pre-process the raw data. Similar to 
+the other case studies we baselined and smoothed (Savitzky-Golay smoother) the 
+data. In addition, outliers were automatically removed in the baseline region 
+(Figure~\ref{figure:qIA}A~and~B). The background range was defined to be between 
+the $1^{th}$ and $190^{th}$ data point.
 
-  \begin{example}
+\begin{example}
   # Apply the CPP functions to pro-process the raw data.1) Baseline data to zero, 
   # 2) Smooth data with spline, 3) Remove outliers in background range between 
   # entry 1 and 190.
@@ -646,7 +647,7 @@ res <- lapply(c(2, 4), function(i) {
              bg.outliers = TRUE,
              bg.range = c(1, 190))
   lines(C81[, i] / 60, y.s[["y.norm"]], type = "b", pch = 20, col = i - 1)
-  # Use the th.cyc function to calculate the cycle threshold time. 
+  # Use the th.cyc function to calculate the cycle threshold time (Cq.t). 
   # The threshold level r was set to 0.05.
   paste(round(th.cyc(C81[, i] / 60, y.s[["y.norm"]], r = 0.05)[1], 2), "min")
 })
@@ -659,7 +660,11 @@ legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3),
        bty = "n")
 \end{example}
 
-We calculated a cycle threshold time    70.18   93.18 minutes, receptively.
+The pre-processing lead to data, ready for the analysis of the $Cq_{t}$ value. 
+It is important to not that the trend correction and proper baseline was a 
+requirement for a sound calculation. The thershold level We calculated $Cq_{t}$ 
+values of 70.18~minutes and 93.18 minutes for the stock (D1) and 1:10 (D2) 
+diluted samples, receptively.
 
 \begin{figure}[htbp]
   \centering
@@ -668,13 +673,12 @@ We calculated a cycle threshold time    70.18   93.18 minutes, receptively.
 Amplification (HDA). \strong{(A)} The raw data of the HDA (D1, undiluted, D2 
 $1:10$ diluted) exhibit some outliers (detector artifacts), an off-set of circa 
 0.5 relative fluorescence units (RFU) and a slight negative trend in the 
-baseline region (0 to ~52 minutes). \strong{(B)} First we used the \code{CPP} 
+baseline region (0~-~52 minutes). \strong{(B)} First we used the \code{CPP} 
 function from the \CRANpkg{chipPCR} package to smooth the data with spline 
-function. Baselining was done with a robust MM-estimator (range 0 to 52 min). 
-Finally, we used the \code{th.cyc} function from the \CRANpkg{chipPCR} package 
-to calculate the cycle threshold time for samples D1 and D2. The threshold 
-value 
-was set to $r = 0.05$ ($--$).}
+function. Baselining was done with a linear regression model (robust 
+MM-estimator). Finally, we used the \code{th.cyc} function from the 
+\CRANpkg{chipPCR} package to calculate the cycle threshold time for samples D1 
+and D2. The threshold value was set to $r = 0.05$ ($--$).}
   \label{figure:qIA}
 \end{figure}
 
@@ -689,7 +693,7 @@ analysis methods, plotting facilities and report generation tools are part of
 the package \citep{pabinger_2014}. Here, we show briefly a case study for the 
 \CRANpkg{dpcR}.
 
-Simulations are part in selected educational curricula and support teaching 
+Simulations are part in many educational curricula and support teaching 
 greatly. In this case study, we mimicked an in-silico experiment for a droplet 
 digital PCR similar to Figure~\ref{figure:dpcR_sim}. The aim was to asses the 
 concentration of the template sample. The number of positive partitions ($k$), 
@@ -754,10 +758,8 @@ template molecules per partition ($\hat \lambda$).
 
 \section{Discussion and Conclusion}
 
-This study gave a brief introduction how to perform a qPCR, qIA or dPCR 
-analysis 
-with R based on packages available from CRAN. In addition, we briefly 
-referenced 
+This study gave a brief introduction how to perform a qPCR, qIA or dPCR analysis 
+with R based on packages available from CRAN. In addition, we briefly referenced 
 to a vast collection of additional packages available from CRAN and 
 Bioconductor. The packages may be considered building blocks (libraries) to 
 create what users want and need. We showed that automatized research with R 
@@ -774,21 +776,20 @@ Most of the software is cross-platform open source software and is freely
 available from CRAN or Bioconductor. Despite the fact that R is free of charge 
 it is quite possible to build commercial applications. The packages cover 
 implementation of novel approaches and peer-reviewed analysis methods. R 
-packages are an open environment to adopt to the growing knowledge in dPCR and 
-qPCR. Therefore, we argue that R may provide a structure for standardized 
-nomenclature and serve as reference in qPCR and dPCR analysis. Speaking about 
-openness, it is important to emphasize that main advantage is the software is 
-transparent at any time for anybody. Thus, it is possible to track numerical 
-errors.  A serve disadvantage of R is the lack of comprehensive GUIs for qPCR 
-analysis. Other and we believe that a graphical user interface (GUI) is a key 
-technology to spread the use of R in bioanalytical sciences. Currently, we are 
-establishing the ``pcRuniveRsum'' 
-(\url{http://michbur.github.io/pcRuniveRsum/}) 
-as an on-line resource for interested users. The command-line structure makes R 
-``inaccessible'' for many novices. This we support the attempt that automatic 
-routines are made accessible via GUIs \citep{rodiger_rkward_2012}. However, 
-work 
-in this has recently started and is still under development.
+packages are an open environment to adopt to the growing knowledge in life 
+sciences and medical sciences. Therefore, we argue that R may provide a 
+structure for standardized nomenclature and serve as reference in qPCR and dPCR 
+analysis. Speaking about openness, it is important to emphasize that main 
+advantage is the software is transparent at any time for anybody. Thus, it is 
+possible to track numerical errors.  A serve disadvantage of R is the lack of 
+comprehensive GUIs for qPCR analysis. Other and we believe that a graphical user 
+interface (GUI) is a key technology to spread the use of R in bioanalytical 
+sciences. Currently, we are establishing the ``pcRuniveRsum'' 
+(\url{http://michbur.github.io/pcRuniveRsum/}) as an on-line resource for 
+interested users. The command-line structure makes R ``inaccessible'' for many 
+novices. This we support the attempt that automatic routines are made accessible 
+via GUIs \citep{rodiger_rkward_2012}. However, work in this has recently started 
+and is still under development.
 
 \begin{figure}[htbp]
   \centering
