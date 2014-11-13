@@ -87,8 +87,8 @@ expertise to master a workflow. This comprises standards for experiment design,
 generation and analysis of data, interpretation, reporting and storage of 
 results \citep{huggett_BDQ_2014}. Yet, in case of closed source software the 
 analysis happens in most cases in a black~box fashion tied to a specific 
-platform \citep{roediger_RJ_2013, Spiess_2014}. We agree that black~boxes are not necessarily 
-a bad thing, but should be avoided if possible. Studies by 
+platform \citep{roediger_RJ_2013, Spiess_2014}. We agree that black~boxes are 
+not necessarily a bad thing, but should be avoided if possible. Studies by 
 \citet{mccullough_2008, Almiron_2010, Duran_2014} exemplified where the 
 black~box approach might fail in science. But the same holds true for the 
 open~source software since software bugs are independent of a development model. 
@@ -102,8 +102,8 @@ analysis of data is often performed in spreadsheets. However, this data
 processing approach is not advisable for research purposes. Spreadsheets often 
 lack (or do not use) tools to validate the input, to debug implemented 
 procedures and to automatize the workflow. These traits make them prone to 
-errors and not well suited for complicated tasks\footnote{For more elaborated 
-critique see \citet{mccullough_2008, burns_2014}.}.
+errors and not well suited for complicated tasks. For more elaborated 
+critique see \citet{mccullough_2008, burns_2014}.
 
 R is one of the most used tools in bioinformatics and is known as an early 
 adopter of emerging technologies \citep{pabinger_2014} for several reasons. R 
@@ -120,26 +120,34 @@ curve analysis experiments, including: \CRANpkg{kulife}, \CRANpkg{MCMC.qpcr},
 Bioconductor \citep{gentleman_2004}. The packages can be freely combined in a 
 plugin-like architecture. R is instrument independent, cross-platform and 
 provides a wide spectrum of calculation options. In particular, visualization of 
-experiments is one of R pinnacles. Though the intrinsic properties of R such as 
-the naming convention \citep{Baaaath_2012} and use of R's class systems (e.g., 
+experiments is one of R's pinnacles. Though the intrinsic properties of R such 
+as the naming convention \citep{Baaaath_2012} and class systems (e.g., 
 \strong{S3}, \strong{S4}, reference classes and \strong{R6}) vary considerable 
 depending on the package developer preferences there is the common ground to 
-track numerical errors in R due to the open source approach. In addition, offers 
-the R environment several data sets. R offers various methods for a standardized 
-data import/export and exchange. Workflows can be embedded in structures for 
-models (e.g., Predictive Model Markup Language (PMML) as proposed by 
-\citet{Guazzelli_2009}, open data exchange formats (e.g., XML-based Real-Time 
-PCR Data Markup Language (RDML) \citep{lefever_2009}, binary formats 
-\citep{michna_2013} or tools provided by the R workspace \citep{RDCT2010c}. 
-Therefore, others and we argue that R is suitable for reproducible research 
-\citep{Gesmann_2011, Murrell_2012, gandrud_2013, hofmann_2013, Leeper_2014, 
-liu_2014}. In addition, several software R packages enable an efficient 
-manipulation, restructuring and reshaping of data to make the readily-available 
-for further processing. This is of particular importance on the human to machine 
-interface \citep{Oh_2014}.
+track numerical errors in R due to the open source approach. R offers various 
+methods for a standardized data import/export and exchange. Workflows can be 
+embedded in structures for models (e.g., Predictive Model Markup Language (PMML) 
+as proposed by \citet{Guazzelli_2009}, open data exchange formats (e.g., 
+XML-based Real-Time PCR Data Markup Language (RDML) \citep{lefever_2009}, binary 
+formats \citep{michna_2013} or tools provided by the R workspace 
+\citep{RDCT2010c}. In addition, offers the R environment several data sets, 
+which can be used to test and reproduce third party software. Therefore, others 
+and we argue that R is suitable for reproducible research \citep{Gesmann_2011, 
+Murrell_2012, gandrud_2013, hofmann_2013, Leeper_2014, liu_2014}. In addition, 
+several software R packages enable an efficient manipulation, restructuring and 
+reshaping of data to make the readily-available for further processing. This is 
+of particular importance on the human to machine interface \citep{Oh_2014}.
 
-The aim of this paper is to show two simple case studies. In 
-particular, we describe how to:
+We share the philosophy of the MIQE guidelines to increase experimental 
+transparency for better experimental practice and reliable interpretation of 
+results and encourage the use of open data exchange formats like RDML. We see 
+the application of R in line with this. Our workflow effectively follows the 
+principle illustrated in Figure~\ref{figure:workflow}. The aim of this paper is 
+to show case studies for qPCR, dPCR, qIA and melting curve analysis experiments. 
+We intent to aggregate functionalities dispersed between various packages and 
+offer a fast insight in the analysis of nucleic acid experiments with R. In particular, 
+we describe how to:
+
 \begin{itemize}
  \item read-in data from a standardized file format,
  \item pre-process the amplification curve data,
@@ -147,14 +155,6 @@ particular, we describe how to:
  \item calculate the melting temperature,
  \item and report the data.
 \end{itemize}
-
-We share the philosophy of the MIQE guidelines to increase experimental 
-transparency for better experimental practice and reliable interpretation of 
-qPCR results and attempts for open data exchange formats like RDML. We see the 
-application of R in line with this. Our workflow effectively follows the 
-principle illustrated in Figure~\ref{figure:workflow}. The intent is to 
-aggregate functionalities dispersed between various packages and offer a fast 
-insight for novices in the analysis of qPCR experiments with R.
 
 \begin{figure}[htbp]
   \centering
@@ -180,9 +180,9 @@ environment (IDE) and graphical user interface (GUI) such as \pkg{RKWard}
 \citep{Valero_2012}. Benefits of IDE's with GUI include syntax-highlighting, 
 auto completion and function references for rapid prototyping of workflows.
 
-Typically the qPCR analysis will start with data from a commercial platform. 
+Typically the analysis will start with data from a commercial platform. 
 Most platforms have an option to export a CSV file or spreadsheets application 
-file (e.g., *.xls, *.odt). The details for the import data has been described 
+file (e.g., *.xls, *.odt). The details for the import data have been described 
 elsewhere \citep{RDCT2010c, rodiger_rkward_2012}. To keep the case study 
 sections compact we have chosen to load datasets from the \CRANpkg{qcpR} package 
 \citep{ritz_2008, spiess_2008} (v.~1.4.0) and the \CRANpkg{RDML} package to our 
@@ -191,11 +191,11 @@ read-in. The data were measured with a CFX96 System (Bio-Rad) and then exported
 as RDML v1.1 format file. The \CRANpkg{chipPCR} package (v.~0.0.8-3) was used 
 for data preprocessing, quality control and  the calculation of the 
 quantification cycle (Cq). The Cq is a quantitative measure, which represents 
-the number of cycles needed to reach a user defined threshold fluorescence 
-signal level. Typically Cq are determined identically the exponential phase of a 
-qPCR reaction. Several Cq methods have been described \citep{ruijter_2013}. In 
-this study we have chosen the second derivative maximum method ($Cq_{SDM}$) and 
-the ``Cycle threshold'' ($Cq_{Ct}$) method.
+the number of cycles needed to reach a user defined threshold signal level. 
+Typically Cq are determined identically the exponential phase of a qPCR/qIA 
+reaction. Several Cq methods have been described \citep{ruijter_2013}. In this 
+study we have chosen the second derivative maximum method ($Cq_{SDM}$) and the 
+``Cycle threshold'' ($Cq_{Ct}$) method.
 
 In a perfect qPCR reaction, the amount of amplicon doubles ($2^{n}$; n = cycle 
 number) at each cycle. Here the amplification efficiency ($AE$) is 100~\%. 
@@ -205,12 +205,11 @@ depending on the sample input quantity as detailed described in
 \citep{roediger_chippcr_2014}.
 
 In \citet{roediger_RJ_2013} we described the application of R for the analysis 
-of melting curve experiments on the surface of microbeads. Since the 
-mathematical foundation for melting curve analysis (MCA) is identical between 
-all platforms we applied the functions from the \CRANpkg{MBmca} package 
-\citep{roediger_RJ_2013} for an analysis of the target specific melting 
-temperature ($T_{M}$) in our qPCR experiment. We used the \CRANpkg{MBmca} 
-package (0.0.3-4) for analysis of melting curve data.
+of melting curve experiments from microbead-based assays. Since the mathematical 
+foundation for melting curve analysis (MCA) is identical between all platforms 
+we applied the functions from the \CRANpkg{MBmca} package (0.0.3-4) for an 
+analysis of the target specific melting temperature ($T_{M}$) in experiments of 
+the present study.
 
 We complete our study with a case study for the analysis of dPCR 
 experiment. In particular, we used the \CRANpkg{dpcR} (0.1.3.1) to estimate the 
@@ -218,25 +217,22 @@ number of molecules in a sample.
 
 \section{Results}
 
-In this section we will try to show that R is a unified open software which 
-fits 
-the needs for (I) data analysis and presentation in research, (II) as software 
-frame-work for novel technical developments, (III) as platform for teaching 
-this 
-new technology and (IV) serves as reference for statistical methods.
+In the following sections we will show how R can be used as an unified open 
+software, which can be used for (I) data analysis and presentation in research, 
+(II) as software frame-work for novel technical developments, (III) as platform 
+for teaching of new technologies and (IV) as reference for statistical methods.
 
 \subsection{Case study one -- qPCR and Amplification Efficiency Calculation}
 
-The goal of our fist case study was to calculate the Cq values and the $AE$ 
-from a qPCR experiment. We used the ``guescini1'' dataset from the 
-\CRANpkg{qcpR} package. Details of the experiment are described in 
-\citet{guescini_2008}. First we start with loading the required packages and 
-datasets. A good practice for reproducible research is to track the package 
-versions and environment used during the analysis. The function $sessionInfo()$ 
-from the \CRANpkg{utils} package provides this information. Assuming that the 
-analysis starts with a clean R session it is possible to assign the required 
-packages to an object only, as shown in our case study below\footnote{The 
-reproducibility of research can be further improved by using dedicated tools. 
+The goal of our fist case study was to calculate the Cq values and the $AE$ from 
+a qPCR experiment. We used the ``guescini1'' dataset from the \CRANpkg{qcpR} 
+package. Details of the experiment are described in \citet{guescini_2008}. First 
+we started with loading the required packages and datasets. A good practice for 
+reproducible research is to track the package versions and environment used 
+during the analysis. The function $sessionInfo()$ from the \CRANpkg{utils} 
+package provides this information. Assuming that the analysis starts with a 
+clean R session it is possible to assign the required packages to an object, as 
+shown below\footnote{The reproducibility of research can be further improved. 
 For example, \CRANpkg{archivist} package allows not only stores and recovers 
 crucial data, but preserves metadata of saved objects. All settings of R session 
 can be easily saved and/or restored using \CRANpkg{settings} package.}.
@@ -260,7 +256,7 @@ gue <- guescini1
 dil <- 10^(2:-4)
 \end{example}
 
-Next, we previewed the amplification curve raw data using the \code{matplot} 
+We previewed the amplification curve raw data using the \code{matplot} 
 function (see code below). The amplification curve data showed a strong signal 
 level variation in the plateau region (Figure~~\ref{figure:dilution_Cq}A). 
 Therefore all data were subjected to a minimum-maximum normalization (compare 
@@ -272,7 +268,8 @@ $Cq_{SDM}$ and $Cq_{Ct}$ methods.
 \begin{example}
 # Pre-process the amplification curve data with the CPP function from the 
 # chipPCR package. The trans parameter was set TRUE to perform a baselining and 
-# the method.norm parameter was set to minm for a min-maximum normalization.
+# the method.norm parameter was set to minm for a min-maximum normalization. All
+# amplification curves were smoothed by Savitzky-Golay smoothing.
 
 res.CPP <- cbind(gue[, 1], apply(gue[, -1], 2, function(x) {
   CPP(gue[, 1], x, trans = TRUE, method.norm = "minm", 
@@ -289,15 +286,11 @@ Cq.SDM <- apply(gue[, -1], 2, function(x)
 
 # Fit a linear model to carry out a regression analysis.
 res.Cq <- lm(Cq.Ct ~ Cq.SDM)
-
-summary(res.Cq)
 \end{example}
 
-
-The dilution ``dil'' and the ``Cq.Ct'' values served as input for the 
-calculations. In our case study we needed to rearrange to ``Cq.Ct'' values in a 
-matrix. For visualization of the confidence intervals of the regression 
-analysis we set the parameter $CI = TRUE$.
+The results of the regression analysis showed that the both Cq methods are in a 
+good agreement. However, the dispersion of the $Cq_{Ct}$ values appeared to be 
+higher than in the $Cq_{SDM}$ values (Figure~~\ref{figure:dilution_Cq}C).
 
 \begin{example}
 > summary(res.Cq)
@@ -320,6 +313,14 @@ Residual standard error: 0.5281 on 82 degrees of freedom
 Multiple R-squared:  0.9945,	Adjusted R-squared:  0.9945 
 F-statistic: 1.49e+04 on 1 and 82 DF,  p-value: < 2.2e-16
 \end{example}
+
+The dilution (``dil'') and the Cq (``Cq.Ct'') values served as input for the 
+calculation of the amplification efficiency ($AE$) with \code{effcalc} function 
+from the \CRANpkg{chipPCR} package. In our case study we needed to rearrange to 
+``Cq.Ct'' values in a matrix using the command $effcalc(dil, t(matrix(Cq.Ct, 
+nrow = 12, ncol = 7))$. For visualization of the confidence intervals of the 
+regression analysis we set the parameter $CI = TRUE$. Finally, were plotted 
+using the \code{layout} function (Figure~\ref{figure:dilution_Cq}D~and~E).
 
 \begin{example}
 layout(matrix(c(1,2,3,3,4,5), 3, 2, byrow = TRUE))
@@ -347,7 +348,6 @@ legend("topright", "E", cex = 3, bty = "n")
 
 \begin{figure}[htbp]
   \centering
-%   \includegraphics[clip=true,trim=0.1cm 0.6cm 1cm 1.8cm, width=16cm]{figures/plotCurves.pdf}
   \includegraphics[clip=true, width=14cm]{figures/dilution_Cq.pdf}
   \caption{Analysis of the amplification curve data of the calibration curve 
 samples. \strong{(A)} Visual inspection of the raw data from the 
@@ -371,86 +371,94 @@ $Cq_{SDM}$ values were automatically analysed with the \code{effcalc}
 \subsection{Case study two -- qPCR and Melting Curve Analysis}
 
 A common task during the analysis of qPCR experiments is to distinguish between 
-positive and negative samples (compare Figure~\ref{figure:plotCurves}). 
-Provided 
+positive and negative samples (compare Figure~\ref{figure:plotCurves}). Provided 
 that the melting temperature of a sample is known it is possible to automatize 
-the melting curve analysis (MCA). As shown in \citet{roediger_RJ_2013} this can 
-be done by interrogating the $T_{M}$. Therefore, we used a logical 
-statement, 
-which checks if $T_{M}$ is within a tight temperature range and signal height. 
-In line 
-with ``Case study one'' we used function $sessionInfo()$ to track the packages 
-used 
-for the analysis. Reproducible research is greatly enhanced of open data 
-exchange formats are used. In this study we used the \CRANpkg{RDML} package to 
-read the qPCR experiment. The example file \file{BioRad\_qPCR\_melt.rdml} for 
-analysis was taken from the \CRANpkg{RDML} package. Within this qPCR experiment 
-we amplified the \textit{Mycobacterium tuberculosis} 
+the decision by a melting curve analysis (MCA). As shown in 
+\citet{roediger_RJ_2013} this can be done by interrogating the $T_{M}$. 
+Therefore, we used a logical statement, which checks if $T_{M}$ is within a 
+tight temperature range. As a second parameter we used the signal height. In 
+line with ``Case study one'' we used the function $sessionInfo()$ to track all 
+packages used during the analysis. Reproducible research is greatly enhanced of 
+open data exchange formats are used. Therefore, we used the \CRANpkg{RDML} 
+package to read the qPCR experiment. The example file 
+\file{BioRad\_qPCR\_melt.rdml} was taken from the \CRANpkg{RDML} package. Within 
+this qPCR experiment we amplified the \textit{Mycobacterium tuberculosis} 
 \textit{katG}\footnote{\url{https://www.wikigenes.org/e/gene/e/923602.html}} 
-gene to detect mutation at codon 315. The experiment was separated for two 
-parts: 
-(I) detection of overall \textit{M.tuberculosis} DNA (wild-type and mutant) by 
-intercalating dye EvaGreen® within qPCR and (II) specific detection of 
-wild-type 
-\textit{M.tuberculosis} by melting of TaqMan probe (quencher -- BHQ2, 
-fluorescent reporter -- Cy5) with amplified DNA (similar assay is described in 
-\citet{luo_multiplex_2011}). Real time amplification were conducted using 
-Syntol 
-EvaGreen Master Mix according to the manufacturer's instructions, with 500 nM 
-of 
-primers and probe in a 25 $\mu$L final reaction volume. Thermocycling was 
-conducted using a CFX96 (BioRad) initiated by 3 min incubation at 
-95~\textcelsius, followed by 41 cycles (15 s at 95~\textcelsius; 40 s at 
-65~\textcelsius) with a single fluorescent reading taken at the end of each 
-cycle. Probe melting was conducted between 35~\textcelsius~and 
-95~\textcelsius~by 1~\textcelsius~at 1 s steps.
+gene and tried to detect a mutation at codon 315. The experiment was separated 
+in two parts: 
+\begin{enumerate}
+ \item Detection of overall \textit{M.~tuberculosis} DNA (wild-type 
+and mutant) and
+ \item specific detection of wild-type \textit{M.~tuberculosis} by melting of 
+TaqMan probe (quencher -- BHQ2, fluorescent reporter -- Cy5) with amplified DNA 
+(similar assay is described in \citet{luo_multiplex_2011}).
+\end{enumerate}
+
+The qPCR was conducted using EvaGreen\circledR~Master Mix (Syntol) according to 
+the manufacturer's instructions, with 500 nM of primers and probe in a 25 $\mu$L 
+final reaction volume. Thermocycling was conducted using a CFX96 (BioRad) 
+initiated by 3 min incubation at 95~\textcelsius, followed by 41 cycles (15 s at 
+95~\textcelsius; 40 s at 65~\textcelsius) with a single fluorescent reading 
+taken at the end of each cycle. Probe melting was conducted between 
+35~\textcelsius~and 95~\textcelsius~by 1~\textcelsius~at 1 s steps.
+
+The structure of an RDML file is quite complex. A simple and fast method to 
+compactly display the Structure of such an object is to use the \code{str} 
+function (not shown). Only a subset of the data was used in our case study 
+and combined to the object ``qPCR''.
+
 \begin{example}
-# Load the required packages for the data import and analysis.
-
-# Import the qPCR and melting curve data via the RDML package
-require(RDML)
-
+# Import the qPCR and melting curve data via the RDML package.
 # Load the chipPCR package for the pre-processing and curve data quality
-# analysis.
+# analysis and the MBmca package for the melting curve analysis.
+require(RDML)
 require(chipPCR)
-
-# Load the MBmca package for the melting curve analysis.
 require(MBmca)
 
 # Collect information about the R session used for the analysis of the qPCR
 # experiment.
 current.session <- sessionInfo()
 
-
 # Load the BioRad_qPCR_melt.rdml file form RDML package and assign the data to 
-the
-# object BioRad.
+# the object BioRad.
 
-filename <- paste(path.package("RDML"), "/extdata/", "BioRad_qPCR_melt.rdml", 
-sep = "")
+filename <- paste(path.package("RDML"), "/extdata/", 
+		  "BioRad_qPCR_melt.rdml", sep = "")
 BioRad <- RDML(filename, name.pattern = "%TUBE%_%NAME%_%TYPE%_%TARGET%")
 
 # Fetch cycle dependent fluorescence for the EvaGreen channel of the 
-# Mycobacterium tuberculosis katG gene and aggregate the data in the 
-# object qPCR. 
+# katG gene and aggregate the data in the object qPCR.
+
 qPCR <- cbind(BioRad[["qPCR"]][["EvaGreen"]][["pos"]], 
 	      BioRad[["qPCR"]][["EvaGreen"]][["unkn"]][, -1], 
 	      BioRad[["qPCR"]][["EvaGreen"]][["ntc"]][, -1])
+	      
 # Leave data only from row 'D' that contains target 'Cy5-2' at channel 'Cy5'
 qPCR <- cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
 \end{example}
 
-We inspected and pre-processed a subset of the amplification curve data 
-solely using functionalities provided by the \CRANpkg{chipPCR} package. The 
+We inspected and pre-processed a subset of the amplification curve data solely 
+using functionalities provided by the \CRANpkg{chipPCR} package. The 
 \code{plotCurves} function was used to get an overview of the curvatures. The 
 data indicated a baseline shift in all curves with a slight negative trend 
 (Figure~\ref{figure:plotCurves}). This suggested to baseline the raw data by 
 using a linear regression model (cycles x - y; ($bg.range = c(x, y)$) in the 
 \code{CPP} function.).
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics{figures/plotCurves.pdf}
+  \caption{Analysis of the amplification curve data of the calibration curve 
+samples by the \code{plotCurves} function from the \CRANpkg{chipPCR} package. 
+The green color code indicates that the data contains no missing values. 
+However, the visual inspection revealed that the data are noisy. All samples 
+(``D1\_Alm12\ldots'' - ``D8\_Alm12\ldots'') appeared to be positive. One 
+negative control (``D10\_H20\_ntc\_EvaGreen'') appeared to be contaminated.}
+  \label{figure:plotCurves}
+\end{figure}
+
 \begin{example}
-# Use plotCurves function from the chipPCR package to get an overview of the
-# amplification curve samples.
+# Use plotCurves function to get an overview of the amplification curve samples.
 
 plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
 
@@ -468,9 +476,10 @@ Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
 Cq.Positive
 \end{example}
 
-Since the qPCR indicated that selected samples (except no template control) are 
-positive, 
-we distinguished between true positive and true negative samples by MCA.
+Since the qPCR indicated that selected samples (except non-template-control 
+(``NTC'')) are positive, we distinguished between true positive and true negative 
+samples by MCA.
+
 \begin{example}
 # Fetch temperature dependent fluorescence for the Cy5 channel of the 
 # probe that can hybridize with Mycobacterium tuberculosis katG gene (codon 315)
@@ -487,10 +496,13 @@ Tm.Positive <- matrix(nrow = length(melt[, -1]),
                       byrow = TRUE,
                       dimnames = list(names(melt)[-1]),
                       unlist(apply(melt[, -1], 2, function(x) {
-  res.Tm <- diffQ(cbind(melt[, 1], x), fct = max, inder = TRUE)
-  positive <- ifelse(res.Tm[1] > 54 & res.Tm[1] < 55 & res.Tm[2] > 80, 1, 0)
-  c(res.Tm[1], res.Tm[2], positive)
-})))
+                        res.Tm <- diffQ(cbind(melt[, 1], x), 
+					fct = max, inder = TRUE)
+                        positive <- ifelse(res.Tm[1] > 54 & 
+                                             res.Tm[1] < 55 & 
+                                             res.Tm[2] > 80, 1, 0)
+                        c(res.Tm[1], res.Tm[2], positive)
+                      })))
 
 # Present the results in a tabular output as data.frame "results.tab".
 # Result of analysis logic is:
@@ -508,22 +520,24 @@ results <- sapply(1:length(Cq.Positive[,1]), function(i) {
   if(Cq.Positive[i, 2] == 0 && Tm.Positive[i, 3] == 1)
     return("Error")
 })
+
 results.tab <- data.frame(cbind(Cq.Positive, Tm.Positive, results))
-names(results.tab) <- c("Cq", "M.Tub DNA", "Tm", "Height", "Tm positive", 
-"Result") 
-results.tab[["M.Tub DNA"]] <- factor(results.tab[["M.Tub DNA"]], labels=c("Not 
-Detected",
-                                                                  "Detected"))
+names(results.tab) <- c("Cq", "M.Tub DNA", "Tm", "Height", 
+                        "Tm positive", "Result")
+
+results.tab[["M.Tub DNA"]] <- factor(results.tab[["M.Tub DNA"]], 
+                                     labels=c("Not Detected", "Detected"))
+
 results.tab[["Tm positive"]] <- factor(results.tab[["Tm positive"]], 
-labels=c(TRUE,
-                                                                  FALSE))
+                                       labels=c(TRUE, FALSE))
 results.tab
 \end{example}
 
-Finally, we plotted and printed the output of our analysis.
+Finally, we plotted and printed the output of our analysis 
+(Figure~\ref{figure:amp_melt}).
 
 \begin{example}
-# Convert the decision from the "relsults" object in a color code:
+# Convert the decision from the results.tab object in a color code:
 # Negative, black; Positive, red.
 
 color <- c(Tm.Positive[, 3] + 1)
@@ -539,31 +553,19 @@ lapply(2L:ncol(qPCR), function(i)
         CPP(qPCR[, 1], qPCR[, i], trans = TRUE, 
             bg.range = c(1,9))[["y.norm"]],
         col = color[i - 1]))
+
 matplot(melt[, 1], melt[, -1], type = "l", col = color, 
-	lty = 1, xlab = "Temperature [Â°C]", ylab = "RFU")
+        lty = 1, xlab = "Temperature [°C]", ylab = "RFU")
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
-	
-plot(NA, NA, xlim = c(35, 95), ylim = c(-15, 120), xlab = "Temperature [Â°C]", 
+
+plot(NA, NA, xlim = c(35, 95), ylim = c(-15, 120), xlab = "Temperature [°C]", 
      ylab = "-d(RFU)/dT")
 mtext("C", cex = 2, side = 3, adj = 0, font = 2)
+
 lapply(2L:ncol(melt), function(i)
   lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
               fct = max, inder = TRUE)[["xy"]], col = color[i - 1]))
-              
 \end{example}
-
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics{figures/plotCurves.pdf}
-  \caption{Analysis of the amplification curve data of the calibration curve 
-samples by the \code{plotCurves} function from the \CRANpkg{chipPCR} package. 
-The green color code indicates that the data contains no missing values. 
-However, the visual inspection revealed that the data are noisy. All samples 
-(``D1\_Alm12\ldots'' - ``D8\_Alm12\ldots'') appeared to be positive. One 
-negative control (``D10\_H20\_ntc\_EvaGreen'') appeared to be contaminated.}
-  \label{figure:plotCurves}
-\end{figure}
 
 \begin{figure}[htbp]
   \centering
@@ -580,76 +582,81 @@ labelled in black.}
 
 \subsection{Case study three -- Isothermal Amplification}
 
-Isothermal amplification is an alternative to PCR. In contrast to PCR use 
-isothermal amplification methods a constant temperature rather than cycling 
-through denaturation, annealing and extension steps. The corresponding signal is 
-monitored depending on the time instead of cycles \citep{rodiger_nucleic_2014}. 
+Isothermal amplification is an alternative to PCR, which uses in contrast to PCR 
+a constant temperature rather than cycling through denaturation, annealing and 
+extension steps. The corresponding signal is monitored depending on the time 
+instead of cycles \citep{rodiger_nucleic_2014}.
+
 We performed a quantitative isothermal amplification (qIA) for the target 
-\textit{pCNG1}\footnote{The HDA conditions were taken from the ``IsoAmp III 
-Universal tHDA Kit'', Biohelix Corp, as described by the vendor. In detail, the 
-reaction was composed of ``mix A)'' 10 $\mu$L A. bidest, 1.25 $\mu$L 10xb~uffer, 
-0.75 $\mu$L primer(150 nM final), 0.5 $\mu$L template plasmid. Preincubation: 
-The mixture was incubated for 2 min at 95\textcelsius and immediately placed on 
-ice. Reaction ``mix B)'' contained 5 $\mu$L A. bidest., 1.25 $\mu$L 10x buffer, 
-2 $\mu$L NaCl, 1.25 $\mu$L MgSO_{4}, 1,75 $\mu$L dNTPs, 0.25 $\mu$L EvaGreen 
-(Biotium), 1 $\mu$L enzyme mix. The mix was covered with 50 $\mu$L mineral oil 
-(Roth). The fluorescence measurement in VideoScan HCU started directly after 
-adding ``mix B)'' at 65\textcelsius. A $1x$ (D1) and a $1:10$ dilution (D2) were 
-tested.} by using a Helicase Dependent Amplification (HDA). The enzyme DNA 
-Helicase unwinds DNA. Therefore, no thermal denaturation is needed. Our 
-previously reported VideoScan platform \citep{rodiger_highly_2013} was used to 
-measure the samples. The resulting dataset \texttt{C81} is part of the 
-\CRANpkg{chipPCR} package. Two concentrations (stock and 1:10 diluted stock) of 
-input DNA were used in the HDA.
+\textit{pCNG1} by using a Helicase Dependent Amplification (HDA). The enzyme DNA 
+Helicase unwinds DNA. Therefore, no thermal denaturation is needed. The HDA 
+conditions were taken from the ``IsoAmp III Universal tHDA Kit'', Biohelix Corp, 
+as described by the vendor. In detail, the reaction was composed of ``mix A)'' 
+10 $\mu$L A. bidest, 1.25 $\mu$L 10xb~uffer, 0.75 $\mu$L primer(150 nM final), 
+0.5 $\mu$L template plasmid. Preincubation: The mixture was incubated for 2 min 
+at 95\textcelsius~and immediately placed on ice. Reaction ``mix B)'' contained 5 
+$\mu$L A. bidest., 1.25 $\mu$L 10x buffer, 2 $\mu$L NaCl, 1.25 $\mu$L $MgSO_{4}$, 
+1,75 $\mu$L dNTPs, 0.25 $\mu$L EvaGreen (Biotium), 1 $\mu$L enzyme mix. The mix 
+was covered with 50 $\mu$L mineral oil (Roth). The fluorescence measurement in 
+VideoScan HCU started directly after adding ``mix B)'' at 65\textcelsius. A $1x$ 
+(D1) and a $1:10$ dilution (D2) were tested. Our previously reported VideoScan 
+platform \citep{rodiger_highly_2013} was used to measure the samples. The 
+resulting dataset \texttt{C81} is part of the \CRANpkg{chipPCR} package. Two 
+concentrations (stock and 1:10 diluted stock) of input DNA were used in the HDA.
+
+Similar to the previous case studies, we first prepared the plot of 
+the data.
 
 \begin{example}
 # Drawn in an 2-by-1 array on the device by two columns and one row.
 par(mfrow = c(2, 1))
 
 # Plot the raw data from the C81 dataset to the first array and add
-# a legend.
-plot(NA, NA, xlim = c(0, 120), ylim = c(0.4, 1.2), xlab = "Time (min)", ylab = 
-"RFU")
+# a legend. Note: The abcsissa values (time in seconds) was divided 
+# by 60 to (C81[, i] / 60) to convert to minutes.
+plot(NA, NA, xlim = c(0, 120), ylim = c(0.4, 1.2), xlab = "Time (min)", ylab = "RFU")
 mtext("A", cex = 2, side = 3, adj = 0, font = 2)
 lapply(c(2, 4), function(i) {
-    lines(C81[, i]/60, C81[, i + 1], type = "b", pch = 20, col = i - 1)
+  lines(C81[, i] / 60, C81[, i + 1], type = "b", pch = 20, col = i - 1)
 })
-legend(10, 0.8, c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 
-3), 
-    bty = "n")
+legend(10, 0.8, c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 3), 
+       bty = "n")
+
+# Prepare a plot on the second array for the pre-processed data.
+plot(NA, NA, xlim = c(0, 120), ylim = c(0, 0.8), xlab = "Time (min)", ylab = "RFU")
+mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 \end{example}
 
-\begin{example}
-# Prepare a plot on the second array for the pre-proccessed data.
-plot(NA, NA, xlim = c(0, 120), ylim = c(0, 0.8), xlab = "Time (min)", ylab = 
-"RFU")
-mtext("B", cex = 2, side = 3, adj = 0, font = 2)
+Next we used the \code{CPP} function to pre-process the raw data. Similar to the 
+other case studies we baselined and smoothed the data. In addition, outliers 
+were automatically removed in the baseline region 
+(Figure~\ref{figure:qIA}A~and~B).
 
-# Apply the CPP functions to pro-process the raw data.
-# 1) Baseline data to zero, 2) Smooth data with spline,
-# 3) Remove outliers in background range between 
-# entry 1 and 190.
+  \begin{example}
+  # Apply the CPP functions to pro-process the raw data.1) Baseline data to zero, 
+  # 2) Smooth data with spline, 3) Remove outliers in background range between 
+  # entry 1 and 190.
 res <- lapply(c(2, 4), function(i) {
-  y.s <- CPP(C81[, i]/60, C81[, i + 1],
+  y.s <- CPP(C81[, i] / 60, C81[, i + 1],
              trans = TRUE, 
              method = "spline",
              bg.outliers = TRUE,
              bg.range = c(1, 190))
-  lines(C81[, i]/60, y.s[["y.norm"]], type = "b", pch = 20, col = i - 1)
+  lines(C81[, i] / 60, y.s[["y.norm"]], type = "b", pch = 20, col = i - 1)
   # Use the th.cyc function to calculate the cycle threshold time. 
   # The threshold level r was set to 0.05.
-  paste(round(th.cyc(C81[, i]/60, y.s[["y.norm"]], r = 0.05)[1], 2), "min")
+  paste(round(th.cyc(C81[, i] / 60, y.s[["y.norm"]], r = 0.05)[1], 2), "min")
 })
 
 # Add the cycle threshold time and the threshold level to plot.
 
 abline(h = 0.05, lty = 2)
 text(10, 0.55, "Cq:")
-legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), bty = 
-"n")
+legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), 
+       bty = "n")
 \end{example}
 
-
+The    70.18   93.18 minutes, receptively.
 
 \begin{figure}[htbp]
   \centering
@@ -679,12 +686,14 @@ analysis methods, plotting facilities and report generation tools are part of
 the package \citep{pabinger_2014}. Here, we show briefly a case study for the 
 \CRANpkg{dpcR}.
 
-In detail, we mimicked an in-silico experiment for a droplet digital PCR similar 
-to Figure~\ref{figure:dpcR_sim}. The aim was to asses the concentration of the 
-template sample. The number of positive partitions ($k$), total number of 
-partitions ($n$) and the size of the partition are only data required for the 
-analysis. The estimate of the mean number of template molecules per partition 
-($\hat \lambda$) is calculated using following equation \citep{huggett_2013}:
+Simulations are part in selected educational curricula and support teaching 
+greatly. In this case study, we mimicked an in-silico experiment for a droplet 
+digital PCR similar to Figure~\ref{figure:dpcR_sim}. The aim was to asses the 
+concentration of the template sample. The number of positive partitions ($k$), 
+total number of partitions ($n$) and the size of the partition are only data 
+required for the analysis. The estimate of the mean number of template molecules 
+per partition ($\hat \lambda$) is calculated using following equation 
+\citep{huggett_2013}:
 
 \begin{equation}
 \hat{\lambda} =  -\ln{(1 - \frac{k}{n})}.
@@ -705,7 +714,6 @@ require(dpcR)
 # Analysis of a digital PCR experiment. The density estimation.
 # In our in-silico experiment we counted in tatal 16800 droplets (n). 
 # Thereof, 4601 were positive (k).
-pdf("dpcR.pdf")
 
 (dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
 

@@ -24,7 +24,8 @@ dil <- 10^(2:-4)
 
 # Pre-process the amplification curve data with the CPP function from the 
 # chipPCR package. The trans parameter was set TRUE to perform a baselining and 
-# the method.norm parameter was set to minm for a min-maximum normalization.
+# the method.norm parameter was set to minm for a min-maximum normalization. All
+# amplification curves were smoothed by Savitzky-Golay smoothing.
 
 res.CPP <- cbind(gue[, 1], apply(gue[, -1], 2, function(x) {
   CPP(gue[, 1], x, trans = TRUE, method.norm = "minm", 
@@ -81,8 +82,6 @@ dev.off()
 #################################
 # Case study two
 #################################
-# Load the required packages for the data import and analysis.
-
 # Import the qPCR and melting curve data via the RDML package.
 # Load the chipPCR package for the pre-processing and curve data quality
 # analysis and the MBmca package for the melting curve analysis.
@@ -100,8 +99,8 @@ filename <- paste(path.package("RDML"), "/extdata/", "BioRad_qPCR_melt.rdml", se
 BioRad <- RDML(filename, name.pattern = "%TUBE%_%NAME%_%TYPE%_%TARGET%")
 
 # Fetch cycle dependent fluorescence for the EvaGreen channel of the 
-# Mycobacterium tuberculosis katG gene and aggregate the data in the 
-# object qPCR. 
+# katG gene and aggregate the data in the object qPCR. 
+
 qPCR <- cbind(BioRad[["qPCR"]][["EvaGreen"]][["pos"]], 
               BioRad[["qPCR"]][["EvaGreen"]][["unkn"]][, -1], 
               BioRad[["qPCR"]][["EvaGreen"]][["ntc"]][, -1])
@@ -109,8 +108,7 @@ qPCR <- cbind(BioRad[["qPCR"]][["EvaGreen"]][["pos"]],
 # Leave data only from row 'D' that contains target 'Cy5-2' at channel 'Cy5'
 qPCR <- cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
 
-# Use plotCurves function from the chipPCR package to get an overview of the
-# amplification curve samples.
+# Use plotCurves function to get an overview of the amplification curve samples.
 pdf("plotCurves.pdf", width = 6, height = 4)
 
 plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
@@ -143,7 +141,8 @@ Tm.Positive <- matrix(nrow = length(melt[, -1]),
                       byrow = TRUE,
                       dimnames = list(names(melt)[-1]),
                       unlist(apply(melt[, -1], 2, function(x) {
-                        res.Tm <- diffQ(cbind(melt[, 1], x), fct = max, inder = TRUE)
+                        res.Tm <- diffQ(cbind(melt[, 1], x), 
+					fct = max, inder = TRUE)
                         positive <- ifelse(res.Tm[1] > 54 & 
                                              res.Tm[1] < 55 & 
                                              res.Tm[2] > 80, 1, 0)
@@ -166,6 +165,7 @@ results <- sapply(1:length(Cq.Positive[,1]), function(i) {
   if(Cq.Positive[i, 2] == 0 && Tm.Positive[i, 3] == 1)
     return("Error")
 })
+
 results.tab <- data.frame(cbind(Cq.Positive, Tm.Positive, results))
 names(results.tab) <- c("Cq", "M.Tub DNA", "Tm", "Height", 
                         "Tm positive", "Result")
@@ -209,26 +209,8 @@ lapply(2L:ncol(melt), function(i)
               fct = max, inder = TRUE)[["xy"]], col = color[i - 1]))
 
 dev.off()
-
 #################################
 # Case study three
-#################################
-# Load the dpcR package for the analysis of the digital PCR experiment.
-require(dpcR)
-
-# Analysis of a digital PCR experiment. The density estimation.
-# In our in-silico experiment we counted in tatal 16800 droplets (n). 
-# Thereof, 4601 were positive (k).
-pdf("dpcR.pdf")
-
-(dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
-
-dev.off()
-# Let us assume, that every droplet has roughly a volume of 5 nL.
-# The total concentration (and its confidence intervals) in molecules/ml is:
-dens[4:6] / 5 * 1e-6
-#################################
-# Case study four
 #################################
 
 pdf("qIA.pdf")
@@ -237,7 +219,8 @@ pdf("qIA.pdf")
 par(mfrow = c(2, 1))
 
 # Plot the raw data from the C81 dataset to the first array and add
-# a legend.
+# a legend. Note: The abcsissa values (time in seconds) was divided 
+# by 60 to (C81[, i] / 60) to convert to minutes.
 plot(NA, NA, xlim = c(0, 120), ylim = c(0.4, 1.2), xlab = "Time (min)", ylab = "RFU")
 mtext("A", cex = 2, side = 3, adj = 0, font = 2)
 lapply(c(2, 4), function(i) {
@@ -250,9 +233,8 @@ legend(10, 0.8, c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 3),
 plot(NA, NA, xlim = c(0, 120), ylim = c(0, 0.8), xlab = "Time (min)", ylab = "RFU")
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 
-# Apply the CPP functions to pro-process the raw data.
-# 1) Basline data to zero, 2) Smooth data with spline,
-# 3) Remove outliers in background range between 
+# Apply the CPP functions to pro-process the raw data.1) Baseline data to zero, 
+# 2) Smooth data with spline, 3) Remove outliers in background range between 
 # entry 1 and 190.
 res <- lapply(c(2, 4), function(i) {
   y.s <- CPP(C81[, i] / 60, C81[, i + 1],
@@ -270,8 +252,27 @@ res <- lapply(c(2, 4), function(i) {
 
 abline(h = 0.05, lty = 2)
 text(10, 0.55, "Cq:")
-legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), bty = "n")
+legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), 
+       bty = "n")
 dev.off()
+
+#################################
+# Case study four
+#################################
+# Load the dpcR package for the analysis of the digital PCR experiment.
+require(dpcR)
+
+# Analysis of a digital PCR experiment. The density estimation.
+# In our in-silico experiment we counted in tatal 16800 droplets (n). 
+# Thereof, 4601 were positive (k).
+pdf("dpcR.pdf")
+
+(dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
+
+dev.off()
+# Let us assume, that every droplet has roughly a volume of 5 nL.
+# The total concentration (and its confidence intervals) in molecules/ml is:
+dens[4:6] / 5 * 1e-6
 
 ##################
 # dPCR demo
