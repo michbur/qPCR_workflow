@@ -15,11 +15,12 @@ require(qpcR)
 # experiment.
 current.session <- sessionInfo()
 
-# Next we load the 'guescini1' dataset from the qpcR package the to
-# workspace and assign it to the object gue.
+# Next load the 'guescini1' dataset from the qpcR package to the
+# workspace and assign it to the object 'gue'.
 gue <- guescini1
 
-# Define the dilution of the sample DNA quantity for the calibration curve.
+# Define the dilution of the sample DNA quantity for the calibration curve 
+# and assign it to the object 'dil'.
 dil <- 10^(2:-4)
 
 # Pre-process the amplification curve data with the CPP function from the 
@@ -33,10 +34,12 @@ res.CPP <- cbind(gue[, 1], apply(gue[, -1], 2, function(x) {
 }))
 
 # Use the th.cyc function from the chipPCR package to calculate the Cq values
-# by the cycle threshold method at a threshold level "r" of 0.05.
+# by the cycle threshold method at a threshold signal level "r" of 0.05.
 Cq.Ct <- apply(gue[, -1], 2, function(x) 
   th.cyc(res.CPP[, 1], x, r = 0.05)[1])
 
+# Use the inder function from the chipPCR package to calculate the Cq values
+# by the SDM method.
 Cq.SDM <- apply(gue[, -1], 2, function(x)
   summary(inder(res.CPP[, 1], x))[2])
 
@@ -49,6 +52,8 @@ pdf("dilution_Cq.pdf", width = 9.5, height = 14)
 
 # Arrange and plot the results in a convenient way.
 layout(matrix(c(1,2,3,3,4,5), 3, 2, byrow = TRUE))
+# Set bigger top margin.
+par(mar = c(5.1, 4.1, 6.1, 2.1))
 
 # Plot the raw amplification curve data.
 matplot(gue[, -1], type = "l", lty = 1, col = 1, xlab = "Cycle", 
@@ -78,6 +83,8 @@ legend("topright", "D", cex = 3, bty = "n")
 plot(effcalc(dil, t(matrix(Cq.SDM, nrow = 12, ncol = 7))), CI = TRUE)
 legend("topright", "E", cex = 3, bty = "n")
 
+# Set top margin to default value.
+par(mar = c(5.1, 4.1, 4.1, 2.1))
 dev.off()
 #################################
 # Case study two
@@ -114,12 +121,12 @@ pdf("plotCurves.pdf", width = 6, height = 4)
 plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
 
 dev.off()
-# Detect positive samples - calculate Cq values
-# by the cycle threshold method. The threshold level r was set to 50.
+# Detect positive samples - calculate Cq values by the cycle threshold method. 
+# The threshold signal level r was set to 10.
 Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
 {
   res <- CPP(qPCR[, 1], x, trans = TRUE, bg.range = c(1, 9))[["y.norm"]]
-  th.cyc <- th.cyc(qPCR[, 1], res, r = 50)[1]
+  th.cyc <- th.cyc(qPCR[, 1], res, r = 10)[1]
   cq <- as.numeric(th.cyc)
   pos <- !is.na(cq)
   c(Cq = cq, M.Tub_positive = pos)
@@ -128,15 +135,14 @@ Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
 
 # Fetch temperature dependent fluorescence for the Cy5 channel of the 
 # probe that can hybridize with Mycobacterium tuberculosis katG gene (codon 315)
-# and aggregate the data in the object melt.
+# and aggregate the data in the object 'melt'.
 melt <- cbind(BioRad[["Melt"]][["Cy5-2"]][["pos"]],
               BioRad[["Melt"]][["Cy5-2"]][["unkn"]][, -1],
               BioRad[["Melt"]][["Cy5-2"]][["ntc"]][, -1])
 
-# Calculate the melting temperature with the diffQ function
-# from the MBmca package. Use simple logical conditions to find out
-# if a positive sample with the expected Tm of circa 54.5 degree 
-# Celsius is found.
+# Calculate the melting temperature with the diffQ function from the MBmca 
+# package. Use simple logical conditions to find out if a positive sample with 
+# the expected Tm of circa 54.5 degree Celsius is found.
 Tm.Positive <- matrix(nrow = length(melt[, -1]),
                       byrow = TRUE,
                       dimnames = list(names(melt)[-1]),
@@ -149,7 +155,7 @@ Tm.Positive <- matrix(nrow = length(melt[, -1]),
                         c(res.Tm[1], res.Tm[2], positive)
                       })))
 
-# Present the results in a tabular output as data.frame "results.tab".
+# Present the results in a tabular output as data.frame 'results.tab'.
 # Result of analysis logic is:
 # Cq.Positive && Tm.Positive = Wild-type
 # Cq.Positive && !Tm.Positive = Mutant
@@ -220,7 +226,7 @@ par(mfrow = c(2, 1))
 
 # Plot the raw data from the C81 dataset to the first array and add
 # a legend. Note: The abcsissa values (time in seconds) was divided 
-# by 60 to (C81[, i] / 60) to convert to minutes.
+# by 60 (C81[, i] / 60) to convert to minutes.
 plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "RFU")
 mtext("A", cex = 2, side = 3, adj = 0, font = 2)
 lapply(c(2, 4), function(i) {
@@ -244,11 +250,11 @@ res <- lapply(c(2, 4), function(i) {
              bg.range = c(1, 190))
   lines(C81[, i] / 60, y.s[["y.norm"]], type = "b", pch = 20, col = i - 1)
   # Use the th.cyc function to calculate the cycle threshold time (Cq.t). 
-  # The threshold level r was set to 0.05.
+  # The threshold signal level r was set to 0.05.
   paste(round(th.cyc(C81[, i] / 60, y.s[["y.norm"]], r = 0.05)[1], 2), "min")
 })
 
-# Add the cycle threshold time and the threshold level to plot.
+# Add the cycle threshold time and the threshold signal level to plot.
 
 abline(h = 0.05, lty = 2)
 text(10, 0.55, "Cq.t:")
