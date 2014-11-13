@@ -366,17 +366,18 @@ par(mar = c(5.1, 4.1, 4.1, 2.1))
 dataset. \strong{(A)} Raw data from the calibration curve samples were visually 
 inspected. The qPCR curves display a broad variation in plateau fluorescence (38 
 -- 62 RFU). The red horizontal line indicates the fluorescence level (0.05) used 
-for the calculation of the Cq by the ``cycle threshold'' method. \strong{(B)} 
-the \code{CPP} function from the \CRANpkg{chipPCR} was sued to baseline the 
-data, to smooth the data with Savitzky-Golay smoothing filter and to normalize 
-the data between 0 and 1. \strong{(C)} The Cq values were calculated for the 
-second derivative maximum ($Cq_{SDM}$) method (\code{inder}, \CRANpkg{chipPCR}) 
-and the cycle threshold method ($Cq_{Ct}$) (\code{th.cyc}, \CRANpkg{chipPCR}). 
-The threshold value was set to $r~=~0.05$. The $Cq_{SDM}$ and $Cq_{Ct}$ values 
-were plotted and analysed by a linear regression ($R^{2}~=~0.9945$; $P < 
-2.2^{-16}$) and Pearson's ($r~=~0.9972605$; $P < 2.2^{-16}$). The $AE$ based on 
-\strong{(D)} $Cq_{Ct}$ values and \strong{(E)} $Cq_{SDM}$ values were 
-automatically analysed with the \code{effcalc} (\CRANpkg{chipPCR}) function.}
+for the calculation of the Cq value by the ``cycle threshold'' method. 
+\strong{(B)} The \code{CPP} function from the \CRANpkg{chipPCR} was sued to 
+baseline the data, to smooth the data with Savitzky-Golay smoothing filter and 
+to normalize the data between 0 and 1. \strong{(C)} The Cq values were 
+calculated by the $Cq_{SDM}$ method (``SDM method'') (\code{inder}, 
+\CRANpkg{chipPCR}) and the $Cq_{Ct}$ method (``Ct method'') (\code{th.cyc}, 
+\CRANpkg{chipPCR}). The threshold value was set to $r~=~0.05$. The $Cq_{SDM}$ 
+and $Cq_{Ct}$ values were plotted and analysed by a linear regression 
+($R^{2}~=~0.9945$; $P < 2.2^{-16}$) and Pearson's ($r~=~0.9972605$; $P < 
+2.2^{-16}$). The $AE$ based on \strong{(D)} $Cq_{Ct}$ values and \strong{(E)} 
+$Cq_{SDM}$ values were automatically analysed with the \code{effcalc} 
+(\CRANpkg{chipPCR}) function.}
   \label{figure:dilution_Cq}
 \end{figure}
 
