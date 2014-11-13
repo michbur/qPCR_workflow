@@ -1,6 +1,6 @@
 if(!grepl("figures", getwd()))
   setwd(paste0(getwd(), "/figures/"))
-# Supplement to 'R as Platform for the Analysis of qPCR experiments' for the R
+# Supplement to 'R as an Environment for the Analysis of dPCR and qPCR Experiments'
 # Journal by Rödiger et al. 2014
 #################################
 # Case study one
