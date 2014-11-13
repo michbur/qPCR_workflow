@@ -89,7 +89,10 @@ lead to the development of peer-reviewed quantification cycle (Cq) analysis
 algorithms \citep{ruijter_2013}, throughout characterized qPCR chemistries 
 \citep{ruijter_2014} and guidelines for a proper conduct of qPCR experiments as 
 implemented in the MIQE guidelines (minimum information for publication of 
-quantitative real-time PCR experiments) \citep{bustin_miqe_2009, huggett_2013}.
+quantitative real-time PCR experiments) \citep{bustin_miqe_2009, huggett_2013}. We share the philosophy of the MIQE guidelines to 
+increase experimental transparency for better experimental practice and reliable 
+interpretation of results and encourage the use of open data exchange formats 
+like RDML \citep{lefever_2009}. We see the application of R in line with this. 
 
 Yet, in case of closed source software usually the analysis happens in a 
 black~box fashion tied to a specific platform \citep{roediger_RJ_2013, 
@@ -113,8 +116,8 @@ burns_2014}.
 
 For several reasons is R one of the most used tools in bioinformatics and is 
 known as an early adopter of emerging technologies \citep{pabinger_2014}. R 
-provides essential packages to build a highly customized workflows, covering: 
-data read-in, data preprocessing, analysis, post-processing, visualization and 
+provides packages to build a highly customized workflows, covering: data 
+read-in, data preprocessing, analysis, post-processing, visualization and 
 storage. As recently briefly reviewed in \citet{pabinger_2014}, numerous R 
 packages have been developed for the analysis of qPCR, dPCR, qIA and melting 
 curve analysis experiments, including: \CRANpkg{kulife}, \CRANpkg{MCMC.qpcr}, 
@@ -126,33 +129,29 @@ curve analysis experiments, including: \CRANpkg{kulife}, \CRANpkg{MCMC.qpcr},
 Bioconductor \citep{gentleman_2004}. The packages can be freely combined in a 
 plugin-like architecture. R is instrument independent, cross-platform and 
 provides a wide spectrum of calculation options. In particular, visualization of 
-experiments is one of R's pinnacles. Though the intrinsic properties of R such 
-as the naming convention \citep{Baaaath_2012} and class systems (e.g., 
+experiments is one of R's pinnacles. Several software R packages enable an 
+efficient manipulation, restructuring and reshaping of data to make the 
+readily-available for further processing. This is of particular importance to 
+the human -- machine interface \citep{Oh_2014}. The intrinsic properties of R 
+such as the naming convention \citep{Baaaath_2012} and class systems (e.g., 
 \strong{S3}, \strong{S4}, reference classes and \strong{R6}) vary considerable 
-depending on the package developer preferences there is the common ground to 
-track numerical errors in R due to the open source approach. R offers various 
-methods for a standardized data import/export and exchange. Workflows can be 
-embedded in structures for models (e.g., Predictive Model Markup Language (PMML) 
-as proposed by \citet{Guazzelli_2009}, open data exchange formats (e.g., 
-XML-based Real-Time PCR Data Markup Language (RDML) \citep{lefever_2009}, binary 
+depending on the package developer preferences. But due to the open source 
+approach there is the common ground to track numerical errors. R offers various 
+methods for a standardized data import/export and exchange. Workflows can embed 
+structured models \citet{Guazzelli_2009}, open data exchange formats (e.g., 
+XML-based Real-Time PCR Data Markup Language (RDML) , binary 
 formats \citep{michna_2013} or tools provided by the R workspace 
 \citep{RDCT2010c}. In addition, the R environment offers several data sets, 
-which can be used to test and reproduce third party software. Therefore, others 
-and we argue that R is suitable for reproducible research \citep{Gesmann_2011, 
-Murrell_2012, gandrud_2013, hofmann_2013, Leeper_2014, liu_2014}. Also, several 
-software R packages enable an efficient manipulation, restructuring and 
-reshaping of data to make the readily-available for further processing. This is 
-of particular importance to the human -- machine interface \citep{Oh_2014}.
+which can be used for testing of algorithms. Therefore, others and we argue that 
+R is suitable for reproducible research \citep{Gesmann_2011, Murrell_2012, 
+gandrud_2013, hofmann_2013, Leeper_2014, liu_2014}. 
 
-We share the philosophy of the MIQE guidelines to increase experimental 
-transparency for better experimental practice and reliable interpretation of 
-results and encourage the use of open data exchange formats like RDML. We see 
-the application of R in line with this. Our workflow effectively follows the 
-principle illustrated in Figure~\ref{figure:workflow}. The aim of this paper is 
-to show case studies for qPCR, dPCR, qIA and melting curve analysis experiments. 
+The aim of this paper is to show case studies for qPCR, dPCR, qIA and melting 
+curve analysis experiments. Our workflow 
+effectively follows the principle illustrated in Figure~\ref{figure:workflow}. 
 We intent to aggregate functionalities dispersed between various packages and 
-offer a fast insight in the analysis of nucleic acid experiments with R. In particular, 
-we describe how to:
+offer a fast insight in the analysis of nucleic acid experiments with R. In 
+particular, we describe how to:
 
 \begin{itemize}
  \item read-in data from a standardized file format,
