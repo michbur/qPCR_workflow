@@ -142,7 +142,8 @@ melt <- cbind(BioRad[["Melt"]][["Cy5-2"]][["pos"]],
 
 # Calculate the melting temperature with the diffQ function from the MBmca 
 # package. Use simple logical conditions to find out if a positive sample with 
-# the expected Tm of circa 54.5 degree Celsius is found.
+# the expected Tm of circa 54.5 degree Celsius is found. The result of the test
+# is assigned to the object 'positive'.
 Tm.Positive <- matrix(nrow = length(melt[, -1]),
                       byrow = TRUE,
                       dimnames = list(names(melt)[-1]),
