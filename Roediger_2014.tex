@@ -90,7 +90,7 @@ algorithms \citep{ruijter_2013}, throughout characterized qPCR chemistries
 \citep{ruijter_2014} and guidelines for a proper conduct of qPCR experiments as 
 implemented in the MIQE guidelines (minimum information for publication of 
 quantitative real-time PCR experiments) \citep{bustin_miqe_2009, huggett_2013}. 
-We share the philosophy of the MIQE guidelines to increase experimental 
+We share the philosophy of the MIQE guidelines to increase the experimental 
 transparency for better experimental practice and reliable interpretation of 
 results and encourage the use of open data exchange formats like the XML-based 
 Real-Time PCR Data Markup Language (RDML) \citep{lefever_2009}. We see the 
@@ -101,7 +101,7 @@ fashion tied to a specific platform. We agree that black~boxes are not
 necessarily a bad thing, but should be avoided if possible 
 \citep{roediger_RJ_2013, Spiess_2014}. Studies by \citet{mccullough_2008, 
 Almiron_2010, Duran_2014} exemplified where the black~box approach might fail in 
-science. But the same holds true for the open~source software since software 
+science. The same holds true for the open~source software since software 
 bugs are independent of a development model. However, at least open~source gives 
 the possibility to track and eliminate  errors by an individual entity. Often 
 black~box systems have limitations in the data processing and force the user to 
@@ -131,7 +131,7 @@ curve analysis experiments, including: \CRANpkg{kulife}, \CRANpkg{MCMC.qpcr},
 Bioconductor \citep{gentleman_2004}. The packages can be freely combined in a 
 plugin-like architecture. R is instrument independent, cross-platform and 
 provides a wide spectrum of calculation options. In particular, visualization of 
-experiments is one of R's pinnacles. Several software R packages enable an 
+experiments is one of R's pinnacles. R enable an 
 efficient manipulation, restructuring and reshaping of data to make the 
 readily-available for further processing. This is of particular importance to 
 the human -- machine interface \citep{Oh_2014}. The intrinsic properties of R 
@@ -169,7 +169,7 @@ to:
 functionality is provided by the R software environment for statistical 
 computing and graphics. In our scenario we used the \CRANpkg{RDML} package to 
 read-in data in standardized format. However, any format supported by R can be 
-used. Further processing of amplification curve data was performed with the 
+used. Further, processing of amplification curve data was performed with the 
 \CRANpkg{chipPCR} package and melting curve data were analysed with the 
 \CRANpkg{MBmca} package. The \CRANpkg{dpcR} package can be embedded in the 
 analysis of digital PCR experiments. Cq, quantification cycle; $T_{M}$, melting 
@@ -179,27 +179,27 @@ temperature.
 
 \section{Setting-up a working environment}
 
-We recommend to perform the scripting in a dedicated integrated development 
+We recommend performing the scripting in a dedicated integrated development 
 environment (IDE) and graphical user interface (GUI) such as \pkg{RKWard} 
 \citep{rodiger_rkward_2012}, 
 \pkg{Rstudio}\footnote{\url{http://www.rstudio.com/}} or related technologies 
 \citep{Valero_2012}. Benefits of IDE's with GUI include syntax-highlighting, 
 auto completion and function references for rapid prototyping of workflows.
 
-Typically the analysis will start with data from a commercial platform. 
+Typically, the analysis will start with data from a commercial platform. 
 Most platforms have an option to export a CSV file or spreadsheets application 
 file (e.g., *.xls, *.odt). The details for the data import have been described 
 elsewhere \citep{RDCT2010c, rodiger_rkward_2012}. To keep the case study 
 sections compact we have chosen to load datasets from the \CRANpkg{qcpR} package 
-\citep{ritz_2008, spiess_2008} (v.~1.4.0) and the \CRANpkg{RDML} package (v.~0.4-2) to our 
-workspace. The \CRANpkg{chipPCR} package (v.~0.0.8-3) was used 
+\citep{ritz_2008, spiess_2008} (v.~1.4.0) and the \CRANpkg{RDML} package 
+(v.~0.4-2) to our workspace. The \CRANpkg{chipPCR} package (v.~0.0.8-3) was used 
 for data preprocessing, quality control and  the calculation of the 
 quantification cycle (Cq). The Cq is a quantitative measure, which represents 
-the number of cycles needed to reach a user defined threshold signal level. 
-Typically Cq are determined identically the exponential phase of a qPCR/qIA 
-reaction. Several Cq methods have been described \citep{ruijter_2013}. In this 
-study we have chosen the second derivative maximum method ($Cq_{SDM}$) and the 
-``Cycle threshold'' ($Cq_{Ct}$) method.
+the number of cycles needed to reach a user defined threshold signal level, in 
+the exponential phase of a qPCR/qIA reaction. Several Cq methods have been 
+described \citep{ruijter_2013}. In this study we have chosen the second 
+derivative maximum method ($Cq_{SDM}$) and the ``Cycle threshold'' ($Cq_{Ct}$) 
+method.
 
 During a perfect qPCR reaction, the target DNA doubles ($2^{n}$; n = cycle 
 number) at each cycle. Here the amplification efficiency ($AE$) is 100~\%. 
@@ -286,7 +286,7 @@ dil <- 10^(2:-4)
 We previewed the amplification curve raw data using the \code{matplot} 
 function (see code below). The amplification curve data showed a strong signal 
 level variation in the plateau region (Figure~~\ref{figure:dilution_Cq}A). 
-Therefore all data were subjected to a minimum-maximum normalization (compare 
+Therefore, all data were subjected to a minimum-maximum normalization (compare 
 \citet{roediger_RJ_2013}) using the \code{CPP} function from the 
 \CRANpkg{chipPCR} package. In addition, all data were baselined and smoothed 
 (Figure~~\ref{figure:dilution_Cq}B). The Cq values were calculated by the 
@@ -401,17 +401,17 @@ contaminated.}
 
 
 A common task during the analysis of qPCR experiments is to distinguish between 
-positive and negative samples (compare Figure~\ref{figure:plotCurves}). Provided 
-that the melting temperature of a sample is known it is possible to automatize 
-the decision by a melting curve analysis (MCA). As shown in 
-\citet{roediger_RJ_2013} this can be done by interrogating the $T_{M}$. 
-Therefore, we used a logical statement, which checks if $T_{M}$ is within a 
-tight temperature range. As a second parameter we used the signal height. In 
-line with ``Case study one'' we used the function $sessionInfo()$ to track all 
-packages used during the analysis. Reproducible research is greatly enhanced if 
-open data exchange formats are used. In this study we used the \CRANpkg{RDML} 
-package for data read-in. The data were measured with a CFX96 system (Bio-Rad) 
-and then exported as RDML v1.1 format file. The example file 
+positive and negative samples (compare Figure~\ref{figure:plotCurves}). If the 
+melting temperature of a sample is known it is possible to automatize the 
+decision by a melting curve analysis (MCA). As shown in \citet{roediger_RJ_2013} 
+this can be done by interrogating the $T_{M}$. Therefore, we used a logical 
+statement, which checks if $T_{M}$ is within a tight temperature range. We used 
+the signal height as second parameter. In line with ``Case study one'' we used 
+the function $sessionInfo()$ to track all packages used during the analysis. 
+Reproducible research is greatly enhanced if open data exchange formats are 
+used. In this study we used the \CRANpkg{RDML} package for data read-in. The 
+data were measured with a CFX96 system (Bio-Rad) and then exported as RDML v1.1 
+format file. The example file 
 \file{BioRad\_qPCR\_melt.rdml} was taken from the \CRANpkg{RDML} package. Within 
 this qPCR experiment we amplified the \textit{Mycobacterium tuberculosis} 
 \textit{katG}\footnote{\url{https://www.wikigenes.org/e/gene/e/923602.html}} 
@@ -791,7 +791,7 @@ inexperienced user to define a workflow and to set up environment for specific
 needs in a broad range of technical settings (Figure~\ref{figure:options}). R 
 enforces no monolithic integration. We claim that the modular structure of R 
 packages allows user to perform flexible data analysis adjusted to their needs 
-and to design frameworks for high-throughput analysis. R allows to access and 
+and to design frameworks for high-throughput analysis. R allows accessing and 
 reuse code for the creation of reports in various formats (e.g., HTML, PDF). 
 Most of the software is cross-platform open source software. Despite the fact 
 that R is free of charge it is quite possible to build commercial applications. 
