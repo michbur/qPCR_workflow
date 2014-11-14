@@ -61,7 +61,7 @@ all Cq values are calculated from the amplification curves and converted into
 discrete events by means of positive and negative chambers. Finally, the 
 absolute quantification of nucleic acids is done using Poisson statistics. 
 Recently we published the \CRANpkg{dpcR} package at CRAN, which is the first 
-open source software package based on R for the analysis of digital PCR (dPCR) 
+open source R software package for the analysis of digital PCR (dPCR) 
 experiments (see \CRANpkg{dpcR} for details).
 
 \begin{figure}[htbp]
@@ -70,7 +70,7 @@ experiments (see \CRANpkg{dpcR} for details).
   \caption{Scheme of droplet digital PCR experiment. \strong{A)} A droplet 
 digital PCR reaction mix was formed in a Bio-Rad QX100 system. The droplets 
 (circa 100 $\mu$m in diameter) were subjected to custom made slide chambers for 
-the detection and analysis in fully automatized imaging platform ``VideoScan'' 
+the detection and analysis in fully automatized imaging VideoScan platform
 \citep{rodiger_highly_2013}. \strong{(B)} Subsequently the samples can be 
 digitalized by counting number of positive and total number of droplets. The 
 plot was generated with the \code{sim\_ddpcr} function from the \CRANpkg{dpcR} 
@@ -96,14 +96,14 @@ results and encourage the use of open data exchange formats like the XML-based
 Real-Time PCR Data Markup Language (RDML) \citep{lefever_2009}. We see the 
 application of R in line with this. 
 
-In case of closed source software usually the analysis happens in a 
-black~box fashion tied to a specific platform \citep{roediger_RJ_2013, 
-Spiess_2014}. We agree that black~boxes are not necessarily a bad thing, but 
-should be avoided if possible. Studies by \citet{mccullough_2008, Almiron_2010, 
-Duran_2014} exemplified where the black~box approach might fail in science. But 
-the same holds true for the open~source software since software bugs are 
-independent of a development model. However, at least open~source gives the 
-possibility to track and eliminate  errors by an individual entity. Often 
+In case of closed source software usually the analysis happens in a black~box 
+fashion tied to a specific platform. We agree that black~boxes are not 
+necessarily a bad thing, but should be avoided if possible 
+\citep{roediger_RJ_2013, Spiess_2014}. Studies by \citet{mccullough_2008, 
+Almiron_2010, Duran_2014} exemplified where the black~box approach might fail in 
+science. But the same holds true for the open~source software since software 
+bugs are independent of a development model. However, at least open~source gives 
+the possibility to track and eliminate  errors by an individual entity. Often 
 black~box systems have limitations in the data processing and force the user to 
 process the data by suboptimal analysis algorithms \citep{ruijter_2013}. The 
 visualization options are usually limited by the software vendor preferences and 
@@ -215,13 +215,13 @@ we applied the functions from the \CRANpkg{MBmca} package (0.0.3-4) for an
 analysis of the target specific melting temperature ($T_{M}$) in experiments of 
 the present study.
 
-We complete our examples with a case study for the analysis of dPCR 
+We completed our examples with a case study for the analysis of dPCR 
 experiment. In particular, we used the \CRANpkg{dpcR} (0.1.3.1) to estimate the 
 number of molecules in a sample.
 
 \section{Results}
 
-In the following sections we show how R can be used as an unified open 
+In the following sections we will show how R can be used as an unified open 
 software for (I) data analysis and presentation in research, 
 (II) as software frame-work for novel technical developments, (III) as platform 
 for teaching of new technologies and (IV) as reference for statistical methods.
@@ -523,7 +523,8 @@ melt <- cbind(BioRad[["Melt"]][["Cy5-2"]][["pos"]],
 
 # Calculate the melting temperature with the diffQ function from the MBmca 
 # package. Use simple logical conditions to find out if a positive sample with 
-# the expected Tm of circa 54.5 degree Celsius is found.
+# the expected Tm of circa 54.5 degree Celsius is found. The result of the test
+# is assigned to the object 'positive'.
 Tm.Positive <- matrix(nrow = length(melt[, -1]),
                       byrow = TRUE,
                       dimnames = list(names(melt)[-1]),
