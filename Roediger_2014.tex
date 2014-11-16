@@ -677,7 +677,7 @@ baseline region between 0~and~52 minutes).
 
 \begin{example}
   # Apply the CPP functions to pro-process the raw data.1) Baseline data to zero, 
-  # 2) Smooth data with spline, 3) Remove outliers in background range between 
+  # 2) Smooth data with a spline, 3) Remove outliers in background range between 
   # entry 1 and 190. Assign the results of the analysis to the object 'res'.
 res <- lapply(c(2, 4), function(i) {
   y.s <- CPP(C81[, i] / 60, C81[, i + 1],

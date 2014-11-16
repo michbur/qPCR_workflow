@@ -241,7 +241,7 @@ plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "RF
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 
 # Apply the CPP functions to pro-process the raw data.1) Baseline data to zero, 
-# 2) Smooth data with spline, 3) Remove outliers in background range between 
+# 2) Smooth data with a spline, 3) Remove outliers in background range between 
 # entry 1 and 190. Assign the results of the analysis to the object 'res'.
 res <- lapply(c(2, 4), function(i) {
   y.s <- CPP(C81[, i] / 60, C81[, i + 1],
