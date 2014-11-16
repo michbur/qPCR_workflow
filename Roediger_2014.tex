@@ -715,16 +715,14 @@ scientific community. Simulations and predictions of binomial and Poisson
 distributions, commonly used theoretical models of dPCR, statistical data 
 analysis methods, plotting facilities and report generation tools are part of 
 the package \citep{pabinger_2014}. Here, we show briefly a case study for the 
-\CRANpkg{dpcR}.
-
-Simulations are part in many educational curricula and support teaching 
-greatly. In this case study, we mimicked an in-silico experiment for a droplet 
-digital PCR similar to Figure~\ref{figure:dpcR_sim}. The aim was to asses the 
-concentration of the template sample. The number of positive partitions ($k$), 
-total number of partitions ($n$) and the size of the partition are only data 
-required for the analysis. The estimate of the mean number of template molecules 
-per partition ($\hat \lambda$) was calculated using following equation 
-\citep{huggett_2013}:
+\CRANpkg{dpcR}. Simulations are part in many educational curricula and support 
+teaching greatly. In this case study, we mimicked an in-silico experiment for a 
+droplet digital PCR similar to Figure~\ref{figure:dpcR_sim}. The aim was to 
+asses the concentration of the template sample. The number of positive 
+partitions ($k$), total number of partitions ($n$) and the size of the partition 
+are only data required for the analysis. The estimate of the mean number of 
+template molecules per partition ($\hat \lambda$) was calculated using following 
+equation \citep{huggett_2013}:
 
 \begin{equation}
 \hat{\lambda} =  -\ln{(1 - \frac{k}{n})}.
