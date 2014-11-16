@@ -270,7 +270,7 @@ dev.off()
 require(dpcR)
 
 # Analysis of a digital PCR experiment. The density estimation.
-# In our in-silico experiment we counted in tatal 16800 droplets (n). 
+# In our in-silico experiment we counted in total 16800 droplets (n). 
 # Thereof, 4601 were positive (k).
 pdf("dpcR.pdf")
 
