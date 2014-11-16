@@ -113,8 +113,7 @@ performed in spreadsheets. However, this data processing approach is not
 advisable for research purposes. Frequently spreadsheets  lack (or do not use) 
 tools to validate the input, to debug implemented procedures and to automatize 
 the workflow. These traits make them prone to errors and not well suited for 
-complicated tasks \citep{mccullough_2008, 
-burns_2014}.
+complicated tasks \citep{mccullough_2008, burns_2014}.
 
 For several reasons, R is one of the most popular tools in bioinformatics and is 
 known as an early adopter of emerging technologies \citep{pabinger_2014}. R 
@@ -679,7 +678,7 @@ baseline region between 0~and~52 minutes).
 \begin{example}
   # Apply the CPP functions to pro-process the raw data.1) Baseline data to zero, 
   # 2) Smooth data with spline, 3) Remove outliers in background range between 
-  # entry 1 and 190.
+  # entry 1 and 190. Assign the results of the analysis to the object 'res'.
 res <- lapply(c(2, 4), function(i) {
   y.s <- CPP(C81[, i] / 60, C81[, i + 1],
              trans = TRUE, 
@@ -692,7 +691,7 @@ res <- lapply(c(2, 4), function(i) {
   paste(round(th.cyc(C81[, i] / 60, y.s[["y.norm"]], r = 0.05)[1], 2), "min")
 })
 
-# Add the cycle threshold time and the threshold signal level to plot.
+# Add the cycle threshold time from the object 'res' to the plot.
 
 abline(h = 0.05, lty = 2)
 text(10, 0.55, "Cq.t:")
