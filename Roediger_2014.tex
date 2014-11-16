@@ -619,11 +619,10 @@ Amplification (HDA). \strong{(A)} The raw data of the HDA (D1, undiluted, D2
 $1:10$ diluted) exhibit some outliers (detector artifacts), an off-set of circa 
 0.5 relative fluorescence units (RFU) and a slight negative trend in the 
 baseline region (0~-~52 minutes). \strong{(B)} First we used the \code{CPP} 
-function from the \CRANpkg{chipPCR} package to smooth the data with spline 
-function. Baselining was done with a linear regression model (robust 
-MM-estimator). Finally, we used the \code{th.cyc} function from the 
-\CRANpkg{chipPCR} package to calculate the cycle threshold time for samples D1 
-and D2. The threshold value was set to $r = 0.05$ ($--$).}
+function to smooth the data with a spline function. Baselining was done with a 
+linear regression model (robust MM-estimator). Finally, we used the 
+\code{th.cyc} function to calculate the cycle threshold time for samples D1 and 
+D2. The threshold value was set to $r = 0.05$ ($--$).}
   \label{figure:qIA}
 \end{figure}
 
@@ -669,12 +668,13 @@ mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 \end{example}
 
 First, we used the \code{CPP} function to pre-process the raw data. Similar to 
-the other case studies we baselined and smoothed the amplification curve data. 
-However, instead of the Savitzky-Golay smoother we used a cubic spline ($method 
-= "spline"$) in the \code{CPP} function. In addition, outliers were 
-automatically removed in the baseline region (Figure~\ref{figure:qIA}A~and~B). 
-The background range was defined to be between the $1^{th}$ and $190^{th}$ data 
-point (corresponds to baseline region between 0~and~52 minutes).
+the other case studies we baselined and smoothed the amplification curve data 
+prior to the analysis of the of the $Cq_{t}$ value. However, instead of the 
+Savitzky-Golay smoother we used a cubic spline ($method = "spline"$) in the 
+\code{CPP} function. In addition, outliers were automatically removed in the 
+baseline region (Figure~\ref{figure:qIA}A~and~B). The background range was 
+defined to be between the $1^{th}$ and $190^{th}$ data point (corresponds to 
+baseline region between 0~and~52 minutes).
 
 \begin{example}
   # Apply the CPP functions to pro-process the raw data.1) Baseline data to zero, 
