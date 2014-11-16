@@ -405,15 +405,14 @@ positive and negative samples (compare Figure~\ref{figure:plotCurves}). If the
 melting temperature of a sample is known it is possible to automatize the 
 decision by a melting curve analysis (MCA). As shown in \citet{roediger_RJ_2013} 
 this can be done by interrogating the $T_{M}$. Therefore, we used a logical 
-statement, which checks if $T_{M}$ is within a tight temperature range. We used 
+statement, which tests if $T_{M}$ is within a tight temperature range. We used 
 the signal height as second parameter. In line with ``Case study one'' we used 
 the function $sessionInfo()$ to track all packages used during the analysis. 
 Reproducible research is greatly enhanced if open data exchange formats are 
-used. In this study we used the \CRANpkg{RDML} package for data read-in. The 
-data were measured with a CFX96 system (Bio-Rad) and then exported as RDML v1.1 
-format file. The example file 
-\file{BioRad\_qPCR\_melt.rdml} was taken from the \CRANpkg{RDML} package. Within 
-this qPCR experiment we amplified the \textit{Mycobacterium tuberculosis} 
+used. Therefore, we used the \CRANpkg{RDML} package for data read-in. The 
+amplification and melting curve data were measured with a CFX96 system (Bio-Rad) 
+and then exported as RDM~v~1.1 format file as \file{BioRad\_qPCR\_melt.rdml}. 
+Within this qPCR experiment we amplified the \textit{Mycobacterium tuberculosis} 
 \textit{katG}\footnote{\url{https://www.wikigenes.org/e/gene/e/923602.html}} 
 gene and tried to detect a mutation at codon 315. The experiment was separated 
 in two parts: 
@@ -430,7 +429,7 @@ The qPCR was conducted using EvaGreen\circledR~Master Mix (Syntol) according to
 the manufacturer's instructions, with 500 nM of primers and probe in a 25 $\mu$L 
 final reaction volume. Thermocycling was conducted using a CFX96 (BioRad) 
 initiated by 3 min incubation at 95~\textcelsius, followed by 41 cycles (15 s at 
-95~\textcelsius; 40 s at 65~\textcelsius) with a single fluorescent reading 
+95~\textcelsius; 40 s at 65~\textcelsius) with a single read-out 
 taken at the end of each cycle. Probe melting was conducted between 
 35~\textcelsius~and 95~\textcelsius~by 1~\textcelsius~at 1 s steps.
 
@@ -509,9 +508,9 @@ Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
 Cq.Positive
 \end{example}
 
-Since the qPCR indicated that selected samples (except non-template-control 
-(``NTC'')) are positive, we distinguished between true positive and true negative 
-samples by MCA (Figure~\ref{figure:amp_melt}A).
+Since the amplification curves indicated that selected samples (except 
+non-template-control (``NTC'')) are positive, we distinguished between true 
+positive and true negative samples by MCA (Figure~\ref{figure:amp_melt}A).
 
 \begin{example}
 # Fetch temperature dependent fluorescence for the Cy5 channel of the 
@@ -566,8 +565,8 @@ results.tab[["Tm positive"]] <- factor(results.tab[["Tm positive"]],
 results.tab
 \end{example}
 
-The results of the entire analysis can be invoked by the statement 
-$results.tab$ (not shown). Finally, we plotted and printed the output of our analysis 
+The results of the analysis can be invoked by the statement $results.tab$ (not 
+shown). Finally, we plotted and printed the output of our analysis 
 (Figure~\ref{figure:amp_melt}C).
 
 \begin{example}
@@ -602,13 +601,15 @@ lapply(2L:ncol(melt), function(i)
 \end{example}
 
 \subsection{Case study three -- Isothermal Amplification}
-
 Isothermal amplification is an alternative to PCR, which uses a constant 
 temperature rather than cycling through denaturation, annealing and extension 
 steps \citep{rodiger_nucleic_2014}. The corresponding signal is monitored 
-continuously. Therefore, the $Cq$ value depends on the time instead of cycles. 
-In this study we used the \code{th.cyc} function to determine the time 
-($Cq_{t}$) required to reach a certain threshold signal level.
+continuously on a time basis. Often the abscissa values are not uniformly 
+spaced\footnote{The \texttt{C81} example data set chosen in this case study are 
+not uniformly spaced. The \code{CPP} function gives a warning in such a case.}. 
+In qIA are the $Cq$ values dependent on the time instead of cycles. In this 
+study we used the \code{th.cyc} function to determine the time ($Cq_{t}$) 
+required to reach a certain threshold signal level.
 
 \begin{figure}[htbp]
   \centering
@@ -635,7 +636,7 @@ as described by the vendor. In detail, the reaction was composed of ``mix A)''
 0.5 $\mu$L template plasmid. Preincubation: The mixture was incubated for 2 min 
 at 95\textcelsius~and immediately placed on ice. Reaction ``mix B)'' contained 5 
 $\mu$L A. bidest., 1.25 $\mu$L 10x buffer, 2 $\mu$L NaCl, 1.25 $\mu$L 
-$MgSO_{4}$, 1,75 $\mu$L dNTPs, 0.25 $\mu$L EvaGreen (Biotium), 1 $\mu$L enzyme 
+$MgSO_{4}$, 1.75 $\mu$L dNTPs, 0.25 $\mu$L EvaGreen (Biotium), 1 $\mu$L enzyme 
 mix. The mix was covered with 50 $\mu$L mineral oil (Roth). The fluorescence 
 measurement in VideoScan HCU started directly after adding ``mix B)'' at 
 65\textcelsius. A $1x$ (D1) and a $1:10$ dilution (D2) were tested. Our 
@@ -652,7 +653,7 @@ it was necessary to pre-process the raw data (Figure~\ref{figure:qIA}A).
 par(mfrow = c(2, 1))
 
 # Plot the raw data from the C81 dataset to the first array and add
-# a legend. Note: The abcsissa values (time in seconds) was divided 
+# a legend. Note: The abscissa values (time in seconds) was divided 
 # by 60 (C81[, i] / 60) to convert to minutes.
 plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "RFU")
 mtext("A", cex = 2, side = 3, adj = 0, font = 2)
@@ -667,12 +668,13 @@ plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "RF
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 \end{example}
 
-Again, we used the \code{CPP} function to pre-process the raw data. Similar to 
-the other case studies we baselined and smoothed (Savitzky-Golay smoother) the 
-data. In addition, outliers were automatically removed in the baseline region 
-(Figure~\ref{figure:qIA}A~and~B). The background range was defined to be between 
-the $1^{th}$ and $190^{th}$ data point (corresponds to baseline region between 
-0~and~52 minutes).
+First, we used the \code{CPP} function to pre-process the raw data. Similar to 
+the other case studies we baselined and smoothed the amplification curve data. 
+However, instead of the Savitzky-Golay smoother we used a cubic spline ($method 
+= "spline"$) in the \code{CPP} function. In addition, outliers were 
+automatically removed in the baseline region (Figure~\ref{figure:qIA}A~and~B). 
+The background range was defined to be between the $1^{th}$ and $190^{th}$ data 
+point (corresponds to baseline region between 0~and~52 minutes).
 
 \begin{example}
   # Apply the CPP functions to pro-process the raw data.1) Baseline data to zero, 
