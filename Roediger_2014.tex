@@ -19,7 +19,7 @@ an excellent foundation for reproducible and transparent data analysis in a
 highly customizable cross-platform environment. However, for novices it is often 
 challenging to master R or learn capabilities of the vast number of packages 
 available. In the paper, we describe exemplary workflows for the analysis of 
-dPCR, qIA or qPCR experiments including the analysis of melting curve data. Our 
+qPCR, qIA or dPCR experiments including the analysis of melting curve data. Our 
 analysis relies entirely on R packages available from public repositories. 
 Additionally, we provide information related to standardized and reproducible 
 research with R.
@@ -46,7 +46,7 @@ nowadays in various fields like diagnostics and point-of-care-testing
 \citep{rodiger_nucleic_2014}.
 
 The digital PCR (dpcR) is a novel approach for detection and quantification of 
-nucleic acids and can be seen as a next generation method. The dPCR Technology 
+nucleic acids and can be seen as a next generation method. The dPCR technology 
 breaks fundamentally with the previous concept of nucleic acid quantification. 
 The key difference between dPCR and traditional qPCR lies in the method of 
 measuring (absolute) nucleic acids amounts, which yields discrete information 
@@ -84,7 +84,7 @@ expertise to master a workflow. This comprises standards for experiment design,
 generation and analysis of data, interpretation, reporting and storage of 
 results \citep{huggett_BDQ_2014}. The scientific misconduct and fraud have shaken 
 the scientific community on several occasions \citep{fang_2012}. In particular, 
-the scientific community work hard to uncover pitfalls of qPCR experiments. This 
+the scientific community works hard to uncover pitfalls of qPCR experiments. This 
 lead to the development of peer-reviewed quantification cycle (Cq) analysis 
 algorithms \citep{ruijter_2013}, throughout characterized qPCR chemistries 
 \citep{ruijter_2014} and guidelines for a proper conduct of qPCR experiments as 
@@ -108,16 +108,16 @@ black~box systems have limitations in the data processing and force the user to
 process the data by suboptimal analysis algorithms \citep{ruijter_2013}. The 
 visualization options are usually limited by the software vendor preferences and 
 do not attain publication quality. Users who have no access to the commercial 
-software are barred. Aside from closed source software, often analysis of data 
-performed in spreadsheets. However, this data processing approach is not 
-advisable for research purposes. Frequently spreadsheets  lack (or do not use) 
+software are barred. Aside from closed source software, data 
+analysis is often performed in spreadsheets. However, this data processing approach is not 
+advisable for research purposes. Most spreadsheets  lack (or do not use) 
 tools to validate the input, to debug implemented procedures and to automatize 
 the workflow. These traits make them prone to errors and not well suited for 
 complicated tasks \citep{mccullough_2008, burns_2014}.
 
 For several reasons, R is one of the most popular tools in bioinformatics and is 
 known as an early adopter of emerging technologies \citep{pabinger_2014}. R 
-provides packages to build a highly customized workflows, covering: data 
+provides packages to build highly customized workflows, covering: data 
 read-in, data preprocessing, analysis, post-processing, visualization and 
 storage. As recently briefly reviewed in \citet{pabinger_2014}, numerous R 
 packages have been developed for the analysis of qPCR, dPCR, qIA and melting 
@@ -220,8 +220,8 @@ number of molecules in a sample.
 
 \section{Results}
 
-In the following sections we will show how R can be used as an unified open 
-software for (I) data analysis and presentation in research, 
+In the following sections we will show how R can be used (I) as an unified open 
+software for data analysis and presentation in research, 
 (II) as software frame-work for novel technical developments, (III) as platform 
 for teaching of new technologies and (IV) as reference for statistical methods.
 
@@ -232,9 +232,9 @@ for teaching of new technologies and (IV) as reference for statistical methods.
   \includegraphics[clip=true, width=14cm]{figures/dilution_Cq.pdf}
   \caption{Analysis of the amplification curve data of the \texttt{guescini1} 
 dataset. \strong{(A)} Raw data from the calibration curve samples were visually 
-inspected. The qPCR curves display a broad variation in plateau fluorescence (38 
--- 62 RFU). The red horizontal line indicates the fluorescence level (0.05) used 
-for the calculation of the Cq value by the ``cycle threshold'' method. 
+inspected. The qPCR curves display a broad variation in plateau fluorescence 
+(38~--~62 RFU). The red horizontal line indicates the fluorescence level (0.05) 
+used for the calculation of the Cq value by the ``cycle threshold'' method. 
 \strong{(B)} The \code{CPP} function from the \CRANpkg{chipPCR} was sued to 
 baseline the data, to smooth the data with Savitzky-Golay smoothing filter and 
 to normalize the data between 0 and 1. \strong{(C)} The Cq values were 
@@ -251,16 +251,18 @@ $Cq_{SDM}$ values were automatically analysed with the \code{effcalc}
 
 The goal of our fist case study was to calculate the Cq values and the $AE$ from 
 a qPCR experiment. We used the ``guescini1'' dataset from the \CRANpkg{qcpR} 
-package. Details of the experiment are described in \citet{guescini_2008}. First 
-we started with loading the required packages and datasets. A good practice for 
-reproducible research is to track the package versions and environment used 
-during the analysis. The function $sessionInfo()$ from the \CRANpkg{utils} 
-package provides this information. Assuming that the analysis starts with a 
-clean R session it is possible to assign the required packages to an object, as 
-shown below. The reproducibility of research can be further improved by the 
-\CRANpkg{archivist} package, which stores and recovers crucial data and 
-preserves metadata of saved objects (not shown). All settings of R session can 
-be easily saved and/or restored using \CRANpkg{settings} package.
+package, where the gene \textit{NADH dehydrogenase 1} (MT-ND1) was amplified in 
+a LightCycler\circledR~480 (Roche) thermocycler. Details of the experiment are 
+described in \citet{guescini_2008}. First we started with loading the required 
+packages and datasets. A good practice for reproducible research is to track the 
+package versions and environment used during the analysis. The function 
+$sessionInfo()$ from the \CRANpkg{utils} package provides this information. 
+Assuming that the analysis starts with a clean R session it is possible to 
+assign the required packages to an object, as shown below. The reproducibility 
+of research can be further improved by the \CRANpkg{archivist} package, which 
+stores and recovers crucial data and preserves metadata of saved objects (not 
+shown). All settings of R session can be easily saved and/or restored using 
+\CRANpkg{settings} package.
 
 \begin{example}
 # Load the required packages for the data import and analysis.
@@ -420,7 +422,7 @@ in two parts:
 and mutant) and
  \item specific detection of wild-type \textit{M.~tuberculosis} by melting of 
 TaqMan probe (quencher -- BHQ2, fluorescent reporter -- Cy5) with amplified DNA 
-(similar assay is described in \citet{luo_multiplex_2011}).
+(see \citet{luo_multiplex_2011} for probe/primer sequences and further details).
 \end{enumerate}
 
 
@@ -471,7 +473,7 @@ qPCR <- cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
   \centering
   \includegraphics[clip=true, width=14cm]{figures/amp_melt.pdf}
   \caption{Graphical presentation of the amplification curve data and melting 
-curve data. \strong{(A)} The raw amplification curve data were pre-process with 
+curve data. \strong{(A)} The raw amplification curve data were pre-processed with 
 the \code{CPP} function prior to visualization. To calculate the $T_{M}$ values 
 from the raw melting curve data \strong{(B)} we used the \code{diffQ} function 
 from the \CRANpkg{MBmca} package. \strong{(C)} We adjusted our algorithm to 
@@ -587,10 +589,10 @@ lapply(2L:ncol(qPCR), function(i)
         col = color[i - 1]))
 
 matplot(melt[, 1], melt[, -1], type = "l", col = color, 
-        lty = 1, xlab = "Temperature [°C]", ylab = "RFU")
+        lty = 1, xlab = "Temperature [degree Celsius]", ylab = "RFU")
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 
-plot(NA, NA, xlim = c(35, 95), ylim = c(-15, 120), xlab = "Temperature [°C]", 
+plot(NA, NA, xlim = c(35, 95), ylim = c(-15, 120), xlab = "Temperature [degree Celsius]", 
      ylab = "-d(RFU)/dT")
 mtext("C", cex = 2, side = 3, adj = 0, font = 2)
 
@@ -606,7 +608,7 @@ steps \citep{rodiger_nucleic_2014}. The corresponding signal is monitored
 continuously on a time basis. Often the abscissa values are not uniformly 
 spaced\footnote{The \texttt{C81} example data set chosen in this case study are 
 not uniformly spaced. The \code{CPP} function gives a warning in such a case.}. 
-In qIA are the $Cq$ values dependent on the time instead of cycles. In this 
+In qIA the $Cq$ values are dependent on the time instead of cycles. In this 
 study we used the \code{th.cyc} function to determine the time ($Cq_{t}$) 
 required to reach a certain threshold signal level.
 
@@ -624,27 +626,29 @@ linear regression model (robust MM-estimator). Finally, we used the
 D2. The threshold value was set to $r = 0.05$ ($--$).}
   \label{figure:qIA}
 \end{figure}
-
 We performed a quantitative isothermal amplification (qIA) with the plasmid 
-\textit{pCNG1} by using a Helicase Dependent Amplification (HDA). Since the enzyme DNA 
-Helicase unwinds DNA, no thermal denaturation is needed. The HDA 
-conditions were taken from the ``IsoAmp III Universal tHDA Kit'', Biohelix Corp, 
-as described by the vendor. In detail, the reaction was composed of ``mix A)'' 
-10 $\mu$L A. bidest, 1.25 $\mu$L 10xb~uffer, 0.75 $\mu$L primer (150 nM final), 
-0.5 $\mu$L template plasmid. Preincubation: The mixture was incubated for 2 min 
-at 95\textcelsius~and immediately placed on ice. Reaction ``mix B)'' contained 5 
+\textit{pCNG1} by using a Helicase Dependent Amplification (HDA). Our previously 
+reported VideoScan platform \citep{rodiger_highly_2013} was used to control the 
+temperature and to monitor the amplification reaction. The VideoScan technology is based 
+on a highly versatile fluorescence microscope imaging platform, which can be 
+operated with a heating/cooling unit (HCU) for qPCR and MCA applications 
+\citep{roediger_RJ_2013, rodiger_highly_2013}. Since the enzyme DNA Helicase 
+unwinds DNA, no thermal denaturation is needed. The HDA conditions were taken 
+from the ``IsoAmp III Universal tHDA Kit'', Biohelix Corp, as described by the 
+vendor. In detail, the reaction was composed of ``mix A)'' 10 $\mu$L A. bidest, 
+1.25 $\mu$L 10xb~uffer, 0.75 $\mu$L primer (150 nM final), 0.5 $\mu$L template 
+plasmid. Preincubation: The mixture was incubated for 2 min at 
+95\textcelsius~and immediately placed on ice. Reaction ``mix B)'' contained 5 
 $\mu$L A. bidest., 1.25 $\mu$L 10x buffer, 2 $\mu$L NaCl, 1.25 $\mu$L 
 $MgSO_{4}$, 1.75 $\mu$L dNTPs, 0.25 $\mu$L EvaGreen (Biotium), 1 $\mu$L enzyme 
 mix. The mix was covered with 50 $\mu$L mineral oil (Roth). The fluorescence 
 measurement in VideoScan HCU started directly after adding ``mix B)'' at 
-65\textcelsius. A $1x$ (D1) and a $1:10$ dilution (D2) were tested. Our 
-previously reported VideoScan platform \citep{rodiger_highly_2013} was used to 
-monitor the amplification (The resulting dataset \texttt{C81} is part of the 
-\CRANpkg{chipPCR} package). Two concentrations (stock and 1:10 diluted stock) of 
-input DNA were used in the HDA. Similar to the previous case studies, we first 
-prepared the plot of the data. Since the raw 
-data showed a slight negative trend and an off-set of circa 0.45 RFU 
-it was necessary to pre-process the raw data (Figure~\ref{figure:qIA}A).
+65\textcelsius. A $1x$ (D1) and a $1:10$ dilution (D2) were tested. The 
+resulting dataset \texttt{C81} is part of the \CRANpkg{chipPCR} package. Two 
+concentrations (stock and 1:10 diluted stock) of input DNA were used in the HDA. 
+Similar to the previous case studies, we first prepared the plot of the data. 
+Since the raw data showed a slight negative trend and an off-set of circa 0.45 
+RFU it was necessary to pre-process the raw data (Figure~\ref{figure:qIA}A).
 
 \begin{example}
 # Drawn in an 2-by-1 array on the device by two columns and one row.
@@ -832,7 +836,7 @@ similar to a utility over a network (i.~p., Internet) \citep{R_cloud}.}
 \section{Acknowledgment}
 
 Part of this work was funded by the BMBF InnoProfile-Transfer-Projekt 03 IPT 
-611X. We would like to thank R community. Part of this work was funded by the 
+611X. We would like to thank the R community. Part of this work was funded by the 
 Russian Ministry of Education and Science (project No. RFMEFI62114X0003) and 
 with usage of scientific equipment of Center for collective use 
 ``Biotechnology'' at All-Russia Research Institute of Agricultural 

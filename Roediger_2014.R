@@ -48,7 +48,7 @@ res.Cq <- lm(Cq.Ct ~ Cq.SDM)
 
 summary(res.Cq)
 
-pdf("dilution_Cq.pdf", width = 9.5, height = 14)
+#pdf("dilution_Cq.#pdf", width = 9.5, height = 14)
 
 # Arrange and plot the results in a convenient way.
 layout(matrix(c(1,2,3,3,4,5), 3, 2, byrow = TRUE))
@@ -85,7 +85,7 @@ legend("topright", "E", cex = 3, bty = "n")
 
 # Set top margin to default value.
 par(mar = c(5.1, 4.1, 4.1, 2.1))
-dev.off()
+#dev.off()
 #################################
 # Case study two
 #################################
@@ -116,11 +116,11 @@ qPCR <- cbind(BioRad[["qPCR"]][["EvaGreen"]][["pos"]],
 qPCR <- cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
 
 # Use plotCurves function to get an overview of the amplification curve samples.
-pdf("plotCurves.pdf", width = 6, height = 4)
+#pdf("plotCurves.#pdf", width = 6, height = 4)
 
 plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
 
-dev.off()
+#dev.off()
 # Detect positive samples - calculate Cq values by the cycle threshold method. 
 # The threshold signal level r was set to 10.
 Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
@@ -184,7 +184,7 @@ results.tab[["Tm positive"]] <- factor(results.tab[["Tm positive"]],
                                        labels=c(TRUE, FALSE))
 results.tab
 
-pdf("amp_melt.pdf", width = 8, height = 6)
+#pdf("amp_melt.#pdf", width = 8, height = 6)
 
 # Convert the decision from the "results" object in a color code:
 # Negative, black; Positive, red.
@@ -204,10 +204,10 @@ lapply(2L:ncol(qPCR), function(i)
         col = color[i - 1]))
 
 matplot(melt[, 1], melt[, -1], type = "l", col = color, 
-        lty = 1, xlab = "Temperature [°C]", ylab = "RFU")
+        lty = 1, xlab = "Temperature [degree Celsius]", ylab = "RFU")
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 
-plot(NA, NA, xlim = c(35, 95), ylim = c(-15, 120), xlab = "Temperature [°C]", 
+plot(NA, NA, xlim = c(35, 95), ylim = c(-15, 120), xlab = "Temperature [degree Celsius]", 
      ylab = "-d(RFU)/dT")
 mtext("C", cex = 2, side = 3, adj = 0, font = 2)
 
@@ -215,12 +215,12 @@ lapply(2L:ncol(melt), function(i)
   lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
               fct = max, inder = TRUE)[["xy"]], col = color[i - 1]))
 
-dev.off()
+#dev.off()
 #################################
 # Case study three
 #################################
 
-pdf("qIA.pdf")
+#pdf("qIA.#pdf")
 
 # Drawn in an 2-by-1 array on the device by two columns and one row.
 par(mfrow = c(2, 1))
@@ -261,7 +261,7 @@ abline(h = 0.05, lty = 2)
 text(10, 0.55, "Cq.t:")
 legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), 
        bty = "n")
-dev.off()
+#dev.off()
 
 #################################
 # Case study four
@@ -272,11 +272,11 @@ require(dpcR)
 # Analysis of a digital PCR experiment. The density estimation.
 # In our in-silico experiment we counted in total 16800 droplets (n). 
 # Thereof, 4601 were positive (k).
-pdf("dpcR.pdf")
+#pdf("dpcR.#pdf")
 
 (dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
 
-dev.off()
+#dev.off()
 # Let us assume, that every droplet has roughly a volume of 5 nL.
 # The total concentration (and its confidence intervals) in molecules/ml is:
 dens[4:6] / 5 * 1e-6
@@ -291,7 +291,7 @@ dens[4:6] / 5 * 1e-6
 # # Generate an amplitude plot for the second fluorescence channel (e.g., VIC)
 # fluos2 <- sim_ddpcr(m = 10, n = 20, times = 100, pos_sums = FALSE, n_exp = 1,
 #   fluo = list(0.1, 0))
-# pdf("dpcR_sim.pdf", width = 12, height = 6.5)
+# #pdf("dpcR_sim.#pdf", width = 12, height = 6.5)
 # # Plot the amplitudes of both fluorescence channel in an aligned fashion
 # plot_vic_fam(fam = fluos1, vic = fluos2, col_vic = "green", col_fam = "pink")
-# dev.off()
+# #dev.off()
