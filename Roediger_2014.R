@@ -48,7 +48,7 @@ res.Cq <- lm(Cq.Ct ~ Cq.SDM)
 
 summary(res.Cq)
 
-#pdf("dilution_Cq.#pdf", width = 9.5, height = 14)
+#pdf("dilution_Cq.pdf", width = 9.5, height = 14)
 
 # Arrange and plot the results in a convenient way.
 layout(matrix(c(1,2,3,3,4,5), 3, 2, byrow = TRUE))
@@ -116,7 +116,7 @@ qPCR <- cbind(BioRad[["qPCR"]][["EvaGreen"]][["pos"]],
 qPCR <- cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
 
 # Use plotCurves function to get an overview of the amplification curve samples.
-#pdf("plotCurves.#pdf", width = 6, height = 4)
+#pdf("plotCurves.pdf", width = 6, height = 4)
 
 plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
 
@@ -184,7 +184,7 @@ results.tab[["Tm positive"]] <- factor(results.tab[["Tm positive"]],
                                        labels=c(TRUE, FALSE))
 results.tab
 
-#pdf("amp_melt.#pdf", width = 8, height = 6)
+#pdf("amp_melt.pdf", width = 8, height = 6)
 
 # Convert the decision from the "results" object in a color code:
 # Negative, black; Positive, red.
@@ -220,7 +220,7 @@ lapply(2L:ncol(melt), function(i)
 # Case study three
 #################################
 
-#pdf("qIA.#pdf")
+#pdf("qIA.pdf")
 
 # Drawn in an 2-by-1 array on the device by two columns and one row.
 par(mfrow = c(2, 1))
@@ -272,7 +272,7 @@ require(dpcR)
 # Analysis of a digital PCR experiment. The density estimation.
 # In our in-silico experiment we counted in total 16800 droplets (n). 
 # Thereof, 4601 were positive (k).
-#pdf("dpcR.#pdf")
+#pdf("dpcR.pdf")
 
 (dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
 
@@ -291,7 +291,7 @@ dens[4:6] / 5 * 1e-6
 # # Generate an amplitude plot for the second fluorescence channel (e.g., VIC)
 # fluos2 <- sim_ddpcr(m = 10, n = 20, times = 100, pos_sums = FALSE, n_exp = 1,
 #   fluo = list(0.1, 0))
-# #pdf("dpcR_sim.#pdf", width = 12, height = 6.5)
+# #pdf("dpcR_sim.pdf", width = 12, height = 6.5)
 # # Plot the amplitudes of both fluorescence channel in an aligned fashion
 # plot_vic_fam(fam = fluos1, vic = fluos2, col_vic = "green", col_fam = "pink")
 # #dev.off()
