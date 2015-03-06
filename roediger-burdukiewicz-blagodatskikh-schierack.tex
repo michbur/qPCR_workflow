@@ -128,7 +128,7 @@ curve analysis experiments, including: \CRANpkg{kulife}, \CRANpkg{MCMC.qpcr},
 \BIOpkg{EasyqpcR}, \BIOpkg{unifiedWMWqPCR}, \BIOpkg{ReadqPCR}, 
 \BIOpkg{NormqPCR}. All the packages are either available from CRAN or 
 Bioconductor \citep{gentleman_2004}. The packages can be freely combined in a 
-plugin-like architecture. The R is an independent, cross-platform instrument and 
+plugin-like architecture. The R is an independent, cross-platform analysis platform and 
 provides a broad spectrum of calculation options. Particularly, the visualization of 
 experiments is one of R's pinnacles. R enables the users to create an 
 efficient manipulation, restructuring and reshaping of data to make them 
@@ -148,7 +148,7 @@ gandrud_2013, hofmann_2013, kuhn_cran_2014, Leeper_2014, liu_2014}.
 
 The aim of this paper is to show case studies for qPCR, dPCR, qIA and melting 
 curve analysis experiments. Our workflow effectively follows the principle 
-illustrated in Figure~\ref{figure:workflow}. We intent to aggregate 
+illustrated in Figure~\ref{figure:workflow}. We intend to aggregate 
 functionalities dispersed between various packages and offer a fast insight in 
 the analysis of nucleic acid experiments with R. In particular, we describe how 
 to:
@@ -237,7 +237,7 @@ dataset. \strong{(A)} Raw data from the calibration curve samples were visually
 inspected. The qPCR curves display a broad variation in plateau fluorescence 
 (38~--~62 RFU). The red horizontal line indicates the fluorescence level (0.05) 
 used for the calculation of the Cq value by the ``cycle threshold'' method. 
-\strong{(B)} The \code{CPP} function from the \CRANpkg{chipPCR} was sued to 
+\strong{(B)} The \code{CPP} function from the \CRANpkg{chipPCR} was used to 
 baseline the data, to smooth the data with Savitzky-Golay smoothing filter and 
 to normalize the data between 0 and 1. \strong{(C)} The Cq values were 
 calculated by the $Cq_{SDM}$ method (``SDM method'') (\code{inder}, 
@@ -569,8 +569,9 @@ results.tab
 \end{example}
 
 The results of the analysis can be invoked by the statement $results.tab$ (not 
-shown). Finally, we plotted and printed the output of our analysis 
-(Figure~\ref{figure:amp_melt}C).
+shown). Finally, we plotted and printed the output of our melting curve 
+(Figure~\ref{figure:amp_melt}B) and melting peak (Figure~\ref{figure:amp_melt}C) 
+analysis.
 
 \begin{example}
 # Convert the decision from the results.tab object in a color code:
@@ -625,7 +626,7 @@ baseline region (0~-~52 minutes). \strong{(B)} First we used the \code{CPP}
 function to smooth the data with a spline function. Baselining was done with a 
 linear regression model (robust MM-estimator). Finally, we used the 
 \code{th.cyc} function (\CRANpkg{chipPCR}) to calculate the cycle threshold time for samples D1 and 
-D2. The threshold value was set to $r = 0.05$ ($--$).}
+D2. The threshold value was set to $r = 0.05$ ($--$, threshold line).}
   \label{figure:qIA}
 \end{figure}
 We performed a quantitative isothermal amplification (qIA) with the plasmid 
