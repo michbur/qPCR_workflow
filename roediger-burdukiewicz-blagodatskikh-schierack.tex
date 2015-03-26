@@ -503,7 +503,8 @@ plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
 # The threshold signal level r was set to 10.
 Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
 {
-  res <- CPP(qPCR[, 1], x, trans = TRUE, bg.range = c(2, 8))[["y.norm"]]
+  res <- CPP(qPCR[, 1], x, trans = TRUE, bg.range = c(2, 8),
+             method.reg = "least")[["y.norm"]]
   th.cyc <- th.cyc(qPCR[, 1], res, r = 10)[1]
   cq <- as.numeric(th.cyc)
   pos <- !is.na(cq)
