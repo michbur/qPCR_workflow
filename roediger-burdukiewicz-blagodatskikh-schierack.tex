@@ -302,7 +302,7 @@ $Cq_{SDM}$ and $Cq_{Ct}$ methods as shown next.
 # amplification curves were smoothed by Savitzky-Golay smoothing.
 
 res.CPP <- cbind(gue[, 1], apply(gue[, -1], 2, function(x) {
-  CPP(gue[, 1], x, trans = TRUE, method.norm = "minm", 
+  CPP(gue[, 1], x, trans = TRUE, method.norm = "minm", method.reg = "least",
       bg.range = c(1,7))[["y.norm"]]
 }))
 
@@ -314,7 +314,7 @@ Cq.Ct <- apply(gue[, -1], 2, function(x)
 # Use the inder function from the chipPCR package to calculate the Cq values
 # by the SDM method.
 Cq.SDM <- apply(gue[, -1], 2, function(x)
-  summary(inder(res.CPP[, 1], x))[2])
+  summary(inder(res.CPP[, 1], x), print = FALSE)[2])
 
 # Fit a linear model to carry out a regression analysis.
 res.Cq <- lm(Cq.Ct ~ Cq.SDM)
@@ -356,6 +356,8 @@ regression analysis we set the parameter $CI = TRUE$. Finally, Cq values were pl
 using the \code{layout} function (Figure~\ref{figure:dilution_Cq}D~and~E).
 
 \begin{example}
+# Store used margin parameters
+def.mar <- par("mar")
 layout(matrix(c(1,2,3,3,4,5), 3, 2, byrow = TRUE))
 # Set bigger top margin.
 par(mar = c(5.1, 4.1, 6.1, 2.1))
@@ -380,8 +382,8 @@ legend("topright", "D", cex = 3, bty = "n")
 plot(effcalc(dil, t(matrix(Cq.SDM, nrow = 12, ncol = 7))), CI = TRUE)
 legend("topright", "E", cex = 3, bty = "n")
 
-# Set top margin to default value.
-par(mar = c(5.1, 4.1, 4.1, 2.1))
+# Restore margins to default values.
+par(mar = def.mar)
 \end{example}
 
 As shown in this case study, it is easy to set-up a streamlined workflow for data 
