@@ -29,7 +29,7 @@ dil <- 10^(2:-4)
 # amplification curves were smoothed by Savitzky-Golay smoothing.
 
 res.CPP <- cbind(gue[, 1], apply(gue[, -1], 2, function(x) {
-  CPP(gue[, 1], x, trans = TRUE, method.norm = "minm", 
+  CPP(gue[, 1], x, trans = TRUE, method.norm = "minm", method.reg = "least", 
       bg.range = c(1,7))[["y.norm"]]
 }))
 
@@ -125,11 +125,14 @@ plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
 # The threshold signal level r was set to 10.
 Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
 {
-  res <- CPP(qPCR[, 1], x, trans = TRUE, bg.range = c(1, 9))[["y.norm"]]
-  th.cyc <- th.cyc(qPCR[, 1], res, r = 10)[1]
-  cq <- as.numeric(th.cyc)
+  res <- CPP(qPCR[, 1], x, trans = TRUE, bg.range = c(2, 8),
+             method.reg = "least")[["y.norm"]]
+  # The th.cyc fails when the threshold exceeds maximum 
+  # observed fluorescence values, so it must be used wti try()
+  th.cycle <- try(th.cyc(qPCR[, 1], res, r = 10)[1], silent = TRUE)
+  cq <- ifelse(class(th.cycle) != "try-error", as.numeric(th.cycle), NA)
   pos <- !is.na(cq)
-  c(Cq = cq, M.Tub_positive = pos)
+  c(Cq=cq, M.Tub_positive = pos)
 }
 ))
 
