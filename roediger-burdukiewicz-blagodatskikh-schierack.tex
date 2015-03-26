@@ -302,7 +302,7 @@ $Cq_{SDM}$ and $Cq_{Ct}$ methods as shown next.
 # amplification curves were smoothed by Savitzky-Golay smoothing.
 
 res.CPP <- cbind(gue[, 1], apply(gue[, -1], 2, function(x) {
-  CPP(gue[, 1], x, trans = TRUE, method.norm = "minm", 
+  CPP(gue[, 1], x, trans = TRUE, method.norm = "minm", method.reg = "least",
       bg.range = c(1,7))[["y.norm"]]
 }))
 
