@@ -506,7 +506,7 @@ Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
   res <- CPP(qPCR[, 1], x, trans = TRUE, bg.range = c(2, 8),
              method.reg = "least")[["y.norm"]]
   # The th.cyc fails when the threshold exceeds maximum 
-  # observed fluorescence values, so it must be used wti try()
+  # observed fluorescence values, so it must be used with try()
   th.cycle <- try(th.cyc(qPCR[, 1], res, r = 10)[1], silent = TRUE)
   cq <- ifelse(class(th.cycle) != "try-error", as.numeric(th.cycle), NA)
   pos <- !is.na(cq)
