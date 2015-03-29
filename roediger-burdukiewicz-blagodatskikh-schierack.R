@@ -306,7 +306,7 @@ par(mfrow = c(2,4))
 
 # Select the wells for the analysis
 
-wells <- 9L:12
+wells <- 1L:8
 
 names(pds_raw)[wells]
 
@@ -315,6 +315,8 @@ for (i in wells) {
   cluster.info <- unique(pds_raw[[i]]["Cluster"])
   bioamp(data = pds_raw[[i]], main = paste("Well", names(pds_raw)[i]), xlab = "Amplitude of ileS (FAM)",
 	  ylab = "Amplitude of styA (HEX)", pch = 19)
+  legend("right", as.character(cluster.info[, 1]), col = cluster.info[, 1], ncol = 2, pch = 19)
+
 }
 for (i in wells) {
   (dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
