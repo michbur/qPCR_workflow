@@ -298,3 +298,24 @@ dens[4:6] / 5 * 1e-6
 # # Plot the amplitudes of both fluorescence channel in an aligned fashion
 # plot_vic_fam(fam = fluos1, vic = fluos2, col_vic = "green", col_fam = "pink")
 # #dev.off()
+
+# NEW CASE STUDY
+# Load the dpcR package for the analysis of the digital PCR experiment.
+require(dpcR)
+par(mfrow = c(2,4))
+
+# Select the wells for the analysis
+
+wells <- 9L:12
+
+names(pds_raw)[wells]
+
+
+for (i in wells) {
+  cluster.info <- unique(pds_raw[[i]]["Cluster"])
+  bioamp(data = pds_raw[[i]], main = paste("Well", names(pds_raw)[i]), xlab = "Amplitude of ileS (FAM)",
+	  ylab = "Amplitude of styA (HEX)", pch = 19)
+}
+for (i in wells) {
+  (dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
+}
