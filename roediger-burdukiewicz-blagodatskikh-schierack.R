@@ -313,7 +313,7 @@ dens[4:6] / 5 * 1e-6
 
 require(dpcR)
 pdf("dpcR_bioamp.pdf", width = 7, height = 15)
-par(mfrow = c(5,2))
+par(mfrow = c(5,3))
 
 # Select the wells for the analysis
 
@@ -325,6 +325,9 @@ for (i in 1L:length(wells)) {
 	  ylab = "Amplitude of styA (HEX)", xlim = c(500,5500), ylim = c(0,3000), pch = 19)
   legend("bottomright", as.character(cluster.info[, 1]), col = cluster.info[, 1], ncol = 2, pch = 19)
   
-  try((dens <- dpcr_density(k = res[1, "Cluster.3"], n = sum(res[1, ]), average = TRUE, methods = "wilson", plot = FALSE)))
+  dens <- dpcr_density(k = res[1, "Cluster.3"], n = sum(res[1, ]), average = TRUE, methods = "wilson")  
+  res.conc <- rbind(original = dens[4:6] /  0.90072 * 1e-6, corrected = dens[4:6] / 0.834 * 1e-6)
+  barplot(res.conc[, 1], col = c("white","grey"))
+    arrows(c(0.7,1.9), res.conc[, 2], c(0.7,1.9), res.conc[, 3], angle = 90)
 }
 dev.off()
