@@ -95,6 +95,7 @@ par(mar = c(5.1, 4.1, 4.1, 2.1))
 require(RDML)
 require(chipPCR)
 require(MBmca)
+require(dplyr)
 
 # Collect information about the R session used for the analysis of the qPCR
 # experiment.
@@ -103,17 +104,25 @@ current.session <- sessionInfo()
 # Load the BioRad_qPCR_melt.rdml file form RDML package and assign the data to the
 # object BioRad.
 filename <- paste(path.package("RDML"), "/extdata/", "BioRad_qPCR_melt.rdml", sep = "")
-BioRad <- RDML(filename, name.pattern = "%TUBE%_%NAME%_%TYPE%_%TARGET%")
+BioRad <- RDML$new(filename)
 
-# Fetch cycle dependent fluorescence for the EvaGreen channel of the 
+# Structure of experiment can be overviewed by AsDendrogram() function
+# We can see that our experiment contains two detection channels
+# ('EvaGreen' and 'Cy5' at 'Run ID'). 'EvaGreen' channel has one
+# probe (target) - 'EvaGreen'. 'Cy5' has: 'Cy5', 'Cy5-2' and 'Cy5-2_rr'.
+# each target has three sample types (positive, unknown, negative).
+# And each sample type has qPCR ('adp') and melting ('mdp') data.
+# Last column shows how many samples of this type at this experiment.
+BioRad$AsDendrogram()
+
+# Fetch cycle dependent fluorescence for the EvaGreen channel and row 'D'
+# (that contains target 'Cy5-2' at channel 'Cy5') of the 
 # katG gene and aggregate the data in the object qPCR. 
 
-qPCR <- cbind(BioRad[["qPCR"]][["EvaGreen"]][["pos"]], 
-              BioRad[["qPCR"]][["EvaGreen"]][["unkn"]][, -1], 
-              BioRad[["qPCR"]][["EvaGreen"]][["ntc"]][, -1])
-
-# Leave data only from row 'D' that contains target 'Cy5-2' at channel 'Cy5'
-qPCR <- cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
+qPCR <- BioRad$AsTable() %>%
+  filter(target == "EvaGreen",
+         grepl("^D", position))  %>% 
+  BioRad$GetFData(.)
 
 # Use plotCurves function to get an overview of the amplification curve samples.
 #pdf("plotCurves.#pdf", width = 6, height = 4)
@@ -128,7 +137,7 @@ Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
   res <- CPP(qPCR[, 1], x, trans = TRUE, bg.range = c(2, 8),
              method.reg = "least")[["y.norm"]]
   # The th.cyc fails when the threshold exceeds maximum 
-  # observed fluorescence values, so it must be used wti try()
+  # observed fluorescence values, so it must be used with try()
   th.cycle <- try(th.cyc(qPCR[, 1], res, r = 10)[1], silent = TRUE)
   cq <- ifelse(class(th.cycle) != "try-error", as.numeric(th.cycle), NA)
   pos <- !is.na(cq)
@@ -137,19 +146,19 @@ Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
 ))
 
 # Fetch temperature dependent fluorescence for the Cy5 channel of the 
-# probe that can hybridize with Mycobacterium tuberculosis katG gene (codon 315)
-# and aggregate the data in the object 'melt'.
-melt <- cbind(BioRad[["Melt"]][["Cy5-2"]][["pos"]],
-              BioRad[["Melt"]][["Cy5-2"]][["unkn"]][, -1],
-              BioRad[["Melt"]][["Cy5-2"]][["ntc"]][, -1])
+# probe 'Cy5-2' that can hybridize with Mycobacterium tuberculosis 
+# katG gene (codon 315) and aggregate the data in the object 'melt'.
+melt <- BioRad$AsTable() %>%
+  filter(target == "Cy5-2")  %>% 
+  BioRad$GetFData(., data.type = "mdp")
 
 # Calculate the melting temperature with the diffQ function from the MBmca 
 # package. Use simple logical conditions to find out if a positive sample with 
 # the expected Tm of circa 54.5 degree Celsius is found. The result of the test
 # is assigned to the object 'positive'.
-Tm.Positive <- matrix(nrow = length(melt[, -1]),
+Tm.Positive <- matrix(nrow = ncol(melt) - 1,
                       byrow = TRUE,
-                      dimnames = list(names(melt)[-1]),
+                      dimnames = list(colnames(melt)[-1]),
                       unlist(apply(melt[, -1], 2, function(x) {
                         res.Tm <- diffQ(cbind(melt[, 1], x), 
                                         fct = max, inder = TRUE)
