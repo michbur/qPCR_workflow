@@ -48,7 +48,7 @@ res.Cq <- lm(Cq.Ct ~ Cq.SDM)
 
 summary(res.Cq)
 
-#pdf("dilution_Cq.#pdf", width = 9.5, height = 14)
+#pdf("dilution_Cq.pdf", width = 9.5, height = 14)
 
 # Arrange and plot the results in a convenient way.
 layout(matrix(c(1,2,3,3,4,5), 3, 2, byrow = TRUE))
@@ -125,7 +125,7 @@ qPCR <- BioRad$AsTable() %>%
   BioRad$GetFData(.)
 
 # Use plotCurves function to get an overview of the amplification curve samples.
-#pdf("plotCurves.#pdf", width = 6, height = 4)
+#pdf("plotCurves.pdf", width = 6, height = 4)
 
 plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
 
@@ -196,7 +196,7 @@ results.tab[["Tm positive"]] <- factor(results.tab[["Tm positive"]],
                                        labels=c(TRUE, FALSE))
 results.tab
 
-#pdf("amp_melt.#pdf", width = 8, height = 6)
+#pdf("amp_melt.pdf", width = 8, height = 6)
 
 # Convert the decision from the "results" object in a color code:
 # Negative, black; Positive, red.
@@ -232,7 +232,7 @@ lapply(2L:ncol(melt), function(i)
 # Case study three
 #################################
 
-#pdf("qIA.#pdf")
+#pdf("qIA.pdf")
 
 # Drawn in an 2-by-1 array on the device by two columns and one row.
 par(mfrow = c(2, 1))
@@ -284,7 +284,7 @@ require(dpcR)
 # Analysis of a digital PCR experiment. The density estimation.
 # In our in-silico experiment we counted in total 16800 droplets (n). 
 # Thereof, 4601 were positive (k).
-#pdf("dpcR.#pdf")
+#pdf("dpcR.pdf")
 
 (dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
 
@@ -303,30 +303,28 @@ dens[4:6] / 5 * 1e-6
 # # Generate an amplitude plot for the second fluorescence channel (e.g., VIC)
 # fluos2 <- sim_ddpcr(m = 10, n = 20, times = 100, pos_sums = FALSE, n_exp = 1,
 #   fluo = list(0.1, 0))
-# #pdf("dpcR_sim.#pdf", width = 12, height = 6.5)
+# #pdf("dpcR_sim.pdf", width = 12, height = 6.5)
 # # Plot the amplitudes of both fluorescence channel in an aligned fashion
 # plot_vic_fam(fam = fluos1, vic = fluos2, col_vic = "green", col_fam = "pink")
 # #dev.off()
 
 # NEW CASE STUDY
 # Load the dpcR package for the analysis of the digital PCR experiment.
-require(dpcR)
 
-par(mfrow = c(2,6))
+require(dpcR)
+pdf("dpcR_bioamp.pdf", width = 7, height = 15)
+par(mfrow = c(5,2))
 
 # Select the wells for the analysis
 
-wells <- c("A01", "B01", "C01", "D01", "G04", "H04")
+wells <- c("A01", "B01", "C01", "D01", "G04")
 
 for (i in 1L:length(wells)) {
   cluster.info <- unique(pds_raw[wells[i]][[1]]["Cluster"])
   res <- bioamp(data = pds_raw[wells[i]][[1]], amp_x = 2, amp_y = 1, main = paste("Well", wells[i]), xlab = "Amplitude of ileS (FAM)",
 	  ylab = "Amplitude of styA (HEX)", xlim = c(500,5500), ylim = c(0,3000), pch = 19)
-  sum(res[1, ])
   legend("bottomright", as.character(cluster.info[, 1]), col = cluster.info[, 1], ncol = 2, pch = 19)
-
+  
+  try((dens <- dpcr_density(k = res[1, "Cluster.3"], n = sum(res[1, ]), average = TRUE, methods = "wilson", plot = FALSE)))
 }
-
-for (i in wells) {
-  (dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
-}
+dev.off()
