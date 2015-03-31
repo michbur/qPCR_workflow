@@ -302,22 +302,22 @@ dens[4:6] / 5 * 1e-6
 # NEW CASE STUDY
 # Load the dpcR package for the analysis of the digital PCR experiment.
 require(dpcR)
-par(mfrow = c(2,4))
+
+par(mfrow = c(2,6))
 
 # Select the wells for the analysis
 
-wells <- 1L:8
+wells <- c("A01", "B01", "C01", "D01", "G04", "H04")
 
-names(pds_raw)[wells]
-
-
-for (i in wells) {
-  cluster.info <- unique(pds_raw[[i]]["Cluster"])
-  bioamp(data = pds_raw[[i]], main = paste("Well", names(pds_raw)[i]), xlab = "Amplitude of ileS (FAM)",
-	  ylab = "Amplitude of styA (HEX)", pch = 19)
-  legend("right", as.character(cluster.info[, 1]), col = cluster.info[, 1], ncol = 2, pch = 19)
+for (i in 1L:length(wells)) {
+  cluster.info <- unique(pds_raw[wells[i]][[1]]["Cluster"])
+  res <- bioamp(data = pds_raw[wells[i]][[1]], amp_x = 2, amp_y = 1, main = paste("Well", wells[i]), xlab = "Amplitude of ileS (FAM)",
+	  ylab = "Amplitude of styA (HEX)", xlim = c(500,5500), ylim = c(0,3000), pch = 19)
+  sum(res[1, ])
+  legend("bottomright", as.character(cluster.info[, 1]), col = cluster.info[, 1], ncol = 2, pch = 19)
 
 }
+
 for (i in wells) {
   (dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
 }
