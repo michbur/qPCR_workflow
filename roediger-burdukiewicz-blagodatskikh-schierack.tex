@@ -48,9 +48,9 @@ In the past decades several isothermal amplification technologies
 emerged, such as helicase 
 dependent amplification (HDA), as alternative to PCR. The isothermal 
 amplification 
-was readily combined with real-time monitoring technologies (qIA) and is used 
+was readily combined with real-time monitoring technologies (qIA) or digital PCR and is used 
 nowadays in various fields like diagnostics and point-of-care-testing 
-\citep{rodiger_nucleic_2014,nixon_2014}.
+\citep{selck_2013, rodiger_nucleic_2014, nixon_2014}.
 
 The digital PCR (dPCR) is a novel approach for detection and quantification of 
 nucleic acids and can be seen as a next generation method 
@@ -857,16 +857,17 @@ template molecules per partition ($\hat \lambda$).
 
 Case study four gave an introduction for the analysis of dPCR experiments with 
 the \CRANpkg{dpcR} package. In this case study we used the \CRANpkg{dpcR} to 
-analyse real-world dPCR data from a Bio-Rad QX100 experiment. For a while, 
-there has been a debate about the effect of the partition volume on the 
-estimated copy numbers size. \citet{corbisier_2015} showed that the partition 
-volume is a critical parameter for the measurement of copy number 
-concentrations. Moreover, their study revealed that the average droplet volume 
-is 8~\% lower than the volume defined in the QuantaSoft software (v.~1.3.2.0, 
-Bio-Rad). In consequence, all quantifications were systematically biased. In 
-this case study we use the \texttt{pds\_raw} data set from the \CRANpkg{dpcR} 
-package and re-analysed the data with the partition volume of 0.834~nL as 
-proposed by \citet{corbisier_2015}.
+analyse real-world dPCR data from a Bio-Rad QX100 experiment. There is an 
+ongoing debate in the scientific community about the effect of the partition 
+volume on the estimated copy numbers size \citep{huggett_clinchem_2014, 
+corbisier_2015}. \citet{corbisier_2015} showed that the partition volume is a 
+critical parameter for the measurement of copy number concentrations. Moreover, 
+their study revealed that the average droplet volume is 8~\% lower than the 
+volume defined in the QuantaSoft software (v.~1.3.2.0, Bio-Rad). In consequence, 
+all quantifications were systematically biased. In this case study we use the 
+\texttt{pds\_raw} data set from the \CRANpkg{dpcR} package and re-analysed the 
+data with the partition volume of 0.834~nL as proposed by 
+\citet{corbisier_2015}.
 
 \begin{example}
 require(dpcR)

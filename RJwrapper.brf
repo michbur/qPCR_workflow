@@ -5,6 +5,7 @@
 \backcite {rodiger_nucleic_2014}{{1}{2.1}{section.2.1}}
 \backcite {khodakov_2014}{{1}{2.1}{section.2.1}}
 \backcite {wu_2014}{{1}{2.1}{section.2.1}}
+\backcite {selck_2013}{{1}{2.1}{section.2.1}}
 \backcite {rodiger_nucleic_2014}{{1}{2.1}{section.2.1}}
 \backcite {nixon_2014}{{1}{2.1}{section.2.1}}
 \backcite {huggett_qpcr_2015}{{1}{2.1}{section.2.1}}
@@ -18,8 +19,8 @@
 \backcite {ruijter_2014}{{1}{2.1}{figure.caption.2}}
 \backcite {huggett_2013}{{1}{2.1}{figure.caption.2}}
 \backcite {bustin_2014}{{1}{2.1}{figure.caption.2}}
-\backcite {lefever_2009}{{1}{2.1}{figure.caption.2}}
 \backcite {rodiger_highly_2013}{{2}{1}{figure.caption.2}}
+\backcite {lefever_2009}{{3}{2.1}{figure.caption.2}}
 \backcite {roediger_RJ_2013}{{3}{2.1}{figure.caption.2}}
 \backcite {Spiess_2014}{{3}{2.1}{figure.caption.2}}
 \backcite {mccullough_2008}{{3}{2.1}{figure.caption.2}}
@@ -64,6 +65,8 @@
 \backcite {pabinger_2014}{{13}{2.3.4}{subsection.2.3.4}}
 \backcite {huggett_2013}{{14}{2.3.4}{subsection.2.3.4}}
 \backcite {brown_2001}{{14}{2.3.4}{equation.2.3.1}}
+\backcite {huggett_clinchem_2014}{{15}{2.3.5}{subsection.2.3.5}}
+\backcite {corbisier_2015}{{15}{2.3.5}{subsection.2.3.5}}
 \backcite {corbisier_2015}{{15}{2.3.5}{subsection.2.3.5}}
 \backcite {corbisier_2015}{{15}{2.3.5}{subsection.2.3.5}}
 \backcite {rodiger_rkward_2012}{{17}{2.4}{section.2.4}}
