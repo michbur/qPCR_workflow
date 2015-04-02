@@ -339,8 +339,9 @@ for (i in 1L:length(wells)) {
 		    corrected = dens[4:6] / 0.834 * 1e-6)
   barplot(res.conc[, 1], col = c("white","grey"), 
 	  names = c("Bio-Rad", "Corbisier"), 
-	  main = "Droplet size", ylab = "molecules/ml", ylim = c(0,8*10E-9))
+	  main = "Influence of\nDroplet size", ylab = "molecules/ml", ylim = c(0,8*10E-9))
     arrows(c(0.7,1.9), res.conc[, 2], c(0.7,1.9), res.conc[, 3], angle = 90, 
 	   code = 3, lwd = 2)
 }
 dev.off()
+
