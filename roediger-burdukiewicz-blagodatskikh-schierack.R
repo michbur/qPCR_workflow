@@ -318,10 +318,15 @@ require(dpcR)
 # Analysis of a droplet dPCR experiment. Data were taken from the pds_raw dataset.
 
 # Select the wells for the analysis.
-
+# A01 to D01 are four replicate dPCR reactions and G04 is the 
+# no template control (NTC).
 wells <- c("A01", "B01", "C01", "D01", "G04")
 
-# Set the arrangement for the plots.
+# Set the arrangement for the plots. The first column contains the amplitude 
+# plots, column two the density functions and column three the concentration
+# calculated on according to the droplet volume as defined in the QX100 system,
+# or the method proposed by Corbisier et al. (2015).
+
 par(mfrow = c(5,3))
 
 for (i in 1L:length(wells)) {
@@ -330,11 +335,17 @@ for (i in 1L:length(wells)) {
 		main = paste("Well", wells[i]), xlab = "Amplitude of ileS (FAM)",
 		ylab = "Amplitude of styA (HEX)", xlim = c(500,5500), 
 		ylim = c(0,3000), pch = 19)
+  # Draw threshold line to visualize between positive and negative droplts.
+  abline(h = max(with(pds_raw[wells[i]][[1]], 
+		 subset(Assay1.Amplitude, Cluster == 4))), lty = 2)
   legend("topleft", as.character(cluster.info[, 1]), col = cluster.info[, 1], 
 	 ncol = 4, pch = 19)
   
-  dens <- dpcr_density(k = res[1, "Cluster.3"], n = sum(res[1, ]), 
-			average = TRUE, methods = "wilson")  
+  k.tmp <- res[1, "Cluster.3"]
+  n.tmp <- sum(res[1, ])
+  dens <- dpcr_density(k = k.tmp, n = n.tmp, 
+			average = TRUE, methods = "wilson")
+  legend("topleft", paste("k:", k.tmp,"\nn:", n.tmp))
   res.conc <- rbind(original = dens[4:6] /  0.90072 * 1e-6, 
 		    corrected = dens[4:6] / 0.834 * 1e-6)
   barplot(res.conc[, 1], col = c("white","grey"), 
