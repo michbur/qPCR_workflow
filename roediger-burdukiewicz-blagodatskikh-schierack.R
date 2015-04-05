@@ -278,6 +278,7 @@ legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3),
 #################################
 # Case study four
 #################################
+pdf("dpcR.pdf")
 # Load the dpcR package for the analysis of the digital PCR experiment.
 require(dpcR)
 
@@ -285,14 +286,15 @@ require(dpcR)
 # In our in-silico experiment we counted in total 16800 droplets (n). 
 # Thereof, 4601 were positive (k).
 #pdf("dpcR.pdf")
-
-(dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
-
+k <- 4601
+n <- 16800
+(dens <- dpcr_density(k = k, n = n, average = TRUE, methods = "wilson"))
+legend("topleft", paste("k:", k,"\nn:", n))
 #dev.off()
 # Let us assume, that every droplet has roughly a volume of 5 nL.
 # The total concentration (and its confidence intervals) in molecules/ml is:
 dens[4:6] / 5 * 1e-6
-
+dev.off()
 ##################
 # dPCR demo
 ##################
