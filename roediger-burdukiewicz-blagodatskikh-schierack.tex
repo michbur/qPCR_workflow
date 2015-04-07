@@ -531,15 +531,18 @@ branches are the data types \texttt{adp} (amplification data point) and
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[clip=true, width=14cm]{figures/amp_melt.pdf}
-  \caption{Graphical representation of the amplification curve data and melting 
+  \includegraphics[clip=true, width=14cm]{figures/amp_melt.pdf} 
+\caption{Graphical representation of the amplification curve data and melting 
 curve data. \strong{(A)} The raw amplification curve data were pre-processed 
 with the \code{CPP} function prior to visualization. To calculate the $T_{M}$ 
 values from the raw melting curve data \strong{(B)} we used the \code{diffQ} 
 function from the \CRANpkg{MBmca} package. \strong{(C)} We adjusted our 
-algorithm to plot the true positive melting peaks in red, while negative 
-melting 
-peaks were labelled in black.} 
+algorithm to plot the true positive melting peaks in red, while negative melting 
+peaks were labelled in black. The inspection of the plot and the output of 
+\texttt{results.tab} showed that only D07\_katG 315\_unkn\_EvaGreen 
+(\textcolor{red}\textemdash) and D08\_katG 315\_unkn\_EvaGreen 
+(\textcolor{red}\textemdash) are true positive.
+} 
 \label{figure:amp_melt}
 \end{figure}
 
@@ -708,10 +711,10 @@ operated with a heating/cooling unit (HCU) for qPCR and MCA applications
 unwinds DNA, no thermal denaturation is needed. The HDA conditions were taken 
 from the ``IsoAmp III Universal tHDA Kit'', Biohelix Corp, as described by the 
 vendor. In detail, the reaction was composed of ``mix A'' 10 $\mu$L A. bidest, 
-1.25 $\mu$L 10x~buffer, 0.75 $\mu$L primer (150 nM final), 0.5 $\mu$L template 
+1.25 $\mu$L 10X~buffer, 0.75 $\mu$L primer (150 nM final), 0.5 $\mu$L template 
 plasmid. Preincubation: The mixture was incubated for 2 min at 
 95\textcelsius~and immediately placed on ice. Reaction ``mix B'' contained 5 
-$\mu$L A. bidest., 1.25 $\mu$L 10x buffer, 2 $\mu$L NaCl, 1.25 $\mu$L 
+$\mu$L A. bidest., 1.25 $\mu$L 10X buffer, 2 $\mu$L NaCl, 1.25 $\mu$L 
 $MgSO_{4}$, 1.75 $\mu$L dNTPs, 0.25 $\mu$L EvaGreen (Biotium), 1 $\mu$L enzyme 
 mix. The mix was covered with 50 $\mu$L mineral oil (Roth). The fluorescence 
 measurement in VideoScan HCU started directly after adding ``mix B'' at 
@@ -878,16 +881,17 @@ proposed by \citet{corbisier_2015} and a volume of 0.90072~nL as used in the
 BioRad QX100 Droplet Digital PCR System.
 
 Our experimental setup was as followed. A duplex assay with constant amount of 
-genomic DNA and plasmid DNA with 4 replicates (theoretically 10.000 copies / 
-micro~L. Included are No-gDNA-control and No-template-control, 2 replicates 
-each. The genomic DNA was isolated from \textit{Pseudomonas putida KT2440} and 
-the plasmid was \textit{pCOM10-StyA::EGFP StyB}. Template DNA was heat treated 
-at 95\textcelsius~for 5 min prior to PCR. Channel~1, primers for genomic DNA 
-marker \textit{ileS}, Taqman probes (FAM labelled). Channel~2, primers for 
-plasmid DNA marker \textit{styA}, Taqman probes (HEX labelled) (see 
+genomic DNA and plasmid DNA with 4 replicates (theoretically 10.000 
+copies/$\mu$L. Included are No-gDNA-control and No-template-control, 2 
+replicates each. The genomic DNA was isolated from \textit{Pseudomonas putida 
+KT2440} and the plasmid was \textit{pCOM10-StyA::EGFP StyB}. Template DNA was 
+heat treated at 95\textcelsius~for 5 min prior to PCR. Channel~1, primers for 
+genomic DNA marker \textit{ileS}, Taqman probes (FAM labelled). Channel~2, 
+primers for plasmid DNA marker \textit{styA}, Taqman probes (HEX labelled) (see 
 \citep{jahn_2013, jahn_2014} and the manual of the \CRANpkg{dpcR} package for 
 details). Gating and droplet clustering was taken without any modification from 
-the data output of the BioRad QX100 Droplet  Digital PCR System. Each droplet is 
+the data output of the BioRad QX100 Droplet  Digital PCR System. Each droplet 
+is 
 represent by a dot in Figure~\ref{figure:dpcR_bioamp}.
 
 \begin{example}
