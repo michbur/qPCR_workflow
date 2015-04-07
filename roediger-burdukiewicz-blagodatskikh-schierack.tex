@@ -520,8 +520,9 @@ qPCR <- cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
 \begin{figure}[htbp]
   \centering
   \includegraphics[clip=true, width=14cm]{figures/RDML_dendrogram.pdf}
-  \caption{Dendrogram of the \texttt{BioRad} object. The file was read by the 
-RDML package and the structure displayed by the call 
+  \caption{Dendrogram of the \texttt{BioRad} for the 
+\file{BioRad\_qPCR\_melt\.rdml} file form \CRANpkg{RDML} package. The file was 
+read by the \code{RDML} function and the structure displayed by the call 
 \code{BioRad\$AsDendrogram()}. The names are used according to the RDML 
 convention by \citet{lefever_2009}. The object \texttt{BioRad} branches into an 
 experiment with \texttt{Run ID} names for two fluorescence detection channels 
@@ -664,8 +665,7 @@ matplot(melt[, 1], melt[, -1], type = "l", col = color,
         lty = 1, xlab = "Temperature [degree Celsius]", ylab = "RFU")
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 
-plot(NA, NA, xlim = c(35, 95), ylim = c(-15, 120), xlab = "Temperature [degree 
-Celsius]", 
+plot(NA, NA, xlim = c(35, 95), ylim = c(-15, 120), xlab = "Temperature [degree Celsius]", 
      ylab = "-d(RFU)/dT")
 mtext("C", cex = 2, side = 3, adj = 0, font = 2)
 
@@ -735,19 +735,15 @@ par(mfrow = c(2, 1))
 # Plot the raw data from the C81 dataset to the first array and add
 # a legend. Note: The abscissa values (time in seconds) was divided 
 # by 60 (C81[, i] / 60) to convert to minutes.
-plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = 
-"RFU")
+plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "RFU")
 mtext("A", cex = 2, side = 3, adj = 0, font = 2)
 lapply(c(2, 4), function(i) {
   lines(C81[, i] / 60, C81[, i + 1], type = "b", pch = 20, col = i - 1)
 })
-legend(10, 0.8, c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 
-3), 
-       bty = "n")
+legend(10, 0.8, c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1,3), bty = "n")
 
 # Prepare a plot on the second array for the pre-processed data.
-plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = 
-"RFU")
+plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "RFU")
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 \end{example}
 
@@ -761,11 +757,10 @@ defined to be between the $1^{th}$ and $190^{th}$ data point (corresponds to
 baseline region between 0~and~52 minutes).
 
 \begin{example}
-  # Apply the CPP functions to pro-process the raw data.1) Baseline data to 
-zero, 
-  # 2) Smooth data with a spline, 3) Remove outliers in background range 
-between 
-  # entry 1 and 190. Assign the results of the analysis to the object 'res'.
+# Apply the CPP functions to pro-process the raw data.1) Baseline data to zero, 
+# 2) Smooth data with a spline, 3) Remove outliers in background range between 
+# entry 1 and 190. Assign the results of the analysis to the object 'res'.
+
 res <- lapply(c(2, 4), function(i) {
   y.s <- CPP(C81[, i] / 60, C81[, i + 1],
              trans = TRUE, 
