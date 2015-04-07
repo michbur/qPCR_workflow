@@ -520,8 +520,17 @@ qPCR <- cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
 \begin{figure}[htbp]
   \centering
   \includegraphics[clip=true, width=14cm]{figures/RDML_dendrogram.pdf}
-  \caption{Dendrogram of the BioRad object. The file was read by the RDML 
-  package and the structure displayed by the call \code{BioRad\$AsDendrogram()}.} 
+  \caption{Dendrogram of the \texttt{BioRad} object. The file was read by the 
+RDML package and the structure displayed by the call 
+\code{BioRad\$AsDendrogram()}. The names are used according to the RDML 
+convention by \citet{lefever_2009}. The object \texttt{BioRad} branches into an 
+experiment with \texttt{Run ID} names for two fluorescence detection channels 
+(FAM, Cy5). The targets have typical designations like \texttt{pos} (positive), 
+\texttt{unkn} (unknown) and \texttt{ntc} (non-template control). In the deeper 
+branches are the data types \texttt{adp} (amplification data point) and 
+\texttt{mdp} (melting data point) shown with the number of samples (ranging from 
+2 to 18).
+} 
 \label{figure:RDML_dendrogram}
 \end{figure}
 
