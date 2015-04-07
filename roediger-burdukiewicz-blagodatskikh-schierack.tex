@@ -494,27 +494,25 @@ in our case study and combined to the object ``qPCR''.
 require(RDML)
 require(chipPCR)
 require(MBmca)
+require(dplyr)
 
 # Collect information about the R session used for the analysis of the qPCR
 # experiment.
 current.session <- sessionInfo()
 
-# Load the BioRad_qPCR_melt.rdml file form RDML package and assign the data to 
-# the object BioRad.
+# Load the BioRad_qPCR_melt.rdml file form RDML package and assign the data to the
+# object BioRad.
+filename <- paste(path.package("RDML"), "/extdata/", "BioRad_qPCR_melt.rdml", sep = "")
+BioRad <- RDML$new(filename)
 
-filename <- paste(path.package("RDML"), "/extdata/", 
-		  "BioRad_qPCR_melt.rdml", sep = "")
-BioRad <- RDML(filename, name.pattern = "%TUBE%_%NAME%_%TYPE%_%TARGET%")
+# Fetch cycle dependent fluorescence for the EvaGreen channel and row 'D'
+# (that contains target 'Cy5-2' at channel 'Cy5') of the 
+# katG gene and aggregate the data in the object qPCR. 
 
-# Fetch cycle dependent fluorescence for the EvaGreen channel of the 
-# katG gene and aggregate the data in the object qPCR.
-
-qPCR <- cbind(BioRad[["qPCR"]][["EvaGreen"]][["pos"]], 
-	      BioRad[["qPCR"]][["EvaGreen"]][["unkn"]][, -1], 
-	      BioRad[["qPCR"]][["EvaGreen"]][["ntc"]][, -1])
-	      
-# Leave data only from row 'D' that contains target 'Cy5-2' at channel 'Cy5'
-qPCR <- cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
+qPCR <- BioRad$AsTable() %>%
+  filter(target == "EvaGreen",
+         grepl("^D", position))  %>% 
+  BioRad$GetFData(.)
 \end{example}
 
 \begin{figure}[htbp]
@@ -588,25 +586,26 @@ positive and true negative samples by MCA (Figure~\ref{figure:amp_melt}A).
 # Fetch temperature dependent fluorescence for the Cy5 channel of the 
 # probe that can hybridize with Mycobacterium tuberculosis katG gene (codon 315)
 # and aggregate the data in the object 'melt'.
-melt <- cbind(BioRad[["Melt"]][["Cy5-2"]][["pos"]],
-              BioRad[["Melt"]][["Cy5-2"]][["unkn"]][, -1],
-              BioRad[["Melt"]][["Cy5-2"]][["ntc"]][, -1])
+melt <- BioRad$AsTable() %>%
+        filter(target == "Cy5-2")  %>% 
+        BioRad$GetFData(., data.type = "mdp")
 
 # Calculate the melting temperature with the diffQ function from the MBmca 
 # package. Use simple logical conditions to find out if a positive sample with 
 # the expected Tm of circa 54.5 degree Celsius is found. The result of the test
 # is assigned to the object 'positive'.
-Tm.Positive <- matrix(nrow = length(melt[, -1]),
+Tm.Positive <- matrix(nrow = ncol(melt) - 1,
                       byrow = TRUE,
-                      dimnames = list(names(melt)[-1]),
+                      dimnames = list(colnames(melt)[-1]),
                       unlist(apply(melt[, -1], 2, function(x) {
                         res.Tm <- diffQ(cbind(melt[, 1], x), 
-					fct = max, inder = TRUE)
+                                        fct = max, inder = TRUE)
                         positive <- ifelse(res.Tm[1] > 54 & 
                                              res.Tm[1] < 55 & 
                                              res.Tm[2] > 80, 1, 0)
                         c(res.Tm[1], res.Tm[2], positive)
                       })))
+
 
 # Present the results in a tabular output as data.frame 'results.tab'.
 # Result of analysis logic is:
