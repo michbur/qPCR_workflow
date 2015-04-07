@@ -114,9 +114,9 @@ BioRad <- RDML$new(filename)
 # And each sample type has qPCR ('adp') and melting ('mdp') data.
 # Last column shows how many samples of this type at this experiment.
 
-pdf("RDML_dendrogram.pdf", width = 12, height = 8)
+#pdf("RDML_dendrogram.pdf", width = 12, height = 8)
 BioRad$AsDendrogram()
-dev.off()
+#dev.off()
 # Fetch cycle dependent fluorescence for the EvaGreen channel and row 'D'
 # (that contains target 'Cy5-2' at channel 'Cy5') of the 
 # katG gene and aggregate the data in the object qPCR. 

@@ -1,7 +1,7 @@
 % !TeX root = RJwrapper.tex
 \title{R as an Environment for the Analysis of dPCR and qPCR Experiments}
 \author{by Stefan R\"{o}diger, Micha\l{} Burdukiewicz, Konstantin 
-Blagodatskikh and Peter Schierack}
+Blagodatskikh, Michael Jahn and Peter Schierack}
 
 \maketitle
 
@@ -434,8 +434,10 @@ samples were inspected by the \code{plotCurves} function from the
 \CRANpkg{chipPCR} package. The green color code indicates that the data contain 
 no missing values. However, the visual inspection revealed that the data are 
 noisy. All samples (``D1\_Alm12\ldots'' - ``D8\_Alm12\ldots'') appeared to be 
-positive. One negative control (``D10\_H20\_ntc\_EvaGreen'') seems to be 
-contaminated.}
+positive. The curvatures of ``D1\_Alm12\ldots'' and ``D2\_Alm12\ldots'' 
+exhibited a drop in the plateau phase. However, this is not of importance during 
+this stage of the analysis. One negative control (``D10\_H20\_ntc\_EvaGreen'') 
+seems to be contaminated.}
   \label{figure:plotCurves}
 \end{figure}
 
@@ -443,19 +445,16 @@ contaminated.}
 A common task during the analysis of qPCR experiments is to distinguish between 
 positive and negative samples (see Figure~\ref{figure:plotCurves}). If the 
 melting temperature of a sample is known it is possible to automatize the 
-decision by a melting curve analysis (MCA). As shown in 
-\citet{roediger_RJ_2013} 
+decision by a melting curve analysis (MCA). As shown in \citet{roediger_RJ_2013} 
 this can be done by interrogating the $T_{M}$. Therefore, we used a logical 
 statement, which tests if $T_{M}$ is within a tight temperature range. We used 
 the signal height as second parameter. In line with ``Case study one'' we used 
 the function $sessionInfo()$ to track all packages used during the analysis. 
 Reproducible research is greatly enhanced if open data exchange formats are 
 used. Therefore, we used the \CRANpkg{RDML} package for data read-in. The 
-amplification and melting curve data were measured with a CFX96 system 
-(Bio-Rad) 
+amplification and melting curve data were measured with a CFX96 system (Bio-Rad) 
 and then exported as RDM~v~1.1 format file as \file{BioRad\_qPCR\_melt.rdml}. 
-Within this qPCR experiment we amplified the \textit{Mycobacterium 
-tuberculosis} 
+Within this qPCR experiment we amplified the \textit{Mycobacterium tuberculosis} 
 \textit{katG}\footnote{\url{https://www.wikigenes.org/e/gene/e/923602.html}} 
 gene and tried to detect a mutation at codon 315. The experiment was separated 
 in two parts: 
@@ -467,16 +466,13 @@ TaqMan probe (quencher -- BHQ2, fluorescent reporter -- Cy5) with amplified DNA
 (see \citet{luo_multiplex_2011} for probe/primer sequences and further details).
 \end{enumerate}
 
-
 The qPCR was conducted using EvaGreen\circledR~Master Mix (Syntol) according to 
-the manufacturer's instructions, with 500 nM of primers and probe in a 25 
-$\mu$L 
+the manufacturer's instructions, with 500 nM of primers and probe in a 25 $\mu$L 
 final reaction volume. Thermocycling was conducted using a CFX96 (BioRad) 
-initiated by 3 min incubation at 95~\textcelsius, followed by 41 cycles (15 s 
-at 
-95~\textcelsius; 40 s at 65~\textcelsius) with a single read-out 
-taken at the end of each cycle. Probe melting was conducted between 
-35~\textcelsius~and 95~\textcelsius~by 1~\textcelsius~at 1 s steps.
+initiated by 3 min incubation at 95~\textcelsius, followed by 41 cycles (15 s at 
+95~\textcelsius; 40 s at 65~\textcelsius) with a single read-out taken at the 
+end of each cycle. Probe melting was conducted between 35~\textcelsius~and 
+95~\textcelsius~by 1~\textcelsius~at 1 s steps.
 
 The structure of an RDML file is quite complex. Though RDML files are XML 
 structured files and thus intended to be readable by humans, it is hard to grasp 
@@ -949,6 +945,15 @@ BioRad QX100 Droplet Digital PCR System and the volume proposed by
     }  \label{figure:dpcR_bioamp}
 \end{figure}
 
+Our results show, that the replicates in 
+Figure~\ref{figure:dpcR_bioamp}~A01~-~D01 vary. However, the variation is within 
+the same range. The positive samples differ significantly from the negative 
+control (Figure~\ref{figure:dpcR_bioamp}~G04). As proposed by 
+\citet{corbisier_2015} leads the analysis with the non-corrected droplet volume 
+to an underestimation of the sample concentration. However, our case studies 
+shows, that the R environment can be used to circumvent problems of locked-in 
+systems.
+
 \section{Discussion and Conclusion}
 
 This study gave a brief introduction to the analysis of qPCR, qIA, MCA and dPCR 
@@ -1045,6 +1050,13 @@ Dresden) for the droplet digital PCR samples.
   Moscow\\
   Russia}
 \email{k.blag@yandex.ru}
+
+\address{Michael Jahn\\
+  Helmholtz Centre for Environmental Research - UFZ\\
+  Flow cytometry group / Environmental microbiology\\
+  Leipzig\\
+  Germany}
+\email{michael.jahn@ufz.de}
 
 \address{Peter Schierack\\
   Faculty of Natural Sciences\\
