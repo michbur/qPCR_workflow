@@ -1,7 +1,7 @@
 if(!grepl("figures", getwd()))
   setwd(paste0(getwd(), "/figures/"))
 # Supplement to 'R as an Environment for the Analysis of dPCR and qPCR Experiments'
-# Journal by Rödiger et al. 2014
+# Journal by Rödiger et al. 2015
 #################################
 # Case study one
 #################################
@@ -113,8 +113,10 @@ BioRad <- RDML$new(filename)
 # each target has three sample types (positive, unknown, negative).
 # And each sample type has qPCR ('adp') and melting ('mdp') data.
 # Last column shows how many samples of this type at this experiment.
-BioRad$AsDendrogram()
 
+pdf("RDML_dendrogram.pdf", width = 11, height = 8)
+BioRad$AsDendrogram()
+dev.off()
 # Fetch cycle dependent fluorescence for the EvaGreen channel and row 'D'
 # (that contains target 'Cy5-2' at channel 'Cy5') of the 
 # katG gene and aggregate the data in the object qPCR. 

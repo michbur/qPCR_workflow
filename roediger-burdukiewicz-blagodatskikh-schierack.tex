@@ -209,7 +209,7 @@ temperature.
 We recommend performing the scripting in a dedicated integrated development 
 environment (IDE) and graphical user interface (GUI) such as \pkg{RKWard} 
 \citep{rodiger_rkward_2012}, 
-\pkg{Rstudio}\footnote{\url{http://www.rstudio.com/}} or related technologies 
+\pkg{RStudio}\footnote{\url{http://www.rstudio.com/}} or related technologies 
 \citep{Valero_2012}. Benefits of IDE's with GUI include syntax-highlighting, 
 auto completion and function references for rapid prototyping of workflows.
 
@@ -235,7 +235,7 @@ number) at each cycle. Here the amplification efficiency ($AE$) is 100~\%.
 However, in reality, numerous factors cause an inhibition of the amplification 
 ($AE$ < 100~\%). The $AE$ can be determined by the relation of the Cq value 
 depending on the sample input quantity as described in 
-\citet{roediger_2015_Bioinformatics, svec_2015}.
+\citep{roediger_2015_Bioinformatics, svec_2015}.
 
 In \citet{roediger_RJ_2013} we described the application of R for the analysis 
 of melting curve experiments from microbead-based assays. Since the 
@@ -478,16 +478,14 @@ at
 taken at the end of each cycle. Probe melting was conducted between 
 35~\textcelsius~and 95~\textcelsius~by 1~\textcelsius~at 1 s steps.
 
-IMPROVEME
 The structure of an RDML file is quite complex. Though RDML files are XML 
-structured files and thus intended to be readable by humans, it is hard to 
-grasp the complex hierarchical file structure with out some basic understanding. 
-A simple and fast method to compactly display the structure of object in R is 
-to use the \code{str} or \code{summary} function (not shown). However, such R 
-tools are not informative in this context. Therefore we implemented a 
-dendrogram like view. Only a subset of the data was used in our case study and 
-combined to the object ``qPCR''.
-IMPROVEME
+structured files and thus intended to be readable by humans, it is hard to grasp 
+the complex hierarchical file structure with out some basic understanding. A 
+simple and fast method to compactly display the structure of object in R is to 
+use the \code{str} or \code{summary} function (not shown). However, such R tools 
+are not informative in this context. Therefore we implemented a dendrogram like 
+view (Figure~\ref{figure:RDML_dendrogram}). Only a subset of the data was used 
+in our case study and combined to the object ``qPCR''.
 
 \begin{example}
 # Import the qPCR and melting curve data via the RDML package.
@@ -518,6 +516,14 @@ qPCR <- cbind(BioRad[["qPCR"]][["EvaGreen"]][["pos"]],
 # Leave data only from row 'D' that contains target 'Cy5-2' at channel 'Cy5'
 qPCR <- cbind(qPCR[,1], qPCR[, grep("^D", names(qPCR))])
 \end{example}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[clip=true, width=14cm]{figures/RDML_dendrogram.pdf}
+  \caption{Dendrogram of the BioRad object. The file was read by the RDML 
+  package and the structure displayed by the call \code{BioRad\$AsDendrogram()}.} 
+\label{figure:RDML_dendrogram}
+\end{figure}
 
 \begin{figure}[htbp]
   \centering
@@ -976,7 +982,7 @@ recently started and is still in progress.
   \includegraphics[clip=true, width=10cm]{figures/options.png}
   \caption{Deployment of R applications for the qPCR and dPCR experiments. 
 \strong{(A)} R is typically run from a desktop computer an operated by an 
-GUI/IDE application such as \pkg{Rstudio} or \pkg{RKWard}. This approach 
+GUI/IDE application such as \pkg{RStudio} or \pkg{RKWard}. This approach 
 provides a flexible workflow for individuals. \strong{(B)} Another approach is 
 to run R with specific applications on a local server. Such scenarios are 
 useful 
