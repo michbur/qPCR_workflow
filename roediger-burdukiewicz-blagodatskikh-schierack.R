@@ -319,45 +319,65 @@ dev.off()
 
 pdf("dpcR_bioamp.pdf", width = 8, height = 12)
 
-require(dpcR)
 # Load the dpcR package for the analysis of the digital PCR experiment.
 # Analysis of a droplet dPCR experiment. Data were taken from the pds_raw dataset.
+require(dpcR)
 
-# Select the wells for the analysis.
-# A01 to D01 are four replicate dPCR reactions and G04 is the 
-# no template control (NTC).
+# To get an overview of the data set we used the head and summary R functions.
+head(summary(pds_raw))
+
+# Next we used str for the element A01. The element of the list contains a data frame
+# with three columns. Two contains Amplitude values (fluorescence intensity) and one
+# contains cluster resultes (interger values of 1 - 4).
+
+str(pds_raw[["A01"]])
+
+# Select the wells for the analysis. A01 to D01 are four replicate dPCR reactions 
+# and G04 is the no template control (NTC).
 wells <- c("A02", "B02", "C02", "D02", "G04")
 
 # Set the arrangement for the plots. The first column contains the amplitude 
 # plots, column two the density functions and column three the concentration
 # calculated on according to the droplet volume as defined in the QX100 system,
 # or the method proposed by Corbisier et al. (2015).
-
 par(mfrow = c(5,3))
 
+# The function bioamp was used in a loop to extract the number of positive and negative 
+# droplets from the sample files. The results were assigned to the object 'res' and plotted.
+# Horizontal and vertical lines show the threshold borders as defined by the QX100 system. 
+  
 for (i in 1L:length(wells)) {
   cluster.info <- unique(pds_raw[wells[i]][[1]]["Cluster"])
   res <- bioamp(data = pds_raw[wells[i]][[1]], amp_x = 2, amp_y = 1, 
 		main = paste("Well", wells[i]), xlab = "Amplitude of ileS (FAM)",
 		ylab = "Amplitude of styA (HEX)", xlim = c(500,4700), 
 		ylim = c(0,3300), pch = 19)
-  # Draw threshold line to visualize between positive and negative droplts.
+  # Draw threshold line to visualize between positive and negative droplets.
   abline(h = max(with(pds_raw[wells[i]][[1]], 
 		 subset(Assay1.Amplitude, Cluster == 4))), lty = 2)
   abline(v = min(with(pds_raw[wells[i]][[1]], 
 		 subset(Assay2.Amplitude, Cluster == 4))), lty = 2)
   legend("topright", as.character(cluster.info[, 1]), col = cluster.info[, 1], pch = 19)
   
-  k.tmp <- res[1, "Cluster.3"]
+  # Counts for the positive clusters 2 and 3 were assigned to new objects and further used by
+  # the function dpcr_density to calculate the number of molecules per partition and the 
+  # confidence intervals. The results were plotted as density plot.
+  k.tmp <- sum(res[1, "Cluster.2"], res[1, "Cluster.3"])
+  # Counts for all clusters
   n.tmp <- sum(res[1, ])
+  
   dens <- dpcr_density(k = k.tmp, n = n.tmp, 
 			average = TRUE, methods = "wilson")
   legend("topright", paste("k:", k.tmp,"\nn:", n.tmp))
+  
+  # Finally, the concentration of the molecules was calculate with the volume used in 
+  # the QX100 system and as proposed by Corbisier et al. (2015). The results were added
+  # as barplot with the confidence intervals.
   res.conc <- rbind(original = dens[4:6] /  0.90072 * 1e-6, 
 		    corrected = dens[4:6] / 0.834 * 1e-6)
   barplot(res.conc[, 1], col = c("white","grey"), 
 	  names = c("Bio-Rad", "Corbisier"), 
-	  main = "Influence of\nDroplet size", ylab = "molecules/ml", ylim = c(0,1*10E-9))
+	  main = "Influence of\nDroplet size", ylab = "molecules/ml", ylim = c(0,1.5*10E-8))
     arrows(c(0.7,1.9), res.conc[, 2], c(0.7,1.9), res.conc[, 3], angle = 90, 
 	   code = 3, lwd = 2)
 }
