@@ -127,11 +127,13 @@ qPCR <- BioRad$AsTable() %>%
   BioRad$GetFData(.)
 
 # Use plotCurves function to get an overview of the amplification curve samples.
-#pdf("plotCurves.pdf", width = 6, height = 4)
+pdf("plotCurves.pdf", width = 6, height = 4)
 
 plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
+  mtext("Cycles", SOUTH<-1, line = 3)
+  mtext("Fluorescence", side = 2, line = 2)
 
-#dev.off()
+dev.off()
 # Detect positive samples - calculate Cq values by the cycle threshold method. 
 # The threshold signal level r was set to 10.
 Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
@@ -234,10 +236,10 @@ lapply(2L:ncol(melt), function(i)
 # Case study three
 #################################
 
-#pdf("qIA.pdf")
+pdf("qIA.pdf", width = 12, height = 6)
 
 # Drawn in an 2-by-1 array on the device by two columns and one row.
-par(mfrow = c(2, 1))
+par(mfrow = c(1, 2))
 
 # Plot the raw data from the C81 dataset to the first array and add
 # a legend. Note: The abcsissa values (time in seconds) was divided 
@@ -247,7 +249,7 @@ mtext("A", cex = 2, side = 3, adj = 0, font = 2)
 lapply(c(2, 4), function(i) {
   lines(C81[, i] / 60, C81[, i + 1], type = "b", pch = 20, col = i - 1)
 })
-legend(0, 0.35, c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 3), 
+legend("bottomleft", c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 3), 
        bty = "n")
 
 # Prepare a plot on the second array for the pre-processed data.
@@ -273,9 +275,9 @@ res <- lapply(c(2, 4), function(i) {
 
 abline(h = 0.05, lty = 2)
 text(10, 0.55, "Cq.t:")
-legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), 
+legend("topleft", paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), 
        bty = "n")
-#dev.off()
+dev.off()
 
 #################################
 # Case study four
