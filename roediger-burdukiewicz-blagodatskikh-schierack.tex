@@ -285,19 +285,20 @@ $Cq_{SDM}$ and $Cq_{Ct}$ methods as shown next.
   \caption{Analysis of the amplification curve data of the \texttt{guescini1} 
 dataset. \strong{(A)} Raw data from the calibration curve samples were visually 
 inspected. The qPCR curves display a broad variation in plateau fluorescence 
-(38~--~62 RFU). The red horizontal line indicates the fluorescence level (0.05) 
-used for the calculation of the Cq value by the ``cycle threshold'' method. 
-\strong{(B)} The \code{CPP} function from the \CRANpkg{chipPCR} was used to 
-baseline the data, to smooth the data with Savitzky-Golay smoothing filter and 
-to normalize the data between 0 and 1. \strong{(C)} The Cq values were 
-calculated by the $Cq_{SDM}$ method (``SDM method'') (\code{inder}, 
-\CRANpkg{chipPCR}) and the $Cq_{Ct}$ method (``Ct method'') (\code{th.cyc}, 
-\CRANpkg{chipPCR}). The threshold value was set to $r~=~0.05$. The $Cq_{SDM}$ 
-and $Cq_{Ct}$ values were plotted and analysed by a linear regression 
-($R^{2}~=~0.9945$; $P < 2.2^{-16}$) and Pearson's ($r~=~0.9972605$; $P < 
-2.2^{-16}$). The $AE$ based on \strong{(D)} $Cq_{Ct}$ values and \strong{(E)} 
-$Cq_{SDM}$ values were automatically analysed with the \code{effcalc} 
-(\CRANpkg{chipPCR}) function. Cq, Quantification cycle; R\textasciicircum2, 
+(38~--~62 RFU). The red horizontal line (\textcolor{red}\textemdash) indicates 
+the fluorescence level (0.05) used for the calculation of the Cq value by the 
+``cycle threshold'' method. \strong{(B)} The \code{CPP} function from the 
+\CRANpkg{chipPCR} was used to baseline the data, to smooth the data with 
+Savitzky-Golay smoothing filter and to normalize the data between 0 and 1. 
+\strong{(C)} The Cq values were calculated by the $Cq_{SDM}$ method (``SDM 
+method'') (\code{inder}, \CRANpkg{chipPCR}) and the $Cq_{Ct}$ method (``Ct 
+method'') (\code{th.cyc}, \CRANpkg{chipPCR}). The threshold value was set to 
+$r~=~0.05$. The $Cq_{SDM}$ and $Cq_{Ct}$ values were plotted and analysed by a 
+linear regression ($R^{2}~=~0.9945$; $P < 2.2^{-16}$) and Pearson's 
+($r~=~0.9972605$; $P < 2.2^{-16}$). The amplification efficiency based on 
+\strong{(D)} $Cq_{Ct}$ values and \strong{(E)} $Cq_{SDM}$ values were 
+automatically analysed with the \code{effcalc} (\CRANpkg{chipPCR}) function. Cq, 
+Quantification cycle; SDM, Second derivative maximum, R\textasciicircum2, 
 Coefficient of determination; r, Pearson product-moment correlation 
 coefficient.}
   \label{figure:dilution_Cq}
@@ -414,11 +415,12 @@ the function $sessionInfo()$ to track all packages used during the analysis.
 Reproducible research is greatly enhanced if open data exchange formats are 
 used. Therefore, we used the \CRANpkg{RDML} package for data read-in. The 
 amplification and melting curve data were measured with a CFX96 system (Bio-Rad) 
-and then exported as RDM~v~1.1 format file as \file{BioRad\_qPCR\_melt.rdml}. 
+and then exported as RDML~v~1.1 format file as \file{BioRad\_qPCR\_melt.rdml}. 
 Within this qPCR experiment we amplified the \textit{Mycobacterium tuberculosis} 
 \textit{katG}\footnote{\url{https://www.wikigenes.org/e/gene/e/923602.html}} 
 gene and tried to detect a mutation at codon 315. The experiment was separated 
-in two parts: 
+in two parts:
+
 \begin{enumerate}
  \item Detection of overall \textit{M.~tuberculosis} DNA (wild-type 
 and mutant) and
@@ -426,19 +428,6 @@ and mutant) and
 TaqMan probe (quencher -- BHQ2, fluorescent reporter -- Cy5) with amplified DNA 
 (see \citet{luo_multiplex_2011} for probe/primer sequences and further details).
 \end{enumerate}
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[clip=true, width=12cm]{figures/plotCurves.pdf}
-  \caption{Analysis of the amplification curve data. The calibration curve 
-samples were inspected by the \code{plotCurves} function from the 
-\CRANpkg{chipPCR} package. The green color code indicates that the data contain 
-no missing values. However, the visual inspection revealed that the data are 
-noisy. All samples (``D1\_Alm12\ldots'' - ``D8\_Alm12\ldots'') appeared to be 
-positive. One negative control (``D10\_H20\_ntc\_EvaGreen'') 
-seems to be contaminated.}
-  \label{figure:plotCurves}
-\end{figure}
 
 The qPCR was conducted using EvaGreen\circledR~Master Mix (Syntol) according to 
 the manufacturer's instructions, with 500 nM of primers and probe in a 25 $\mu$L 
@@ -454,8 +443,10 @@ the complex hierarchical file structure with out some basic understanding. A
 simple and fast method to compactly display the structure of object in R is to 
 use the \code{str} or \code{summary} function (not shown). However, such R tools 
 are not informative in this context. Therefore we implemented a dendrogram like 
-view (Figure~\ref{figure:RDML_dendrogram}). Only a subset of the data was used 
-in our case study and combined to the object ``qPCR''.
+view (Figure~\ref{figure:RDML_dendrogram}). According to this, the file contains 
+different datasets, each with 3 samples, ('pos',  'ntc', 'unknown'). Only a 
+subset of the data was used in our case study and combined to the object 
+``qPCR''.
 
 \begin{example}
 # Import the qPCR and melting curve data via the RDML package.
@@ -503,23 +494,6 @@ branches are the data types \texttt{adp} (amplification data point) and
 \label{figure:RDML_dendrogram}
 \end{figure}
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[clip=true, width=12cm]{figures/amp_melt.pdf} 
-\caption{Graphical representation of the amplification curve data and melting 
-curve data. \strong{(A)} The raw amplification curve data were pre-processed 
-with the \code{CPP} function prior to visualization. To calculate the $T_{M}$ 
-values from the raw melting curve data \strong{(B)} we used the \code{diffQ} 
-function from the \CRANpkg{MBmca} package. \strong{(C)} We adjusted our 
-algorithm to plot the true positive melting peaks in red, while negative melting 
-peaks were labelled in black. The inspection of the plot and the output of 
-\texttt{results.tab} showed that only D07\_katG 315\_unkn\_EvaGreen 
-(\textcolor{red}\textemdash) and D08\_katG 315\_unkn\_EvaGreen 
-(\textcolor{red}\textemdash) are true positive.
-} 
-\label{figure:amp_melt}
-\end{figure}
-
 We inspected and pre-processed a subset of the amplification curve data solely 
 using functionalities provided by the \CRANpkg{chipPCR} package. The 
 \code{plotCurves} function was used to get an overview of the curvatures. The 
@@ -528,7 +502,7 @@ data indicated a baseline shift in all curves with a slight negative trend
 data by using a linear regression model (cycles x - y; ($bg.range = c(x, y)$) in 
 the \code{CPP} function.). The curvatures of ``D1\_Alm12\ldots'' and 
 ``D2\_Alm12\ldots'' exhibited a drop in the plateau phase. However, this is not 
-of importance during this stage of the analysis. 
+of importance during this stage of the analysis.
 
 \begin{example}
 # Use plotCurves function to get an overview of the amplification curve samples.
@@ -552,9 +526,39 @@ Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
 Cq.Positive
 \end{example}
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[clip=true, width=12cm]{figures/plotCurves.pdf}
+  \caption{Analysis of the amplification curve data. The calibration curve 
+samples were inspected by the \code{plotCurves} function from the 
+\CRANpkg{chipPCR} package. The green color code indicates that the data contain 
+no missing values. However, the visual inspection revealed that the data are 
+noisy. All samples (``D1\_Alm12\ldots'' - ``D8\_Alm12\ldots'') appeared to be 
+positive. One negative control (``D10\_H20\_ntc\_EvaGreen'') 
+seems to be contaminated.}
+  \label{figure:plotCurves}
+\end{figure}
+
 Since the amplification curves indicated that selected samples (except 
 non-template-control (``NTC'')) are positive, we distinguished between true 
 positive and true negative samples by MCA (Figure~\ref{figure:amp_melt}A).
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[clip=true, width=12cm]{figures/amp_melt.pdf} 
+\caption{Graphical representation of the amplification curve data and melting 
+curve data. \strong{(A)} The raw amplification curve data were pre-processed 
+with the \code{CPP} function prior to visualization. To calculate the $T_{M}$ 
+values from the raw melting curve data \strong{(B)} we used the \code{diffQ} 
+function from the \CRANpkg{MBmca} package. \strong{(C)} We adjusted our 
+algorithm to plot the true positive melting peaks in red, while negative melting 
+peaks were labelled in black. The inspection of the plot and the output of 
+\texttt{results.tab} showed that only D07\_katG 315\_unkn\_EvaGreen 
+(\textcolor{red}\textemdash) and D08\_katG 315\_unkn\_EvaGreen 
+(\textcolor{red}\textemdash) are true positive.
+} 
+\label{figure:amp_melt}
+\end{figure}
 
 \begin{example}
 # Fetch temperature dependent fluorescence for the Cy5 channel of the 
@@ -652,16 +656,17 @@ be positive in the amplification plot in Figure~\ref{figure:plotCurves} due to
 primer-dimer formation or sample contamination.
 
 \subsection{Case study three -- Isothermal Amplification}
+
 Isothermal amplification is an alternative to PCR, which uses a constant 
 temperature rather than cycling through denaturation, annealing and extension 
 steps \citep{rodiger_nucleic_2014}. The corresponding signal is monitored 
 continuously on a time basis. Often the abscissa values are not uniformly 
-spaced\footnote{The \texttt{C81} example data sets chosen in this case study 
-are 
+spaced\footnote{The \texttt{C81} example data sets chosen in this case study are 
 not uniformly spaced. The \code{CPP} function gives a warning in such a case.}. 
 In qIA the $Cq$ values are dependent on the time instead of cycles. In this 
-study we used the \code{th.cyc} function to determine the time ($Cq_{t}$) 
-required to reach a certain threshold signal level.
+study we used the \code{th.cyc} function from the \CRANpkg{chipPCR} package to 
+determine the time ($Cq_{t}$) required to reach a defined threshold signal 
+level.
 
 \begin{figure}[htbp]
   \centering
@@ -675,18 +680,17 @@ function to smooth the data with a spline function. Baselining was done with a
 linear regression model (robust MM-estimator). Finally, we used the 
 \code{th.cyc} function (\CRANpkg{chipPCR}) to calculate the cycle threshold time 
 for samples D1 and D2. The threshold value was set to $r = 0.05$ ($--$, 
-threshold line).}
+threshold line). $Cq_{t}$, required time to reach a defined threshold signal 
+level.}
   \label{figure:qIA}
 \end{figure}
 
 We performed a quantitative isothermal amplification (qIA) with the plasmid 
-\textit{pCNG1} by using a Helicase Dependent Amplification (HDA). Our 
-previously 
+\textit{pCNG1} by using a Helicase Dependent Amplification (HDA). Our previously 
 reported VideoScan platform \citep{rodiger_highly_2013} was used to control the 
 temperature and to monitor the amplification reaction. The VideoScan technology 
-is based 
-on a highly versatile fluorescence microscope imaging platform, which can be 
-operated with a heating/cooling unit (HCU) for qPCR and MCA applications 
+is based on a highly versatile fluorescence microscope imaging platform, which 
+can be operated with a heating/cooling unit (HCU) for qPCR and MCA applications 
 \citep{roediger_RJ_2013, rodiger_highly_2013}. Since the enzyme DNA Helicase 
 unwinds DNA, no thermal denaturation is needed. The HDA conditions were taken 
 from the ``IsoAmp III Universal tHDA Kit'', Biohelix Corp, as described by the 
@@ -700,8 +704,7 @@ mix. The mix was covered with 50 $\mu$L mineral oil (Roth). The fluorescence
 measurement in VideoScan HCU started directly after adding ``mix B'' at 
 65\textcelsius. A $1x$ (D1) and a $1:10$ dilution (D2) were tested. The 
 resulting dataset \texttt{C81} is part of the \CRANpkg{chipPCR} package. Two 
-concentrations (stock and 1:10 diluted stock) of input DNA were used in the 
-HDA. 
+concentrations (stock and 1:10 diluted stock) of input DNA were used in the HDA. 
 Similar to the previous case studies, we first prepared the plot of the data. 
 Since the raw data showed a slight negative trend and an off-set of circa 0.45 
 RFU it was necessary to pre-process the raw data (Figure~\ref{figure:qIA}A).
