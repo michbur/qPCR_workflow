@@ -324,7 +324,7 @@ require(dpcR)
 # Select the wells for the analysis.
 # A01 to D01 are four replicate dPCR reactions and G04 is the 
 # no template control (NTC).
-wells <- c("A01", "B01", "C01", "D01", "G04")
+wells <- c("A02", "B02", "C02", "D02", "G04")
 
 # Set the arrangement for the plots. The first column contains the amplitude 
 # plots, column two the density functions and column three the concentration
@@ -337,24 +337,25 @@ for (i in 1L:length(wells)) {
   cluster.info <- unique(pds_raw[wells[i]][[1]]["Cluster"])
   res <- bioamp(data = pds_raw[wells[i]][[1]], amp_x = 2, amp_y = 1, 
 		main = paste("Well", wells[i]), xlab = "Amplitude of ileS (FAM)",
-		ylab = "Amplitude of styA (HEX)", xlim = c(500,5500), 
-		ylim = c(0,3000), pch = 19)
+		ylab = "Amplitude of styA (HEX)", xlim = c(500,4700), 
+		ylim = c(0,3300), pch = 19)
   # Draw threshold line to visualize between positive and negative droplts.
   abline(h = max(with(pds_raw[wells[i]][[1]], 
 		 subset(Assay1.Amplitude, Cluster == 4))), lty = 2)
-  legend("topleft", as.character(cluster.info[, 1]), col = cluster.info[, 1], 
-	 ncol = 4, pch = 19)
+  abline(v = min(with(pds_raw[wells[i]][[1]], 
+		 subset(Assay2.Amplitude, Cluster == 4))), lty = 2)
+  legend("topright", as.character(cluster.info[, 1]), col = cluster.info[, 1], pch = 19)
   
   k.tmp <- res[1, "Cluster.3"]
   n.tmp <- sum(res[1, ])
   dens <- dpcr_density(k = k.tmp, n = n.tmp, 
 			average = TRUE, methods = "wilson")
-  legend("topleft", paste("k:", k.tmp,"\nn:", n.tmp))
+  legend("topright", paste("k:", k.tmp,"\nn:", n.tmp))
   res.conc <- rbind(original = dens[4:6] /  0.90072 * 1e-6, 
 		    corrected = dens[4:6] / 0.834 * 1e-6)
   barplot(res.conc[, 1], col = c("white","grey"), 
 	  names = c("Bio-Rad", "Corbisier"), 
-	  main = "Influence of\nDroplet size", ylab = "molecules/ml", ylim = c(0,8*10E-9))
+	  main = "Influence of\nDroplet size", ylab = "molecules/ml", ylim = c(0,1*10E-9))
     arrows(c(0.7,1.9), res.conc[, 2], c(0.7,1.9), res.conc[, 3], angle = 90, 
 	   code = 3, lwd = 2)
 }
