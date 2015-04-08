@@ -200,7 +200,7 @@ results.tab[["Tm positive"]] <- factor(results.tab[["Tm positive"]],
                                        labels=c(TRUE, FALSE))
 results.tab
 
-#pdf("amp_melt.pdf", width = 8, height = 6)
+pdf("amp_melt.pdf", width = 12, height = 6)
 
 # Convert the decision from the "results" object in a color code:
 # Negative, black; Positive, red.
@@ -231,7 +231,7 @@ lapply(2L:ncol(melt), function(i)
   lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
               fct = max, inder = TRUE)[["xy"]], col = color[i - 1]))
 
-#dev.off()
+dev.off()
 #################################
 # Case study three
 #################################
@@ -274,8 +274,7 @@ res <- lapply(c(2, 4), function(i) {
 # Add the cycle threshold time from the object 'res' to the plot.
 
 abline(h = 0.05, lty = 2)
-text(10, 0.55, "Cq.t:")
-legend("topleft", paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), 
+legend("topleft", paste(c("D1 Cq.t: ", "D2 Cq.t: "), res), pch = 19, col = c(1, 3), 
        bty = "n")
 dev.off()
 
