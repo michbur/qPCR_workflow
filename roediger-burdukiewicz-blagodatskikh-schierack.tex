@@ -668,23 +668,6 @@ study we used the \code{th.cyc} function from the \CRANpkg{chipPCR} package to
 determine the time ($Cq_{t}$) required to reach a defined threshold signal 
 level.
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[clip=true, width=14.5cm]{figures/qIA.pdf}
-  \caption{Quantitative isothermal amplification by Helicase Dependent 
-Amplification (HDA). \strong{(A)} The raw data of the HDA (D1, undiluted, D2 
-$1:10$ diluted) exhibit some outliers (detector artifacts), an off-set of circa 
-0.5 relative fluorescence units (RFU) and a slight negative trend in the 
-baseline region (0~-~52 minutes). \strong{(B)} First we used the \code{CPP} 
-function to smooth the data with a spline function. Baselining was done with a 
-linear regression model (robust MM-estimator). Finally, we used the 
-\code{th.cyc} function (\CRANpkg{chipPCR}) to calculate the cycle threshold time 
-for samples D1 and D2. The threshold value was set to $r = 0.05$ ($--$, 
-threshold line). $Cq_{t}$, required time to reach a defined threshold signal 
-level.}
-  \label{figure:qIA}
-\end{figure}
-
 We performed a quantitative isothermal amplification (qIA) with the plasmid 
 \textit{pCNG1} by using a Helicase Dependent Amplification (HDA). Our previously 
 reported VideoScan platform \citep{rodiger_highly_2013} was used to control the 
@@ -707,7 +690,42 @@ resulting dataset \texttt{C81} is part of the \CRANpkg{chipPCR} package. Two
 concentrations (stock and 1:10 diluted stock) of input DNA were used in the HDA. 
 Similar to the previous case studies, we first prepared the plot of the data. 
 Since the raw data showed a slight negative trend and an off-set of circa 0.45 
-RFU it was necessary to pre-process the raw data (Figure~\ref{figure:qIA}A).
+relative fluorescence units (mean fluorescence intensity, MFI) it was necessary 
+to pre-process the raw data (Figure~\ref{figure:qIA}A). First we had a look at 
+the C81 data set with the \code{str} function.
+
+\begin{example}
+str(C81)
+'data.frame':	351 obs. of  5 variables:
+ $ Cycle : int  0 1 2 3 4 5 6 7 8 9 ...
+ $ t.D1  : int  0 51 73 90 107 124 140 157 174 190 ...
+ $ MFI.D1: num  0.549 0.535 0.532 0.53 0.525 ...
+ $ t.D2  : int  0 19 53 72 91 110 128 147 166 185 ...
+ $ MFI.D2: num  0.77 0.523 0.514 0.51 0.508 ...
+\end{example}
+
+The data are arranged in a data frame. The first column contains the measure 
+point (cycle) and the consecutive columns the time stamps (seconds) and the 
+signal hight (as MFI). A brief look at the time stamps (e.g., ``t.D1'') showed 
+that the data were not measured equidistant. Next we plotted and analysed the 
+data. 
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[clip=true, width=14.5cm]{figures/qIA.pdf}
+  \caption{Quantitative isothermal amplification by Helicase Dependent 
+Amplification (HDA). \strong{(A)} The raw data of the HDA (D1, undiluted, D2 
+$1:10$ diluted) exhibit some outliers (detector artifacts), an off-set of circa 
+0.5 relative fluorescence units (RFU) and a slight negative trend in the 
+baseline region (0~-~52 minutes). \strong{(B)} First we used the \code{CPP} 
+function to smooth the data with a spline function. Baselining was done with a 
+linear regression model (robust MM-estimator). Finally, we used the 
+\code{th.cyc} function (\CRANpkg{chipPCR}) to calculate the cycle threshold time 
+for samples D1 and D2. The threshold value was set to $r = 0.05$ ($--$, 
+threshold line). $Cq_{t}$, required time to reach a defined threshold signal 
+level. MFI, mean fluorescence intensity.}
+  \label{figure:qIA}
+\end{figure}
 
 \begin{example}
 # Drawn in an 2-by-1 array on the device by two columns and one row.
@@ -716,7 +734,7 @@ par(mfrow = c(2, 1))
 # Plot the raw data from the C81 dataset to the first array and add
 # a legend. Note: The abscissa values (time in seconds) was divided 
 # by 60 (C81[, i] / 60) to convert to minutes.
-plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "RFU")
+plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "MFI")
 mtext("A", cex = 2, side = 3, adj = 0, font = 2)
 lapply(c(2, 4), function(i) {
   lines(C81[, i] / 60, C81[, i + 1], type = "b", pch = 20, col = i - 1)
@@ -724,7 +742,7 @@ lapply(c(2, 4), function(i) {
 legend(10, 0.8, c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1,3), bty = "n")
 
 # Prepare a plot on the second array for the pre-processed data.
-plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "RFU")
+plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "MFI")
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 \end{example}
 
@@ -734,8 +752,8 @@ prior to the analysis of the of the $Cq_{t}$ value. However, instead of the
 Savitzky-Golay smoother we used a cubic spline ($method = "spline"$) in the 
 \code{CPP} function. In addition, outliers were automatically removed in the 
 baseline region (Figure~\ref{figure:qIA}A~and~B). The background range was 
-defined to be between the $1^{th}$ and $190^{th}$ data point (corresponds to 
-baseline region between 0~and~52 minutes).
+defined by bare eye to be between the $1^{th}$ and $190^{th}$ data point 
+(corresponds to baseline region between 0~and~52 minutes). 
 
 \begin{example}
 # Apply the CPP functions to pro-process the raw data.1) Baseline data to zero, 
@@ -750,7 +768,9 @@ res <- lapply(c(2, 4), function(i) {
              bg.range = c(1, 190))
   lines(C81[, i] / 60, y.s[["y.norm"]], type = "b", pch = 20, col = i - 1)
   # Use the th.cyc function to calculate the cycle threshold time (Cq.t). 
-  # The threshold signal level r was set to 0.05.
+  # The threshold signal level r was set to 0.05. NOTE: The function th.cyc
+  # will give a warning in case data are not equidistant. This is intentional
+  # to make the user aware of potential artificats due to pre-processing.
   paste(round(th.cyc(C81[, i] / 60, y.s[["y.norm"]], r = 0.05)[1], 2), "min")
 })
 

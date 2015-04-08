@@ -237,6 +237,9 @@ dev.off()
 #################################
 
 pdf("qIA.pdf", width = 12, height = 6)
+# First we had a look at the C81 data set with the str function.
+
+str(C81)
 
 # Drawn in an 2-by-1 array on the device by two columns and one row.
 par(mfrow = c(1, 2))
@@ -244,7 +247,7 @@ par(mfrow = c(1, 2))
 # Plot the raw data from the C81 dataset to the first array and add
 # a legend. Note: The abcsissa values (time in seconds) was divided 
 # by 60 (C81[, i] / 60) to convert to minutes.
-plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "RFU")
+plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "MFI")
 mtext("A", cex = 2, side = 3, adj = 0, font = 2)
 lapply(c(2, 4), function(i) {
   lines(C81[, i] / 60, C81[, i + 1], type = "b", pch = 20, col = i - 1)
@@ -253,7 +256,7 @@ legend("bottomleft", c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1
        bty = "n")
 
 # Prepare a plot on the second array for the pre-processed data.
-plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "RFU")
+plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "MFI")
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 
 # Apply the CPP functions to pro-process the raw data.1) Baseline data to zero, 
@@ -267,7 +270,9 @@ res <- lapply(c(2, 4), function(i) {
              bg.range = c(1, 190))
   lines(C81[, i] / 60, y.s[["y.norm"]], type = "b", pch = 20, col = i - 1)
   # Use the th.cyc function to calculate the cycle threshold time (Cq.t). 
-  # The threshold signal level r was set to 0.05.
+  # The threshold signal level r was set to 0.05. NOTE: The function th.cyc
+  # will give a warning in case data are not equidistant. This is intentional
+  # to make the user aware of potential artificats due to pre-processing.
   paste(round(th.cyc(C81[, i] / 60, y.s[["y.norm"]], r = 0.05)[1], 2), "min")
 })
 
