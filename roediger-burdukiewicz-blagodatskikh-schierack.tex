@@ -242,7 +242,7 @@ a LightCycler\circledR~480 (Roche) thermocycler. Details of the experiment are
 described in \citet{guescini_2008}. First we started with loading the required 
 packages and datasets. A good practice for reproducible research is to track the 
 package versions and environment used during the analysis. The function 
-$sessionInfo()$ from the \CRANpkg{utils} package provides this information. 
+\code{sessionInfo} from the \CRANpkg{utils} package provides this information. 
 Assuming that the analysis starts with a clean R session it is possible to 
 assign the required packages to an object, as shown below. The reproducibility 
 of research can be further improved by the \CRANpkg{archivist} package, which 
@@ -411,7 +411,7 @@ decision by a melting curve analysis (MCA). As shown in \citet{roediger_RJ_2013}
 this can be done by interrogating the $T_{M}$. Therefore, we used a logical 
 statement, which tests if $T_{M}$ is within a tight temperature range. We used 
 the signal height as second parameter. In line with ``Case study one'' we used 
-the function $sessionInfo()$ to track all packages used during the analysis. 
+the function \code{sessionInfo} to track all packages used during the analysis. 
 Reproducible research is greatly enhanced if open data exchange formats are 
 used. Therefore, we used the \CRANpkg{RDML} package for data read-in. The 
 amplification and melting curve data were measured with a CFX96 system (Bio-Rad) 
@@ -1009,11 +1009,13 @@ BioRad QX100 Droplet Digital PCR System and the volume proposed by
 
 Our results show, that the replicates in 
 Figure~\ref{figure:dpcR_bioamp}~A01~-~D01 vary. However, the variation is within 
-the same range. The positive samples differ significantly from the negative 
-control (Figure~\ref{figure:dpcR_bioamp}~G04). As proposed by 
-\citet{corbisier_2015} the analysis with the non-corrected droplet volume leads 
-to an underestimation of sample concentrations. However, our case studies shows, 
-that the R environment can be used to circumvent problems of locked-in systems.
+a similar range (Figure~\ref{figure:dpcR_bioamp}~column~2). The positive samples 
+differ significantly from the negative control 
+(Figure~\ref{figure:dpcR_bioamp}~G04). As proposed by \citet{corbisier_2015} the 
+analysis with the non-corrected droplet volume leads to an underestimation of 
+sample concentrations (Figure~\ref{figure:dpcR_bioamp}~column~3). However, our 
+case studies shows, that the R environment can be used to circumvent problems of 
+locked-in systems.
 
 \section{Discussion and Conclusion}
 
