@@ -147,9 +147,13 @@ common ground to track numerical errors. R offers various methods for a
 standardized data import/export and exchange. Workflows can embed structured 
 models \citet{Guazzelli_2009}, open data exchange formats (e.g., RDML), binary 
 formats \citep{michna_2013} or tools provided by the R workspace 
-\citep{RDCT2010c}. Additionally, the R environment offers several datasets, 
-which can be used for testing of algorithms. Therefore, others and we argue that 
-R is suitable for reproducible research \citep{Murrell_2012, gandrud_2013, 
+\citep{RDCT2010c}. The NetCDF binary format has advantages over some other 
+binary formats (e.g., the RData format), since arbitrary array data sections of 
+massive datasets can be processed efficiently \citep{michna_2013}. This might be 
+useful for large data sets as present in high-throughput PCRs or dPCRs with 
+large partition numbers. The R environment offers several datasets, which can be 
+used for testing of algorithms. Therefore, others and we argue that R is 
+suitable for reproducible research \citep{Murrell_2012, gandrud_2013, 
 hofmann_2013, kuhn_cran_2014, Leeper_2014, liu_2014}.
 
 The aim of this paper is to show case studies for qPCR, dPCR, qIA and melting 
@@ -217,8 +221,8 @@ depending on the sample input quantity as described in
 
 In \citet{roediger_RJ_2013} we described the application of R for the analysis 
 of melting curve experiments from microbead-based assays. Since the mathematical 
-foundation for melting curve analysis (MCA) is identical between all platforms 
-we applied the functions from the \CRANpkg{MBmca} package (0.0.3-4) for an 
+foundation for melting curve analysis (MCA) is identical between all methods
+we used functions from the \CRANpkg{MBmca} package (0.0.3-4) for an 
 analysis of the target specific melting temperature ($T_{M}$) in experiments of 
 the present study.
 
