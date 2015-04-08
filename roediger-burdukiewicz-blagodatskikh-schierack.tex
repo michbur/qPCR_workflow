@@ -12,7 +12,7 @@ Moreover, the novel amplification strategies based on quantitative isothermal
 amplification (qIA) have become more prominent in life sciences and 
 point-of-care-diagnostics. Additionally, the analysis of melting data is 
 essential during many experiments. Several software packages have been developed 
-for the analysis of such data sets. In most cases, the software is either 
+for the analysis of such datasets. In most cases, the software is either 
 distributed as closed source software or as monolithic block with little freedom 
 to perform highly customized analysis procedures. We argue, among others, that R is 
 an excellent foundation for reproducible and transparent data analysis in a 
@@ -41,7 +41,7 @@ wu_2014}.
 In the past decades several isothermal amplification technologies emerged, such 
 as helicase dependent amplification (HDA), as alternative to PCR. The isothermal 
 amplification was readily combined with real-time monitoring technologies (qIA) 
-or digital PCR and is used nowadays in various fields like diagnostics and 
+or digital PCR and is used in various fields like diagnostics and 
 point-of-care-testing \citep{selck_2013, rodiger_nucleic_2014, nixon_2014}.
 
 The digital PCR (dPCR) is a novel approach for detection and quantification of 
@@ -147,7 +147,7 @@ common ground to track numerical errors. R offers various methods for a
 standardized data import/export and exchange. Workflows can embed structured 
 models \citet{Guazzelli_2009}, open data exchange formats (e.g., RDML), binary 
 formats \citep{michna_2013} or tools provided by the R workspace 
-\citep{RDCT2010c}. Additionally, the R environment offers several data sets, 
+\citep{RDCT2010c}. Additionally, the R environment offers several datasets, 
 which can be used for testing of algorithms. Therefore, others and we argue that 
 R is suitable for reproducible research \citep{Murrell_2012, gandrud_2013, 
 hofmann_2013, kuhn_cran_2014, Leeper_2014, liu_2014}.
@@ -659,7 +659,7 @@ Isothermal amplification is an alternative to PCR, which uses a constant
 temperature rather than cycling through denaturation, annealing and extension 
 steps \citep{rodiger_nucleic_2014}. The corresponding signal is monitored 
 continuously on a time basis. Often the abscissa values are not uniformly 
-spaced\footnote{The \texttt{C81} example data sets chosen in this case study are 
+spaced\footnote{The \texttt{C81} example datasets chosen in this case study are 
 not uniformly spaced. The \code{CPP} function gives a warning in such a case.}. 
 In qIA the $Cq$ values are dependent on the time instead of cycles. In this 
 study we used the \code{th.cyc} function from the \CRANpkg{chipPCR} package to 
@@ -690,7 +690,7 @@ Similar to the previous case studies, we first prepared the plot of the data.
 Since the raw data showed a slight negative trend and an off-set of circa 0.45 
 MFI (mean fluorescence intensity) it was necessary 
 to pre-process the raw data (Figure~\ref{figure:qIA}A). First we had a look at 
-the C81 data set with the \code{str} function.
+the C81 dataset with the \code{str} function.
 
 \begin{example}
 str(C81)
@@ -809,14 +809,15 @@ following equation \citep{huggett_2013}:
 \hat{\lambda} =  -\ln{(1 - \frac{k}{n})}.
 \end{equation}
 
-The average partition volume in our experiment was assumed to be 5 nL. We counted 
-$n = 16800$ partitions in total from which $k = 4601$ partitions were positive. The 
-binomial distribution of positive and negative partitions was used to determine 
-$\hat \lambda$ (Figure~\ref{figure:dpcR}). Our packages allows both easy 
-estimation of a density of the parameter and calculation of confidence intervals 
-using Wilson's method \citep{brown_2001}. The obtained mean number of template 
-molecules per partition multiplied by the volume of the partitions ($ 16800 * 
-5~nL$) constitutes the sample concentration.
+The average partition volume in our experiment was assumed to be 5 nL. We 
+counted $n = 16800$ partitions in total from which $k = 4601$ partitions were 
+positive. The binomial distribution of positive and negative partitions was used 
+to determine $\hat \lambda$ (Figure~\ref{figure:dpcR}). Our packages allows both 
+easy estimation of a density of the parameter and calculation of confidence 
+intervals using Wilson's method \citep{brown_2001} at a confidence interval 
+level of 0.95. The obtained mean number of template molecules per partition 
+multiplied by the volume of the partitions ($ 16800 * 5~nL$) constitutes the 
+sample concentration.
 
 \begin{example}
 # Load the dpcR package for the analysis of the digital PCR experiment.
@@ -829,9 +830,26 @@ require(dpcR)
 (dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
 
 # Let us assume, that every partition has roughly a volume of 5 nL.
-# The total concentration (and its confidence intervals) in molecules/ml is:
+# The total concentration (and its confidence intervals) in molecules/mL is
+# (the factor 1e-6 is used for the conversion from nL to mL):
 dens[4:6] / 5 * 1e-6
 \end{example}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[clip=true, width=7cm]{figures/dpcR.pdf}
+  \caption{\code{dpcr\_density} function from the \CRANpkg{dpcR} package used 
+for analysis of droplet digital PCR experiment. From 16800 counted partitions 
+($n$) 4601 were positive ($k$). The chart presents the distribution of mean 
+number of template molecules per partition ($\hat \lambda$). $n$, number of 
+total partitions; $k$, number of positive partitions.
+}
+  \label{figure:dpcR}
+\end{figure}
+
+Since we assumed a partition volume of 5 nL we have a total volume of 0.084~mL 
+an $6.40^{-8}$ (95\% CI: $6.2^{-8}$ - $6.6^{-8}$) molecules/mL in the 
+sample.
 
 Selected functionality was implemented as interactive \CRANpkg{shiny} GUI 
 application to make the software accessible for users who are not fluent in R 
@@ -848,18 +866,6 @@ and text fields. An example can be found at
 \url{https://michbur.shinyapps.io/dpcr_density/}. This approach enables the 
 automatized output of R objects in combined plots, tables and summaries.
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[clip=true, width=7cm]{figures/dpcR.pdf}
-  \caption{\code{dpcr\_density} function from the \CRANpkg{dpcR} package used 
-for analysis of droplet digital PCR experiment. From 16800 counted partitions 
-($n$) 4601 were positive ($k$). The chart presents the distribution of mean 
-number of template molecules per partition ($\hat \lambda$). $n$, number of 
-total partitions; $k$, number of positive partitions.
-}
-  \label{figure:dpcR}
-\end{figure}
-
 \subsection{Case study five - digital PCR correction}
 
 There is an ongoing debate in the scientific community about the effect of the 
@@ -874,7 +880,7 @@ different dPCR platforms.
 
 Case study four served as an introduction into the analysis of simulated dPCR 
 experiments with the \CRANpkg{dpcR} package. In the next case study, number 
-five, we used the \texttt{pds\_raw} data set, which was generated by a BioRad 
+five, we used the \texttt{pds\_raw} dataset, which was generated by a BioRad 
 QX100 Droplet Digital PCR System experiment. We re-analysed the data with the 
 partition volume of 0.834~nL as proposed by \citet{corbisier_2015} and a volume 
 of 0.90072~nL as used in the BioRad QX100 Droplet Digital PCR System.
@@ -891,17 +897,17 @@ jahn_2014} and the manual of the \CRANpkg{dpcR} package for details). Gating and
 partition clustering was taken without any modification from the data output of 
 the BioRad QX100 Droplet  Digital PCR System. Each partition is represented by a 
 dot in Figure~\ref{figure:dpcR_bioamp}. First, we had a look at the data 
-structure of the \texttt{pds\_raw} data set.
+structure of the \texttt{pds\_raw} dataset.
 
 \begin{example}
-# Load the dpcR package for the analysis of the digital PCR experiment.
-# Analysis of a droplet dPCR experiment. Data were taken from the pds_raw dataset.
+# Load the dpcR package and use the pds_raw dataset for the analysis of the 
+# digital PCR experiment.
 require(dpcR)
 
-# To get an overview of the data set we used the head and summary R functions.
+# To get an overview of the dataset we used the head and summary R functions.
 head(summary(pds_raw))
 
-# The output shows that the data set contains lists of different samples (A01 ...)
+# The output shows that the dataset contains lists of different samples (A01 ...)
     Length Class        Mode  
 A01 "3"    "data.frame" "list"
 A02 "3"    "data.frame" "list"
@@ -921,7 +927,7 @@ str(pds_raw[["A01"]])
  $ Cluster         : int  4 4 4 4 4 4 4 4 4 4 ...
 \end{example}
 
-Since the structure of the data set was known now we selected samples for the 
+Since the structure of the dataset was known now we selected samples for the 
 analysis. According to the \CRANpkg{dpcR} manual contain the samples ``A02'', 
 ``B02'', ``C02'' and ``D02'' the values for the replicates at a 1:100 dilution 
 and ``G04'' the values for the non-template control.
@@ -990,7 +996,7 @@ This is to be found in the clusters 2 and 3.
 \centering
   \includegraphics[clip=true, width=12cm]{figures/dpcR_bioamp.pdf}
     \caption{Analysis of a droplet digital PCR experiment. We used the 
-\texttt{pds\_raw} data set from the \CRANpkg{dpcR} package. All raw data were 
+\texttt{pds\_raw} dataset from the \CRANpkg{dpcR} package. All raw data were 
 generated with a BioRad QX100 Droplet Digital PCR System. Column one: Amplitude 
 plot of raw data shown by the \code{bioamp} function. Each dot represents a 
 partition in a cluster. Negative partition are below and positive partitions above the 

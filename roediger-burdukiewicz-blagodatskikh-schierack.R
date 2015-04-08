@@ -300,7 +300,8 @@ n <- 16800
 legend("topleft", paste("k:", k,"\nn:", n))
 #dev.off()
 # Let us assume, that every partition has roughly a volume of 5 nL.
-# The total concentration (and its confidence intervals) in molecules/ml is:
+# The total concentration (and its confidence intervals) in molecules/ml is
+# (the factor 1e-6 is used for the conversion from nL to mL):
 dens[4:6] / 5 * 1e-6
 dev.off()
 ##################
@@ -323,8 +324,8 @@ dev.off()
 
 pdf("dpcR_bioamp.pdf", width = 8, height = 12)
 
-# Load the dpcR package for the analysis of the digital PCR experiment.
-# Analysis of a droplet dPCR experiment. Data were taken from the pds_raw dataset.
+# Load the dpcR package and use the pds_raw dataset for the analysis of the 
+# digital PCR experiment.
 require(dpcR)
 
 # To get an overview of the data set we used the head and summary R functions.
@@ -377,12 +378,12 @@ for (i in 1L:length(wells)) {
   # Finally, the concentration of the molecules was calculate with the volume used in 
   # the QX100 system and as proposed by Corbisier et al. (2015). The results were added
   # as barplot with the confidence intervals.
-  res.conc <- rbind(original = dens[4:6] /  0.90072 * 1e-6, 
-		    corrected = dens[4:6] / 0.834 * 1e-6)
+  res.conc <- rbind(original = dens[4:6] /  0.90072, 
+		    corrected = dens[4:6] / 0.834)
   barplot(res.conc[, 1], col = c("white","grey"), 
 	  names = c("Bio-Rad", "Corbisier"), 
-	  main = "Influence of\nDroplet size", ylab = "molecules/ml", 
-	  ylim = c(0,1.5*10E-8))
+	  main = "Influence of\nDroplet size", ylab = "molecules/nL", 
+	  ylim = c(0,1.5*10E-2))
     arrows(c(0.7,1.9), res.conc[, 2], c(0.7,1.9), res.conc[, 3], angle = 90, 
 	   code = 3, lwd = 2)
 }
