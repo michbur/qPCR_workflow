@@ -291,7 +291,7 @@ pdf("dpcR.pdf")
 require(dpcR)
 
 # Analysis of a digital PCR experiment. The density estimation.
-# In our in-silico experiment we counted in total 16800 droplets (n). 
+# In our in-silico experiment we counted in total 16800 partitions (n). 
 # Thereof, 4601 were positive (k).
 #pdf("dpcR.pdf")
 k <- 4601
@@ -299,7 +299,7 @@ n <- 16800
 (dens <- dpcr_density(k = k, n = n, average = TRUE, methods = "wilson"))
 legend("topleft", paste("k:", k,"\nn:", n))
 #dev.off()
-# Let us assume, that every droplet has roughly a volume of 5 nL.
+# Let us assume, that every partition has roughly a volume of 5 nL.
 # The total concentration (and its confidence intervals) in molecules/ml is:
 dens[4:6] / 5 * 1e-6
 dev.off()
@@ -347,7 +347,7 @@ wells <- c("A02", "B02", "C02", "D02", "G04")
 par(mfrow = c(5,3))
 
 # The function bioamp was used in a loop to extract the number of positive and negative 
-# droplets from the sample files. The results were assigned to the object 'res' and plotted.
+# partitions from the sample files. The results were assigned to the object 'res' and plotted.
 # Horizontal and vertical lines show the threshold borders as defined by the QX100 system. 
   
 for (i in 1L:length(wells)) {
@@ -356,7 +356,7 @@ for (i in 1L:length(wells)) {
 		main = paste("Well", wells[i]), xlab = "Amplitude of ileS (FAM)",
 		ylab = "Amplitude of styA (HEX)", xlim = c(500,4700), 
 		ylim = c(0,3300), pch = 19)
-  # Draw threshold line to visualize between positive and negative droplets.
+  # Draw threshold line to visualize between positive and negative partitions.
   abline(h = max(with(pds_raw[wells[i]][[1]], 
 		 subset(Assay1.Amplitude, Cluster == 4))), lty = 2)
   abline(v = min(with(pds_raw[wells[i]][[1]], 
@@ -381,7 +381,8 @@ for (i in 1L:length(wells)) {
 		    corrected = dens[4:6] / 0.834 * 1e-6)
   barplot(res.conc[, 1], col = c("white","grey"), 
 	  names = c("Bio-Rad", "Corbisier"), 
-	  main = "Influence of\nDroplet size", ylab = "molecules/ml", ylim = c(0,1.5*10E-8))
+	  main = "Influence of\nDroplet size", ylab = "molecules/ml", 
+	  ylim = c(0,1.5*10E-8))
     arrows(c(0.7,1.9), res.conc[, 2], c(0.7,1.9), res.conc[, 3], angle = 90, 
 	   code = 3, lwd = 2)
 }
