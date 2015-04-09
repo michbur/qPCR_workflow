@@ -39,8 +39,8 @@ cyclers, capillary cyclers, microfluidic platforms and related technologies
 wu_2014}.
 
 In the past decades several isothermal amplification technologies emerged, such 
-as helicase dependent amplification (HDA), as alternative to PCR. The isothermal 
-amplification was readily combined with real-time monitoring technologies (qIA) 
+as helicase dependent amplification (HDA). Isothermal 
+amplification methods were readily combined with real-time monitoring technologies (qIA) 
 or digital PCR and is used in various fields like diagnostics and 
 point-of-care-testing \citep{selck_2013, rodiger_nucleic_2014, nixon_2014}.
 
@@ -96,27 +96,24 @@ Language (RDML) \citep{lefever_2009}. We see the application of R in line with
 this philosophy. 
 
 In case of closed source software the analysis usually happens in a black~box 
-fashion tied to a specific platform. We agree that closed frameworks are 
-not necessarily a bad thing, but should be avoided if possible 
+fashion tied to a specific platform. We agree that closed frameworks are not 
+necessarily a bad thing, but should be avoided if possible 
 \citep{roediger_RJ_2013, Spiess_2014}. Studies by \citet{mccullough_2008, 
 Almiron_2010, Duran_2014} exemplified where the black~box approach might fail in 
 science. The same holds true for the open~source software since software bugs 
 are independent of a development model. However, at least open~source gives the 
-possibility to track and eliminate errors by an individual entity. 
-
-Black-box systems often force the user to process the data by suboptimal 
-analysis algorithms \citep{ruijter_2013}. Moreover, the data usually cannot be 
-accessed between the steps of the analysis which restrains quality control. The 
+possibility to track and eliminate errors by an individual entity. Black-box 
+systems often force the user to process the data by suboptimal analysis 
+algorithms \citep{ruijter_2013}. Moreover, the data usually cannot be accessed 
+between the steps of the analysis which restrains quality control. The 
 visualization options are usually limited by the software vendor preferences and 
 do not attain publication quality. In addition to this, users who have no access 
-to the commercial software are barred. 
-
-Aside from closed source software, data analysis is often performed in 
-spreadsheets. However, this data processing approach is not advisable for 
-research purposes. Most spreadsheets  lack (or do not use) tools to validate the 
-input, to debug implemented procedures and to automatize the workflow. These 
-traits make them prone to errors and not well suited for complicated tasks 
-\citep{mccullough_2008, burns_2014}.
+to the commercial software are barred. Aside from closed source software, data 
+analysis is often performed in spreadsheets. However, this data processing 
+approach is not advisable for research purposes. Most spreadsheets  lack (or do 
+not use) tools to validate the input, to debug implemented procedures and to 
+automatize the workflow. These traits make them prone to errors and not well 
+suited for complicated tasks \citep{mccullough_2008, burns_2014}.
 
 For several reasons, R is one of the most popular tools in bioinformatics and is 
 known as an early adopter of emerging technologies \citep{pabinger_2014}. R 
@@ -204,7 +201,9 @@ keep the case study sections compact we have chosen to load datasets from the
 package (v.~0.8-3) to our workspace. The \CRANpkg{chipPCR} package 
 \citep{roediger_2015_Bioinformatics} (v.~0.0.8-8) was used for data 
 preprocessing, quality control and  the calculation of the quantification cycle 
-(Cq). The Cq is a quantitative measure, which represents the number of cycles 
+(Cq).
+
+The Cq is a quantitative measure, which represents the number of cycles 
 needed to reach a user defined threshold signal level, in the exponential phase 
 of a qPCR/qIA reaction. Several Cq methods have been described 
 \citep{ruijter_2013}. In this study we have chosen the second derivative maximum 
@@ -244,7 +243,7 @@ a LightCycler\circledR~480 (Roche) thermocycler. Details of the experiment are
 described in \citet{guescini_2008}. First we started with loading the required 
 packages and datasets. A good practice for reproducible research is to track the 
 package versions and environment used during the analysis. The function 
-\code{sessionInfo} from the \CRANpkg{utils} package provides this information. 
+\code{sessionInfo} from the \CRANpkg{utils} package provides this functionality. 
 Assuming that the analysis starts with a clean R session it is possible to 
 assign the required packages to an object, as shown below. The reproducibility 
 of research can be further improved by the \CRANpkg{archivist} package, which 
@@ -302,7 +301,7 @@ linear regression ($R^{2}~=~0.9945$; $P < 2.2^{-16}$) and Pearson's
 automatically analysed with the \code{effcalc} (\CRANpkg{chipPCR}) function. Cq, 
 Quantification cycle; SDM, Second derivative maximum, R\textasciicircum2, 
 Coefficient of determination; r, Pearson product-moment correlation 
-coefficient.}
+coefficient, RFU, relative fluorescence units.}
   \label{figure:dilution_Cq}
 \end{figure}
 
@@ -361,13 +360,10 @@ F-statistic: 1.49e+04 on 1 and 82 DF,  p-value: < 2.2e-16
 
 The dilution (``dil'') and the Cq (``Cq.Ct'') values served as input for the 
 calculation of the amplification efficiency ($AE$) with \code{effcalc} function 
-from the \CRANpkg{chipPCR} package. In our case study we needed to rearrange 
-the 
+from the \CRANpkg{chipPCR} package. In our case study we needed to rearrange the 
 ``Cq.Ct'' values in a matrix using the command $effcalc(dil, t(matrix(Cq.Ct, 
 nrow = 12, ncol = 7))$. For visualization of the confidence intervals of the 
-regression analysis we set the parameter $CI = TRUE$. Finally, Cq values were 
-plotted 
-using the \code{layout} function (Figure~\ref{figure:dilution_Cq}D~and~E).
+regression analysis we set the parameter $CI = TRUE$.
 
 \begin{example}
 # Store used margin parameters
@@ -400,9 +396,12 @@ legend("topright", "E", cex = 3, bty = "n")
 par(mar = def.mar)
 \end{example}
 
-As shown in this case study, it is easy to set-up a streamlined workflow for 
-data 
-read-in, pre-processing and analysis with a few functions.
+Finally, Cq values were plotted using the \code{layout} function 
+(Figure~\ref{figure:dilution_Cq}D~and~E). The Cq values and amplification vary 
+slightly between both methods. This is an expected behaviour as recently 
+described by \citet{ruijter_2013}. As shown in this case study, it is easy to 
+set-up a streamlined workflow for data read-in, pre-processing and analysis with 
+a few functions.
 
 \subsection{Case study two -- qPCR and Melting Curve Analysis}
 
@@ -829,7 +828,7 @@ require(dpcR)
 # In our in silico experiment we counted in total 16800 partitions (n). 
 # Thereof, 4601 were positive (k).
 
-(dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"
+(dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson",
 		      conf.level = 0.95))
 
 # Let us assume, that every partition has roughly a volume of 5 nL.

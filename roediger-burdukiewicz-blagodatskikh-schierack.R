@@ -39,7 +39,7 @@ Cq.Ct <- apply(gue[, -1], 2, function(x)
   th.cyc(res.CPP[, 1], x, r = 0.05)[1])
 
 # Use the inder function from the chipPCR package to calculate the Cq values
-# by the SDM method.
+# by the SDM method. This will give a lot of output in the console.
 Cq.SDM <- apply(gue[, -1], 2, function(x)
   summary(inder(res.CPP[, 1], x))[2])
 
@@ -48,7 +48,7 @@ res.Cq <- lm(Cq.Ct ~ Cq.SDM)
 
 summary(res.Cq)
 
-#pdf("dilution_Cq.pdf", width = 9.5, height = 14)
+pdf("dilution_Cq.pdf", width = 9.5, height = 14)
 
 # Arrange and plot the results in a convenient way.
 layout(matrix(c(1,2,3,3,4,5), 3, 2, byrow = TRUE))
@@ -58,34 +58,35 @@ par(mar = c(5.1, 4.1, 6.1, 2.1))
 # Plot the raw amplification curve data.
 matplot(gue[, -1], type = "l", lty = 1, col = 1, xlab = "Cycle", 
         ylab = "RFU", main = "Raw data")
-legend("topleft", "A", cex = 3, bty = "n")
+mtext("A", side = 3, adj = 0, cex = 2)
 
 # Plot the pre-processed amplification curve data.
 matplot(res.CPP[, -1], type = "l", lty = 1, col = 1, xlab = "Cycle", 
         ylab = "RFU", main = "Pre-processed data")
-legend("topleft", "B", cex = 3, bty = "n")
+mtext("B", side = 3, adj = 0, cex = 2)
 abline(h = 0.05, col = "red", lwd = 2)
 
 # Plot Cq.SDM against Cq.Ct and add the trendline from the linear regression
 # analysis.
 
-plot(Cq.SDM, Cq.Ct, xlab = "Ct method", ylab = "SDM method", 
+plot(Cq.SDM, Cq.Ct, xlab = "Cq Ct method", ylab = "Cq SDM method", 
      main = "Comparison of Cq methods")
 abline(res.Cq)
-
-legend("topleft", "C", cex = 3, bty = "n")
+mtext("C", side = 3, adj = 0, cex = 2)
 
 # Use the effcalc function from the chipPCR package to calculate the
 # amplification efficiency.
-plot(effcalc(dil, t(matrix(Cq.Ct, nrow = 12, ncol = 7))), CI = TRUE)
-legend("topright", "D", cex = 3, bty = "n")
+plot(effcalc(dil, t(matrix(Cq.Ct, nrow = 12, ncol = 7))), ylab = "Cq Ct method", 
+     CI = TRUE)
+mtext("D", side = 3, adj = 0, cex = 2)
 
-plot(effcalc(dil, t(matrix(Cq.SDM, nrow = 12, ncol = 7))), CI = TRUE)
-legend("topright", "E", cex = 3, bty = "n")
+plot(effcalc(dil, t(matrix(Cq.SDM, nrow = 12, ncol = 7))), ylab = "Cq SDM method", 
+     CI = TRUE)
+mtext("E", side = 3, adj = 0, cex = 2)
 
 # Set top margin to default value.
 par(mar = c(5.1, 4.1, 4.1, 2.1))
-#dev.off()
+dev.off()
 #################################
 # Case study two
 #################################
