@@ -19,8 +19,8 @@
 \backcite {ruijter_2014}{{1}{2.1}{figure.caption.2}}
 \backcite {huggett_2013}{{1}{2.1}{figure.caption.2}}
 \backcite {bustin_2014}{{1}{2.1}{figure.caption.2}}
+\backcite {lefever_2009}{{1}{2.1}{figure.caption.2}}
 \backcite {rodiger_highly_2013}{{2}{1}{figure.caption.2}}
-\backcite {lefever_2009}{{2}{2.1}{figure.caption.2}}
 \backcite {roediger_RJ_2013}{{2}{2.1}{figure.caption.2}}
 \backcite {Spiess_2014}{{2}{2.1}{figure.caption.2}}
 \backcite {mccullough_2008}{{2}{2.1}{figure.caption.2}}
@@ -33,7 +33,7 @@
 \backcite {pabinger_2014}{{2}{2.1}{figure.caption.2}}
 \backcite {gentleman_2004}{{2}{2.1}{figure.caption.2}}
 \backcite {Oh_2014}{{2}{2.1}{figure.caption.2}}
-\backcite {Baaaath_2012}{{3}{2.1}{figure.caption.2}}
+\backcite {Baaaath_2012}{{2}{2.1}{figure.caption.2}}
 \backcite {Guazzelli_2009}{{3}{2.1}{figure.caption.2}}
 \backcite {michna_2013}{{3}{2.1}{figure.caption.2}}
 \backcite {RDCT2010c}{{3}{2.1}{figure.caption.2}}
@@ -77,6 +77,6 @@
 \backcite {jahn_2014}{{14}{2.3.5}{subsection.2.3.5}}
 \backcite {corbisier_2015}{{16}{2.3.5}{figure.caption.10}}
 \backcite {rodiger_rkward_2012}{{16}{2.4}{figure.caption.11}}
-\backcite {corbisier_2015}{{22}{9}{figure.caption.10}}
-\backcite {R_web}{{23}{10}{figure.caption.11}}
-\backcite {R_cloud}{{23}{10}{figure.caption.11}}
+\backcite {corbisier_2015}{{21}{9}{figure.caption.10}}
+\backcite {R_web}{{22}{10}{figure.caption.11}}
+\backcite {R_cloud}{{22}{10}{figure.caption.11}}

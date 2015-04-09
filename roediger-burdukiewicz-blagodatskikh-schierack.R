@@ -296,7 +296,8 @@ require(dpcR)
 #pdf("dpcR.pdf")
 k <- 4601
 n <- 16800
-(dens <- dpcr_density(k = k, n = n, average = TRUE, methods = "wilson"))
+(dens <- dpcr_density(k = k, n = n, average = TRUE, methods = "wilson", 
+		      conf.level = 0.95))
 legend("topleft", paste("k:", k,"\nn:", n))
 #dev.off()
 # Let us assume, that every partition has roughly a volume of 5 nL.
@@ -350,18 +351,15 @@ par(mfrow = c(5,3))
 # The function bioamp was used in a loop to extract the number of positive and negative 
 # partitions from the sample files. The results were assigned to the object 'res' and plotted.
 # Horizontal and vertical lines show the threshold borders as defined by the QX100 system. 
-  
+
+
 for (i in 1L:length(wells)) {
   cluster.info <- unique(pds_raw[wells[i]][[1]]["Cluster"])
   res <- bioamp(data = pds_raw[wells[i]][[1]], amp_x = 2, amp_y = 1, 
 		main = paste("Well", wells[i]), xlab = "Amplitude of ileS (FAM)",
 		ylab = "Amplitude of styA (HEX)", xlim = c(500,4700), 
 		ylim = c(0,3300), pch = 19)
-  # Draw threshold line to visualize between positive and negative partitions.
-  abline(h = max(with(pds_raw[wells[i]][[1]], 
-		 subset(Assay1.Amplitude, Cluster == 4))), lty = 2)
-  abline(v = min(with(pds_raw[wells[i]][[1]], 
-		 subset(Assay2.Amplitude, Cluster == 4))), lty = 2)
+
   legend("topright", as.character(cluster.info[, 1]), col = cluster.info[, 1], pch = 19)
   
   # Counts for the positive clusters 2 and 3 were assigned to new objects and further used by
@@ -371,9 +369,10 @@ for (i in 1L:length(wells)) {
   # Counts for all clusters
   n.tmp <- sum(res[1, ])
   
-  dens <- dpcr_density(k = k.tmp, n = n.tmp, 
-			average = TRUE, methods = "wilson")
-  legend("topright", paste("k:", k.tmp,"\nn:", n.tmp))
+  if(i < 5) x.lim <- c(0.065, 0.115) else x.lim <- c(0, 0.115)
+  dens <- dpcr_density(k = k.tmp, n = n.tmp, average = TRUE, methods = "wilson", 
+		       conf.level = 0.95, xlim = x.lim, bars = FALSE)
+  legend("topright", paste("k:", k.tmp,"\nn:", n.tmp), bty = "n")
   
   # Finally, the concentration of the molecules was calculate with the volume used in 
   # the QX100 system and as proposed by Corbisier et al. (2015). The results were added

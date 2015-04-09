@@ -63,7 +63,7 @@ Poisson statistics. Recently, we have published the \CRANpkg{dpcR} package at
 CRAN, which is the first open source R software package for the analysis of dPCR 
 experiments (see \CRANpkg{dpcR} for details).
 
-\begin{figure}[htbp]
+\begin{figure}[h]
   \centering
   \includegraphics[clip=true, width=12cm]{figures/dpcR_sim.pdf} \caption{Scheme 
 of a digital PCR experiment. \strong{(A)} A droplet digital PCR reaction 
@@ -77,24 +77,23 @@ package.}
 \label{figure:dpcR_sim}
 \end{figure}
 
-Many of the commercial and experimental hardware platforms provide means to 
-analyse the data. The complexity of hardware, wetware and software requires 
-expertise to master a workflow. This comprises standards for experiment design, 
-generation and analysis of data, multiple hypothesis testing, interpretation, 
-reporting and storage of results \citep{huggett_BDQ_2014, conde_2014}. 
-Scientific misconduct and fraud have shaken the scientific community on several 
-occasions \citep{bustin_2014}. In particular, the scientific community works 
-hard to uncover pitfalls of qPCR experiments. This lead to the development of 
+The complexity of hardware, wetware and software requires expertise to master a 
+workflow. This comprises standards for experiment design, generation and 
+analysis of data, multiple hypothesis testing, interpretation, reporting and 
+storage of results \citep{huggett_BDQ_2014, conde_2014}. Scientific misconduct 
+and fraud have shaken the scientific community on several occasions 
+\citep{bustin_2014}. In particular, the scientific community works hard to 
+uncover pitfalls of qPCR experiments. This lead to the development of 
 peer-reviewed quantification cycle (Cq) analysis algorithms 
-\citep{ruijter_2013}, fully characterized qPCR chemistries 
-\citep{ruijter_2014} and guidelines for a proper conduct of qPCR experiments as 
-implemented in the MIQE guidelines (minimum information for publication of 
-quantitative real-time PCR experiments) \citep{huggett_2013, bustin_2014}. We 
-share the philosophy of the MIQE guidelines to increase the experimental 
-transparency for better experimental practice and reliable interpretation of 
-results and encourage the use of open data exchange formats like the XML-based 
-Real-Time PCR Data Markup Language (RDML) \citep{lefever_2009}. We see the 
-application of R in line with this philosophy. 
+\citep{ruijter_2013}, fully characterized qPCR chemistries \citep{ruijter_2014} 
+and guidelines for a proper conduct of qPCR experiments as implemented in the 
+MIQE guidelines (minimum information for publication of quantitative real-time 
+PCR experiments) \citep{huggett_2013, bustin_2014}. We share the philosophy of 
+the MIQE guidelines to increase the experimental transparency for better 
+experimental practice and reliable interpretation of results and encourage the 
+use of open data exchange formats like the XML-based Real-Time PCR Data Markup 
+Language (RDML) \citep{lefever_2009}. We see the application of R in line with 
+this philosophy. 
 
 In case of closed source software the analysis usually happens in a black~box 
 fashion tied to a specific platform. We agree that closed frameworks are 
@@ -147,14 +146,15 @@ common ground to track numerical errors. R offers various methods for a
 standardized data import/export and exchange. Workflows can embed structured 
 models \citet{Guazzelli_2009}, open data exchange formats (e.g., RDML), binary 
 formats \citep{michna_2013} or tools provided by the R workspace 
-\citep{RDCT2010c}. The NetCDF binary format has advantages over some other 
-binary formats (e.g., the RData format), since arbitrary array data sections of 
-massive datasets can be processed efficiently \citep{michna_2013}. This might be 
-useful for large data sets as present in high-throughput PCRs or dPCRs with 
-large partition numbers. The R environment offers several datasets, which can be 
-used for testing of algorithms. Therefore, others and we argue that R is 
-suitable for reproducible research \citep{Murrell_2012, gandrud_2013, 
-hofmann_2013, kuhn_cran_2014, Leeper_2014, liu_2014}.
+\citep{RDCT2010c}. The NetCDF binary format, available from the 
+\CRANpkg{RNetCDF} package, has advantages over some other binary formats (e.g., 
+the RData format), since arbitrary array data sections of massive datasets can 
+be processed efficiently \citep{michna_2013}. This might be useful for large 
+data sets as present in high-throughput PCRs or dPCRs with large partition 
+numbers. The R environment offers several datasets, which can be used for 
+testing of algorithms. Therefore, others and we argue that R is suitable for 
+reproducible research \citep{Murrell_2012, gandrud_2013, hofmann_2013, 
+kuhn_cran_2014, Leeper_2014, liu_2014}.
 
 The aim of this paper is to show case studies for qPCR, dPCR, qIA and melting 
 curve analysis experiments. Our workflow effectively follows the principle 
@@ -195,15 +195,13 @@ environment (IDE) and graphical user interface (GUI) such as \pkg{RKWard}
 \citep{rodiger_rkward_2012}, \pkg{RStudio} \citep{RStudio, gandrud_2013} or 
 other technologies \citep{Valero_2012}. Benefits of IDE's with GUI include 
 syntax-highlighting, auto completion and function references for rapid 
-prototyping of workflows.
-
-Typically, the analysis will start with data from a commercial platform. Most 
-platforms have an option to export a CSV file or spreadsheets application file 
-(e.g., *.xls, *.odt). The details for the data import have been described 
-elsewhere \citep{RDCT2010c, rodiger_rkward_2012}. To keep the case study 
-sections compact we have chosen to load datasets from the \CRANpkg{qpcR} package 
-\citep{ritz_2008} (v.~1.4.0) and the \CRANpkg{RDML} package 
-(v.~0.8-3) to our workspace. The \CRANpkg{chipPCR} package 
+prototyping of workflows. Typically, the analysis will start with data from a 
+commercial platform. Most platforms have an option to export a CSV file or 
+spreadsheets application file (e.g., *.xls, *.odt). The details for the data 
+import have been described elsewhere \citep{RDCT2010c, rodiger_rkward_2012}. To 
+keep the case study sections compact we have chosen to load datasets from the 
+\CRANpkg{qpcR} package \citep{ritz_2008} (v.~1.4.0) and the \CRANpkg{RDML} 
+package (v.~0.8-3) to our workspace. The \CRANpkg{chipPCR} package 
 \citep{roediger_2015_Bioinformatics} (v.~0.0.8-8) was used for data 
 preprocessing, quality control and  the calculation of the quantification cycle 
 (Cq). The Cq is a quantitative measure, which represents the number of cycles 
@@ -831,7 +829,8 @@ require(dpcR)
 # In our in silico experiment we counted in total 16800 partitions (n). 
 # Thereof, 4601 were positive (k).
 
-(dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"))
+(dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson"
+		      conf.level = 0.95))
 
 # Let us assume, that every partition has roughly a volume of 5 nL.
 # The total concentration (and its confidence intervals) in molecules/mL is
@@ -957,11 +956,7 @@ for (i in 1L:length(wells)) {
 		main = paste("Well", wells[i]), xlab = "Amplitude of ileS (FAM)",
 		ylab = "Amplitude of styA (HEX)", xlim = c(500,4700), 
 		ylim = c(0,3300), pch = 19)
-  # Draw threshold line to visualize between positive and negative partitions.
-  abline(h = max(with(pds_raw[wells[i]][[1]], 
-		 subset(Assay1.Amplitude, Cluster == 4))), lty = 2)
-  abline(v = min(with(pds_raw[wells[i]][[1]], 
-		 subset(Assay2.Amplitude, Cluster == 4))), lty = 2)
+
   legend("topright", as.character(cluster.info[, 1]), col = cluster.info[, 1], pch = 19)
 \end{example}
 
