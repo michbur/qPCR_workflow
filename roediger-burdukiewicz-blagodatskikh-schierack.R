@@ -52,6 +52,10 @@ pdf("dilution_Cq.pdf", width = 9.5, height = 14)
 
 # Arrange and plot the results in a convenient way.
 layout(matrix(c(1,2,3,3,4,5), 3, 2, byrow = TRUE))
+
+# Store used margin parameters
+def.mar <- par("mar")
+layout(matrix(c(1,2,3,3,4,5), 3, 2, byrow = TRUE))
 # Set bigger top margin.
 par(mar = c(5.1, 4.1, 6.1, 2.1))
 
@@ -84,7 +88,7 @@ plot(effcalc(dil, t(matrix(Cq.SDM, nrow = 12, ncol = 7))), ylab = "Cq SDM method
      CI = TRUE)
 mtext("E", side = 3, adj = 0, cex = 2)
 
-# Set top margin to default value.
+# Resore margin default values.
 par(mar = c(5.1, 4.1, 4.1, 2.1))
 dev.off()
 #################################

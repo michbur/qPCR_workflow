@@ -366,42 +366,54 @@ nrow = 12, ncol = 7))$. For visualization of the confidence intervals of the
 regression analysis we set the parameter $CI = TRUE$.
 
 \begin{example}
+# Arrange and plot the results in a convenient way.
+layout(matrix(c(1,2,3,3,4,5), 3, 2, byrow = TRUE))
+
 # Store used margin parameters
 def.mar <- par("mar")
 layout(matrix(c(1,2,3,3,4,5), 3, 2, byrow = TRUE))
 # Set bigger top margin.
 par(mar = c(5.1, 4.1, 6.1, 2.1))
 
+# Plot the raw amplification curve data.
 matplot(gue[, -1], type = "l", lty = 1, col = 1, xlab = "Cycle", 
-	    ylab = "RFU", main = "Raw data")
-legend("topleft", "A", cex = 3, bty = "n")
+        ylab = "RFU", main = "Raw data")
+mtext("A", side = 3, adj = 0, cex = 2)
 
+# Plot the pre-processed amplification curve data.
 matplot(res.CPP[, -1], type = "l", lty = 1, col = 1, xlab = "Cycle", 
-	ylab = "RFU", main = "Pre-processed data")
-legend("topleft", "B", cex = 3, bty = "n")
+        ylab = "RFU", main = "Pre-processed data")
+mtext("B", side = 3, adj = 0, cex = 2)
 abline(h = 0.05, col = "red", lwd = 2)
 
-plot(Cq.SDM, Cq.Ct, xlab = "Ct method", ylab = "SDM method", 
+# Plot Cq.SDM against Cq.Ct and add the trendline from the linear regression
+# analysis.
+
+plot(Cq.SDM, Cq.Ct, xlab = "Cq Ct method", ylab = "Cq SDM method", 
      main = "Comparison of Cq methods")
 abline(res.Cq)
-legend("topleft", "C", cex = 3, bty = "n")
+mtext("C", side = 3, adj = 0, cex = 2)
 
-plot(effcalc(dil, t(matrix(Cq.Ct, nrow = 12, ncol = 7))), CI = TRUE)
-legend("topright", "D", cex = 3, bty = "n")
+# Use the effcalc function from the chipPCR package to calculate the
+# amplification efficiency.
+plot(effcalc(dil, t(matrix(Cq.Ct, nrow = 12, ncol = 7))), ylab = "Cq Ct method", 
+     CI = TRUE)
+mtext("D", side = 3, adj = 0, cex = 2)
 
-plot(effcalc(dil, t(matrix(Cq.SDM, nrow = 12, ncol = 7))), CI = TRUE)
-legend("topright", "E", cex = 3, bty = "n")
+plot(effcalc(dil, t(matrix(Cq.SDM, nrow = 12, ncol = 7))), ylab = "Cq SDM method", 
+     CI = TRUE)
+mtext("E", side = 3, adj = 0, cex = 2)
 
-# Restore margins to default values.
-par(mar = def.mar)
+# Resore margin default values.
+par(mar = c(5.1, 4.1, 4.1, 2.1))
 \end{example}
 
 Finally, Cq values were plotted using the \code{layout} function 
 (Figure~\ref{figure:dilution_Cq}D~and~E). The Cq values and amplification vary 
-slightly between both methods. This is an expected behaviour as recently 
-described by \citet{ruijter_2013}. As shown in this case study, it is easy to 
-set-up a streamlined workflow for data read-in, pre-processing and analysis with 
-a few functions.
+slightly between both methods. This is an expected observation and is in 
+accordance to the findings by \citet{ruijter_2013}. As shown in this case study, 
+it is easy to set-up a streamlined workflow for data read-in, pre-processing and 
+analysis with a few functions.
 
 \subsection{Case study two -- qPCR and Melting Curve Analysis}
 
