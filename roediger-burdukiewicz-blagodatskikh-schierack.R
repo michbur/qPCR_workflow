@@ -108,7 +108,7 @@ require(dplyr)
 current.session <- sessionInfo()
 
 # Load the BioRad_qPCR_melt.rdml file form RDML package and assign the data to the
-# object BioRad.
+# object 'BioRad'.
 filename <- paste(path.package("RDML"), "/extdata/", "BioRad_qPCR_melt.rdml", 
 		  sep = "")
 BioRad <- RDML$new(filename)
@@ -119,9 +119,10 @@ BioRad <- RDML$new(filename)
 # probe (target) - 'EvaGreen'. 'Cy5' has: 'Cy5', 'Cy5-2' and 'Cy5-2_rr'.
 # each target has three sample types (positive, unknown, negative).
 # And each sample type has qPCR ('adp') and melting ('mdp') data.
-# Last column shows how many samples of this type at this experiment.
+# The last column shows the number of samples in an experiment.
 
 BioRad$AsDendrogram()
+
 # Fetch cycle dependent fluorescence for the EvaGreen channel and row 'D'
 # (that contains target 'Cy5-2' at channel 'Cy5') of the 
 # katG gene and aggregate the data in the object qPCR. 
@@ -142,8 +143,11 @@ mtext("Cycles", SOUTH <- 1, line = 3)
 mtext("Fluorescence", side = 2, line = 2)
 
 dev.off()
-# Detect positive samples - calculate Cq values by the cycle threshold method. 
-# The threshold signal level r was set to 10.
+
+# To detect positive samples we calculated the Cq values by the cycle threshold 
+# method. This method is implemented in the th.cyc function. The threshold signal 
+# level r was set to 10.
+
 Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
 {
   res <- CPP(qPCR[, 1], x, trans = TRUE, bg.range = c(2, 8),
@@ -168,7 +172,8 @@ melt <- BioRad$AsTable() %>%
 # Calculate the melting temperature with the diffQ function from the MBmca 
 # package. Use simple logical conditions to find out if a positive sample with 
 # the expected Tm of circa 54.5 degree Celsius is found. The result of the test
-# is assigned to the object 'positive'.
+# is assigned to the object 'Tm.Positive'.
+
 Tm.Positive <- matrix(nrow = ncol(melt) - 1,
                       byrow = TRUE,
                       dimnames = list(colnames(melt)[-1]),
@@ -187,6 +192,7 @@ Tm.Positive <- matrix(nrow = ncol(melt) - 1,
 # Cq.Positive && !Tm.Positive = Mutant
 # !Cq.Positive && !Tm.Positive = NTC
 # !Cq.Positive && Tm.Positive = Error
+
 results <- sapply(1:length(Cq.Positive[,1]), function(i) {
   if(Cq.Positive[i, 2] == 1 && Tm.Positive[i, 3] == 1)
     return("Wild-type")
@@ -197,6 +203,7 @@ results <- sapply(1:length(Cq.Positive[,1]), function(i) {
   if(Cq.Positive[i, 2] == 0 && Tm.Positive[i, 3] == 1)
     return("Error")
 })
+
 
 results.tab <- data.frame(cbind(Cq.Positive, Tm.Positive, results))
 names(results.tab) <- c("Cq", "M.Tub DNA", "Tm", "Height", 
@@ -211,7 +218,7 @@ results.tab
 
 pdf("amp_melt.pdf", width = 12, height = 6)
 
-# Convert the decision from the "results" object in a color code:
+# Convert the decision from the 'results' object in a color code:
 # Negative, black; Positive, red.
 
 color <- c(Tm.Positive[, 3] + 1)

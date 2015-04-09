@@ -65,7 +65,7 @@ experiments (see \CRANpkg{dpcR} for details).
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[clip=true, width=12cm]{figures/dpcR_sim.pdf} \caption{Scheme 
+  \includegraphics[clip=true,trim=0.2cm 0.5cm 0.2cm 0.1cm, width=12cm]{figures/dpcR_sim.pdf} \caption{Scheme 
 of a digital PCR experiment. \strong{(A)} A droplet digital PCR reaction 
 mix was formed in a BioRad QX100 Droplet Digital PCR System. The droplets (circa 
 100 $\mu$m in diameter) were subjected to custom made slide chambers for the 
@@ -170,7 +170,7 @@ to:
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics{figures/workflow.png}
+  \includegraphics[clip=true,trim=0cm 0cm 0cm 0cm]{figures/workflow.png}
   \caption{Exemplary workflow for quantitative PCR, digital PCR, quantitative 
 isothermal amplification and melting curve analysis experiments in R. Core 
 functionality is provided by the R software environment for statistical 
@@ -199,7 +199,7 @@ import have been described elsewhere \citep{RDCT2010c, rodiger_rkward_2012}. To
 keep the case study sections compact we have chosen to load datasets from the 
 \CRANpkg{qpcR} package \citep{ritz_2008} (v.~1.4.0) and the \CRANpkg{RDML} 
 package (v.~0.8-3) to our workspace. The \CRANpkg{chipPCR} package 
-\citep{roediger_2015_Bioinformatics} (v.~0.0.8-8) was used for data 
+\citep{roediger_2015_Bioinformatics} (v.~0.0.8-10) was used for data 
 preprocessing, quality control and  the calculation of the quantification cycle 
 (Cq).
 
@@ -282,7 +282,7 @@ $Cq_{SDM}$ and $Cq_{Ct}$ methods as shown next.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[clip=true, width=12cm]{figures/dilution_Cq.pdf}
+  \includegraphics[clip=truec,trim=0.9cm 0.7cm 0.9cm 5cm, width=12cm]{figures/dilution_Cq.pdf}
   \caption{Analysis of the amplification curve data of the \texttt{guescini1} 
 dataset. \strong{(A)} Raw data from the calibration curve samples were visually 
 inspected. The qPCR curves display a broad variation in plateau fluorescence 
@@ -457,7 +457,7 @@ are not informative in this context. Therefore we implemented a dendrogram like
 view (Figure~\ref{figure:RDML_dendrogram}). According to this, the file contains 
 different datasets, each with 3 samples, ('pos',  'ntc', 'unknown'). Only a 
 subset of the data was used in our case study and combined to the object 
-``qPCR''.
+\texttt{qPCR}.
 
 \begin{example}
 # Import the qPCR and melting curve data via the RDML package.
@@ -473,7 +473,7 @@ require(dplyr)
 current.session <- sessionInfo()
 
 # Load the BioRad_qPCR_melt.rdml file form RDML package and assign the data to the
-# object BioRad.
+# object 'BioRad'.
 filename <- paste(path.package("RDML"), "/extdata/", "BioRad_qPCR_melt.rdml", 
 		  sep = "")
 BioRad <- RDML$new(filename)
@@ -484,13 +484,13 @@ BioRad <- RDML$new(filename)
 # probe (target) - 'EvaGreen'. 'Cy5' has: 'Cy5', 'Cy5-2' and 'Cy5-2_rr'.
 # each target has three sample types (positive, unknown, negative).
 # And each sample type has qPCR ('adp') and melting ('mdp') data.
-# Last column shows how many samples of this type at this experiment.
+# The last column shows the number of samples in an experiment.
 
 BioRad$AsDendrogram()
 
 # Fetch cycle dependent fluorescence for the EvaGreen channel and row 'D'
 # (that contains target 'Cy5-2' at channel 'Cy5') of the 
-# katG gene and aggregate the data in the object qPCR. 
+# katG gene and aggregate the data in the object 'qPCR'. 
 
 qPCR <- BioRad$AsTable() %>%
   filter(target == "EvaGreen",
@@ -500,7 +500,7 @@ qPCR <- BioRad$AsTable() %>%
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[clip=true, width=13cm]{figures/RDML_dendrogram.pdf}
+  \includegraphics[clip=true,trim=4cm 1cm 0.9cm 2.75cm, width=12cm]{figures/RDML_dendrogram.pdf}
   \caption{File structure visualization of the RDML file 
 \file{BioRad\_qPCR\_melt\.rdml} form the \CRANpkg{RDML} package. The file was read 
 by the \code{RDML} function and the structure displayed as dendrogram by the 
@@ -537,7 +537,7 @@ mtext("Fluorescence", side = 2, line = 2)
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[clip=true, width=12cm]{figures/plotCurves.pdf}
+  \includegraphics[clip=true, trim=0.2cm 0.3cm 0.4cm 1.2cm, width=12cm]{figures/plotCurves.pdf}
   \caption{Analysis of the amplification curve data. The calibration curve 
 samples were inspected by the \code{plotCurves} function from the 
 \CRANpkg{chipPCR} package. The green color code indicates that the data contain 
@@ -554,7 +554,7 @@ positive and true negative samples by MCA (Figure~\ref{figure:amp_melt}A).
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[clip=true, width=14cm]{figures/amp_melt.pdf} 
+  \includegraphics[clip=true, trim=0.05cm 0.35cm 0.85cm 1cm, width=12cm]{figures/amp_melt.pdf} 
 \caption{Amplification curve plots and melting curve plots. \strong{(A)} The raw 
 amplification curve data were pre-processed with the \code{CPP} function prior 
 to visualization. To calculate the $T_{M}$ values from the raw melting curve 
@@ -569,22 +569,35 @@ relative fluorescence units; -d(RFU)/dT, negative first derivative of the meltin
 \end{figure}
 
 \begin{example}
-# Detect positive samples - calculate Cq values by the cycle threshold method. 
-# The threshold signal level r was set to 10.
+# To detect positive samples we calculated the Cq values by the cycle threshold 
+# method. This method is implemented in the th.cyc function. The threshold signal 
+# level r was set to 10.
 Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
 {
   res <- CPP(qPCR[, 1], x, trans = TRUE, bg.range = c(2, 8),
              method.reg = "least")[["y.norm"]]
-  # The th.cyc fails when the threshold exceeds maximum 
-  # observed fluorescence values, so it must be used with try()
+             
+  # The th.cyc fails when the threshold exceeds a maximum observed fluorescence 
+  # value. Therefore, we used try() to allow an error-recovery.
+  
   th.cycle <- try(th.cyc(qPCR[, 1], res, r = 10, linear = FALSE)[1], silent = TRUE)
+  
+  # In addition we used logical statements, which define if a 
   cq <- ifelse(class(th.cycle) != "try-error", as.numeric(th.cycle), NA)
   if(th.cycle > 35) cq <- NA
   pos <- !is.na(cq)
   c(Cq=cq, M.Tub_positive = pos)
 }
 ))
+\end{example}
 
+So far we were able to calculate the Cq values for all samples. Next we focused 
+on the analysis of the melting curve data. First, we fetched the melting curve 
+data from the \texttt{BioRad} object. Next, we focused on the important steps of 
+the melting curve analysis. A comprehensive overview on such analysis was 
+presented in \citet{roediger_RJ_2013}. 
+
+\begin{example}
 # Fetch temperature dependent fluorescence for the Cy5 channel of the 
 # probe 'Cy5-2' that can hybridize with Mycobacterium tuberculosis 
 # katG gene (codon 315) and aggregate the data in the object 'melt'.
@@ -595,7 +608,8 @@ melt <- BioRad$AsTable() %>%
 # Calculate the melting temperature with the diffQ function from the MBmca 
 # package. Use simple logical conditions to find out if a positive sample with 
 # the expected Tm of circa 54.5 degree Celsius is found. The result of the test
-# is assigned to the object 'positive'.
+# is assigned to the object 'Tm.Positive'.
+
 Tm.Positive <- matrix(nrow = ncol(melt) - 1,
                       byrow = TRUE,
                       dimnames = list(colnames(melt)[-1]),
@@ -607,13 +621,20 @@ Tm.Positive <- matrix(nrow = ncol(melt) - 1,
                                              res.Tm[2] > 80, 1, 0)
                         c(res.Tm[1], res.Tm[2], positive)
                       })))
+\end{example}
 
+An important part of an automatized report generation is the automatic 
+assignment of decisions (e.g., sample is a wild-type or mutant). Therefore, we 
+used again a simple logic.
+
+\begin{example}
 # Present the results in a tabular output as data.frame 'results.tab'.
 # Result of analysis logic is:
 # Cq.Positive && Tm.Positive = Wild-type
 # Cq.Positive && !Tm.Positive = Mutant
 # !Cq.Positive && !Tm.Positive = NTC
 # !Cq.Positive && Tm.Positive = Error
+
 results <- sapply(1:length(Cq.Positive[,1]), function(i) {
   if(Cq.Positive[i, 2] == 1 && Tm.Positive[i, 3] == 1)
     return("Wild-type")
@@ -624,7 +645,14 @@ results <- sapply(1:length(Cq.Positive[,1]), function(i) {
   if(Cq.Positive[i, 2] == 0 && Tm.Positive[i, 3] == 1)
     return("Error")
 })
+\end{example}
 
+We applied names of variables and factors to all the objects (e.g, 
+\texttt{Tm.Positive}, \texttt{Cq.Positive}) and aggregated them in the object 
+\texttt{results.tab}. The aim of doing this is to present the result in an easy 
+readable form.
+
+\begin{example}
 results.tab <- data.frame(cbind(Cq.Positive, Tm.Positive, results))
 names(results.tab) <- c("Cq", "M.Tub DNA", "Tm", "Height", 
                         "Tm positive", "Result")
@@ -643,7 +671,7 @@ shown). Finally, we plotted and printed the output of our melting curve
 analysis.
 
 \begin{example}
-# Convert the decision from the "results" object in a color code:
+# Convert the decision from the 'results' object in a color code:
 # Negative, black; Positive, red.
 
 color <- c(Tm.Positive[, 3] + 1)
@@ -742,7 +770,7 @@ the data.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[clip=true, width=14cm]{figures/qIA.pdf}
+  \includegraphics[clip=true, trim=0.15cm 0.55cm 1cm 1.3cm, width=12cm]{figures/qIA.pdf}
   \caption{Quantitative isothermal amplification by Helicase Dependent 
 Amplification (HDA). \strong{(A)} The raw data of the HDA (D1, undiluted, D2 
 $1:10$ diluted) exhibit some outliers (detector artifacts), an off-set of circa 
@@ -871,7 +899,7 @@ dens[4:6] / 5 * 1e-6
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[clip=true, width=7cm]{figures/dpcR.pdf}
+  \includegraphics[clip=true, trim=0.15cm 0.55cm 1cm 1.8cm, width=8cm]{figures/dpcR.pdf}
   \caption{\code{dpcr\_density} function from the \CRANpkg{dpcR} package used 
 for analysis of droplet digital PCR experiment. From 16800 counted partitions 
 ($n$) 4601 were positive ($k$). The chart presents the distribution of mean 
@@ -1029,7 +1057,7 @@ This is to be found in the clusters 2 and 3.
 
 \begin{figure}[htbp]
 \centering
-  \includegraphics[clip=true, width=12cm]{figures/dpcR_bioamp.pdf}
+  \includegraphics[clip=true, trim=0.1cm 0.4cm 0.7cm 0.3cm, width=12cm]{figures/dpcR_bioamp.pdf}
     \caption{Analysis of a droplet digital PCR experiment. We used the 
 \texttt{pds\_raw} dataset from the \CRANpkg{dpcR} package. All raw data were 
 generated with a BioRad QX100 Droplet Digital PCR System. Column one: Amplitude 
@@ -1084,7 +1112,7 @@ HTML, PDF).
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[clip=true, width=10cm]{figures/options.png}
+  \includegraphics[clip=true, trim=0.05cm 0cm 0.06cm 0.05cm, width=10cm]{figures/options.png}
   \caption{Deployment of R applications for the qPCR and dPCR experiments. 
 \strong{(A)} R is typically run from a desktop computer an operated by an 
 GUI/IDE application such as \pkg{RStudio} or \pkg{RKWard}. This approach 
