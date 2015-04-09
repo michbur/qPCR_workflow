@@ -312,7 +312,7 @@ coefficient, RFU, relative fluorescence units.}
 # amplification curves were smoothed by Savitzky-Golay smoothing.
 
 res.CPP <- cbind(gue[, 1], apply(gue[, -1], 2, function(x) {
-  CPP(gue[, 1], x, trans = TRUE, method.norm = "minm", method.reg = "least",
+  CPP(gue[, 1], x, trans = TRUE, method.norm = "minm", method.reg = "least", 
       bg.range = c(1,7))[["y.norm"]]
 }))
 
@@ -322,17 +322,16 @@ Cq.Ct <- apply(gue[, -1], 2, function(x)
   th.cyc(res.CPP[, 1], x, r = 0.05)[1])
 
 # Use the inder function from the chipPCR package to calculate the Cq values
-# by the SDM method.
+# by the SDM method. This will give a lot of output in the console.
 Cq.SDM <- apply(gue[, -1], 2, function(x)
-  summary(inder(res.CPP[, 1], x), print = FALSE)[2])
+  summary(inder(res.CPP[, 1], x))[2])
 
 # Fit a linear model to carry out a regression analysis.
 res.Cq <- lm(Cq.Ct ~ Cq.SDM)
 \end{example}
 
 To compare the $Cq_{SDM}$ and $Cq_{Ct}$ methods we performed a regression 
-analysis. The Cq methods are in a good agreement. However, the dispersion of 
-the 
+analysis. The Cq methods are in a good agreement. However, the dispersion of the 
 $Cq_{Ct}$ values appeared to be higher than in the $Cq_{SDM}$ values 
 (Figure~~\ref{figure:dilution_Cq}C).
 
@@ -475,8 +474,19 @@ current.session <- sessionInfo()
 
 # Load the BioRad_qPCR_melt.rdml file form RDML package and assign the data to the
 # object BioRad.
-filename <- paste(path.package("RDML"), "/extdata/", "BioRad_qPCR_melt.rdml", sep = "")
+filename <- paste(path.package("RDML"), "/extdata/", "BioRad_qPCR_melt.rdml", 
+		  sep = "")
 BioRad <- RDML$new(filename)
+
+# The structure of the file can be overviewed by AsDendrogram() function.
+# We can see that our experiment contains two detection channels (Figure 4).
+# ('EvaGreen' and 'Cy5' at 'Run ID'). 'EvaGreen' channel has one
+# probe (target) - 'EvaGreen'. 'Cy5' has: 'Cy5', 'Cy5-2' and 'Cy5-2_rr'.
+# each target has three sample types (positive, unknown, negative).
+# And each sample type has qPCR ('adp') and melting ('mdp') data.
+# Last column shows how many samples of this type at this experiment.
+
+BioRad$AsDendrogram()
 
 # Fetch cycle dependent fluorescence for the EvaGreen channel and row 'D'
 # (that contains target 'Cy5-2' at channel 'Cy5') of the 
@@ -517,25 +527,12 @@ the \code{CPP} function.). The curvatures of ``D1\_Alm12\ldots'' and
 of importance during this stage of the analysis.
 
 \begin{example}
-# Use plotCurves function to get an overview of the amplification curve samples.
+# Use plotCurves function to get an overview of the amplification curve samples
+# (Figure 5).
 
 plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
-
-# Detect positive samples - calculate Cq values by the cycle threshold method. 
-# The threshold signal level r was set to 10.
-Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
-{
-  res <- CPP(qPCR[, 1], x, trans = TRUE, bg.range = c(2, 8),
-             method.reg = "least")[["y.norm"]]
-  # The th.cyc fails when the threshold exceeds maximum 
-  # observed fluorescence values, so it must be used with try()
-  th.cycle <- try(th.cyc(qPCR[, 1], res, r = 10)[1], silent = TRUE)
-  cq <- ifelse(class(th.cycle) != "try-error", as.numeric(th.cycle), NA)
-  pos <- !is.na(cq)
-  c(Cq=cq, M.Tub_positive = pos)
-}
-))
-Cq.Positive
+mtext("Cycles", SOUTH <- 1, line = 3)
+mtext("Fluorescence", side = 2, line = 2)
 \end{example}
 
 \begin{figure}[htbp]
@@ -557,7 +554,7 @@ positive and true negative samples by MCA (Figure~\ref{figure:amp_melt}A).
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[clip=true, width=14.5cm]{figures/amp_melt.pdf} 
+  \includegraphics[clip=true, width=14cm]{figures/amp_melt.pdf} 
 \caption{Amplification curve plots and melting curve plots. \strong{(A)} The raw 
 amplification curve data were pre-processed with the \code{CPP} function prior 
 to visualization. To calculate the $T_{M}$ values from the raw melting curve 
@@ -572,12 +569,28 @@ relative fluorescence units; -d(RFU)/dT, negative first derivative of the meltin
 \end{figure}
 
 \begin{example}
+# Detect positive samples - calculate Cq values by the cycle threshold method. 
+# The threshold signal level r was set to 10.
+Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
+{
+  res <- CPP(qPCR[, 1], x, trans = TRUE, bg.range = c(2, 8),
+             method.reg = "least")[["y.norm"]]
+  # The th.cyc fails when the threshold exceeds maximum 
+  # observed fluorescence values, so it must be used with try()
+  th.cycle <- try(th.cyc(qPCR[, 1], res, r = 10, linear = FALSE)[1], silent = TRUE)
+  cq <- ifelse(class(th.cycle) != "try-error", as.numeric(th.cycle), NA)
+  if(th.cycle > 35) cq <- NA
+  pos <- !is.na(cq)
+  c(Cq=cq, M.Tub_positive = pos)
+}
+))
+
 # Fetch temperature dependent fluorescence for the Cy5 channel of the 
-# probe that can hybridize with Mycobacterium tuberculosis katG gene (codon 315)
-# and aggregate the data in the object 'melt'.
+# probe 'Cy5-2' that can hybridize with Mycobacterium tuberculosis 
+# katG gene (codon 315) and aggregate the data in the object 'melt'.
 melt <- BioRad$AsTable() %>%
-        filter(target == "Cy5-2")  %>% 
-        BioRad$GetFData(., data.type = "mdp")
+  filter(target == "Cy5-2")  %>% 
+  BioRad$GetFData(., data.type = "mdp")
 
 # Calculate the melting temperature with the diffQ function from the MBmca 
 # package. Use simple logical conditions to find out if a positive sample with 
@@ -595,14 +608,13 @@ Tm.Positive <- matrix(nrow = ncol(melt) - 1,
                         c(res.Tm[1], res.Tm[2], positive)
                       })))
 
-
 # Present the results in a tabular output as data.frame 'results.tab'.
 # Result of analysis logic is:
 # Cq.Positive && Tm.Positive = Wild-type
 # Cq.Positive && !Tm.Positive = Mutant
 # !Cq.Positive && !Tm.Positive = NTC
 # !Cq.Positive && Tm.Positive = Error
-results <- sapply(1:length(Cq.Positive[, 1]), function(i) {
+results <- sapply(1:length(Cq.Positive[,1]), function(i) {
   if(Cq.Positive[i, 2] == 1 && Tm.Positive[i, 3] == 1)
     return("Wild-type")
   if(Cq.Positive[i, 2] == 1 && Tm.Positive[i, 3] == 0)
@@ -631,7 +643,7 @@ shown). Finally, we plotted and printed the output of our melting curve
 analysis.
 
 \begin{example}
-# Convert the decision from the results.tab object in a color code:
+# Convert the decision from the "results" object in a color code:
 # Negative, black; Positive, red.
 
 color <- c(Tm.Positive[, 3] + 1)
@@ -652,7 +664,8 @@ matplot(melt[, 1], melt[, -1], type = "l", col = color,
         lty = 1, xlab = "Temperature [degree Celsius]", ylab = "RFU")
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 
-plot(NA, NA, xlim = c(35, 95), ylim = c(-15, 120), xlab = "Temperature [degree Celsius]", 
+plot(NA, NA, xlim = c(35, 95), ylim = c(-15, 120), 
+     xlab = "Temperature [degree Celsius]", 
      ylab = "-d(RFU)/dT")
 mtext("C", cex = 2, side = 3, adj = 0, font = 2)
 
@@ -729,7 +742,7 @@ the data.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[clip=true, width=14.5cm]{figures/qIA.pdf}
+  \includegraphics[clip=true, width=14cm]{figures/qIA.pdf}
   \caption{Quantitative isothermal amplification by Helicase Dependent 
 Amplification (HDA). \strong{(A)} The raw data of the HDA (D1, undiluted, D2 
 $1:10$ diluted) exhibit some outliers (detector artifacts), an off-set of circa 
@@ -746,17 +759,18 @@ level. MFI, mean fluorescence intensity.}
 
 \begin{example}
 # Drawn in an 2-by-1 array on the device by two columns and one row.
-par(mfrow = c(2, 1))
+par(mfrow = c(1, 2))
 
 # Plot the raw data from the C81 dataset to the first array and add
-# a legend. Note: The abscissa values (time in seconds) was divided 
+# a legend. Note: The abcsissa values (time in seconds) was divided 
 # by 60 (C81[, i] / 60) to convert to minutes.
 plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "MFI")
 mtext("A", cex = 2, side = 3, adj = 0, font = 2)
 lapply(c(2, 4), function(i) {
   lines(C81[, i] / 60, C81[, i + 1], type = "b", pch = 20, col = i - 1)
 })
-legend(10, 0.8, c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1,3), bty = "n")
+legend("topleft", c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 3), 
+       bty = "n")
 
 # Prepare a plot on the second array for the pre-processed data.
 plot(NA, NA, xlim = c(0, 120), ylim = c(0, 1.2), xlab = "Time (min)", ylab = "MFI")
@@ -776,7 +790,6 @@ defined by bare eye to be between the $1^{th}$ and $190^{th}$ data point
 # Apply the CPP functions to pro-process the raw data.1) Baseline data to zero, 
 # 2) Smooth data with a spline, 3) Remove outliers in background range between 
 # entry 1 and 190. Assign the results of the analysis to the object 'res'.
-
 res <- lapply(c(2, 4), function(i) {
   y.s <- CPP(C81[, i] / 60, C81[, i + 1],
              trans = TRUE, 
@@ -794,9 +807,8 @@ res <- lapply(c(2, 4), function(i) {
 # Add the cycle threshold time from the object 'res' to the plot.
 
 abline(h = 0.05, lty = 2)
-text(10, 0.55, "Cq.t:")
-legend(10, 0.5, paste(c("D1: ", "D2: "), res), pch = 19, col = c(1, 3), 
-       bty = "n")
+legend("topleft", paste(c("D1 Cq.t: ", "D2 Cq.t: "), res), pch = 19, 
+       col = c(1, 3), bty = "n")
 \end{example}
 
 The pre-processed data were subjected to the analysis of the $Cq_{t}$ values. 
@@ -843,14 +855,16 @@ sample concentration.
 require(dpcR)
 
 # Analysis of a digital PCR experiment. The density estimation.
-# In our in silico experiment we counted in total 16800 partitions (n). 
+# In our in-silico experiment we counted in total 16800 partitions (n). 
 # Thereof, 4601 were positive (k).
-
-(dens <- dpcr_density(k = 4601, n = 16800, average = TRUE, methods = "wilson",
-		      conf.level = 0.95))
-
+k <- 4601
+n <- 16800
+(dens <- dpcr_density(k = k, n = n, average = TRUE, methods = "wilson", 
+                      conf.level = 0.95))
+legend("topleft", paste("k:", k,"\nn:", n))
+#dev.off()
 # Let us assume, that every partition has roughly a volume of 5 nL.
-# The total concentration (and its confidence intervals) in molecules/mL is
+# The total concentration (and its confidence intervals) in molecules/ml is
 # (the factor 1e-6 is used for the conversion from nL to mL):
 dens[4:6] / 5 * 1e-6
 \end{example}
@@ -963,18 +977,19 @@ wells <- c("A02", "B02", "C02", "D02", "G04")
 # or the method proposed by Corbisier et al. (2015).
 par(mfrow = c(5,3))
 
-# The function bioamp was used in a loop to extract the number of positive and negative 
-# partitions from the sample files. The results were assigned to the object 'res' and plotted.
-# Horizontal and vertical lines show the threshold borders as defined by the QX100 system. 
+# The function bioamp was used in a loop to extract the number of positive and 
+# negative partitions from the sample files. The results were assigned to the 
+# object 'res' and plotted.
 
 for (i in 1L:length(wells)) {
   cluster.info <- unique(pds_raw[wells[i]][[1]]["Cluster"])
   res <- bioamp(data = pds_raw[wells[i]][[1]], amp_x = 2, amp_y = 1, 
-		main = paste("Well", wells[i]), xlab = "Amplitude of ileS (FAM)",
-		ylab = "Amplitude of styA (HEX)", xlim = c(500,4700), 
-		ylim = c(0,3300), pch = 19)
-
-  legend("topright", as.character(cluster.info[, 1]), col = cluster.info[, 1], pch = 19)
+                main = paste("Well", wells[i]), xlab = "Amplitude of ileS (FAM)",
+                ylab = "Amplitude of styA (HEX)", xlim = c(500,4700), 
+                ylim = c(0,3300), pch = 19)
+  
+  legend("topright", as.character(cluster.info[, 1]), col = cluster.info[, 1], 
+	 pch = 19)
 \end{example}
 
 Next we used the results from the object \texttt{res} to get the information 
@@ -982,29 +997,33 @@ about the number positive partitions for the  plasmid DNA marker \textit{styA}.
 This is to be found in the clusters 2 and 3.
 
 \begin{example}
-  # Counts for the positive clusters 2 and 3 were assigned to new objects and further used by
-  # the function dpcr_density to calculate the number of molecules per partition and the 
-  # confidence intervals. The results were plotted as density plot.
+  # Counts for the positive clusters 2 and 3 were assigned to new objects 
+  # and further used by the function dpcr_density to calculate the number 
+  # of molecules per partition and the confidence intervals. The results 
+  # were plotted as density plot.
+  
   k.tmp <- sum(res[1, "Cluster.2"], res[1, "Cluster.3"])
   # Counts for all clusters
+  
   n.tmp <- sum(res[1, ])
   
-  dens <- dpcr_density(k = k.tmp, n = n.tmp, 
-			average = TRUE, methods = "wilson")
-  legend("topright", paste("k:", k.tmp,"\nn:", n.tmp))
+  if(i < 5) x.lim <- c(0.065, 0.115) else x.lim <- c(0, 0.115)
+  dens <- dpcr_density(k = k.tmp, n = n.tmp, average = TRUE, methods = "wilson", 
+                       conf.level = 0.95, xlim = x.lim, bars = FALSE)
+  legend("topright", paste("k:", k.tmp,"\nn:", n.tmp), bty = "n")
   
-  # Finally, the concentration of the molecules was calculate with the volume used in 
-  # the QX100 system and as proposed by Corbisier et al. (2015).The results were added
-  # as barplot with the confidence intervals.
+  # Finally, the concentration of the molecules was calculate with the volume 
+  # used in the QX100 system and as proposed by Corbisier et al. (2015). The 
+  # results were added as barplot with the confidence intervals.
   
-  res.conc <- rbind(original = dens[4:6] /  0.90072 * 1e-6, 
-		    corrected = dens[4:6] / 0.834 * 1e-6)
+  res.conc <- rbind(original = dens[4:6] /  0.90072, 
+                    corrected = dens[4:6] / 0.834)
   barplot(res.conc[, 1], col = c("white","grey"), 
-	  names = c("Bio-Rad", "Corbisier"), 
-	  main = "Influence of\nDroplet size", ylab = "molecules/ml", 
-	  ylim = c(0,1.5*10E-8))
-    arrows(c(0.7,1.9), res.conc[, 2], c(0.7,1.9), res.conc[, 3], angle = 90, 
-	   code = 3, lwd = 2)
+          names = c("Bio-Rad", "Corbisier"), 
+          main = "Influence of\nDroplet size", ylab = "molecules/nL", 
+          ylim = c(0,1.5*10E-2))
+  arrows(c(0.7,1.9), res.conc[, 2], c(0.7,1.9), res.conc[, 3], angle = 90, 
+         code = 3, lwd = 2)
 }
 \end{example}
 

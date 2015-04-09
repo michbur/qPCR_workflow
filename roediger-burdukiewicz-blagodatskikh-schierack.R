@@ -94,6 +94,7 @@ dev.off()
 #################################
 # Case study two
 #################################
+pdf("RDML_dendrogram.pdf", width = 12, height = 8)
 # Import the qPCR and melting curve data via the RDML package.
 # Load the chipPCR package for the pre-processing and curve data quality
 # analysis and the MBmca package for the melting curve analysis.
@@ -108,20 +109,19 @@ current.session <- sessionInfo()
 
 # Load the BioRad_qPCR_melt.rdml file form RDML package and assign the data to the
 # object BioRad.
-filename <- paste(path.package("RDML"), "/extdata/", "BioRad_qPCR_melt.rdml", sep = "")
+filename <- paste(path.package("RDML"), "/extdata/", "BioRad_qPCR_melt.rdml", 
+		  sep = "")
 BioRad <- RDML$new(filename)
 
-# Structure of experiment can be overviewed by AsDendrogram() function
-# We can see that our experiment contains two detection channels
+# The structure of the file can be overviewed by AsDendrogram() function.
+# We can see that our experiment contains two detection channels (Figure 4).
 # ('EvaGreen' and 'Cy5' at 'Run ID'). 'EvaGreen' channel has one
 # probe (target) - 'EvaGreen'. 'Cy5' has: 'Cy5', 'Cy5-2' and 'Cy5-2_rr'.
 # each target has three sample types (positive, unknown, negative).
 # And each sample type has qPCR ('adp') and melting ('mdp') data.
 # Last column shows how many samples of this type at this experiment.
 
-pdf("RDML_dendrogram.pdf", width = 12, height = 8)
 BioRad$AsDendrogram()
-dev.off()
 # Fetch cycle dependent fluorescence for the EvaGreen channel and row 'D'
 # (that contains target 'Cy5-2' at channel 'Cy5') of the 
 # katG gene and aggregate the data in the object qPCR. 
@@ -131,12 +131,15 @@ qPCR <- BioRad$AsTable() %>%
          grepl("^D", position))  %>% 
   BioRad$GetFData(.)
 
-# Use plotCurves function to get an overview of the amplification curve samples.
+dev.off()
+
 pdf("plotCurves.pdf", width = 6, height = 4)
+# Use plotCurves function to get an overview of the amplification curve samples
+# (Figure 5).
 
 plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
-  mtext("Cycles", SOUTH<-1, line = 3)
-  mtext("Fluorescence", side = 2, line = 2)
+mtext("Cycles", SOUTH <- 1, line = 3)
+mtext("Fluorescence", side = 2, line = 2)
 
 dev.off()
 # Detect positive samples - calculate Cq values by the cycle threshold method. 
@@ -229,7 +232,8 @@ matplot(melt[, 1], melt[, -1], type = "l", col = color,
         lty = 1, xlab = "Temperature [degree Celsius]", ylab = "RFU")
 mtext("B", cex = 2, side = 3, adj = 0, font = 2)
 
-plot(NA, NA, xlim = c(35, 95), ylim = c(-15, 120), xlab = "Temperature [degree Celsius]", 
+plot(NA, NA, xlim = c(35, 95), ylim = c(-15, 120), 
+     xlab = "Temperature [degree Celsius]", 
      ylab = "-d(RFU)/dT")
 mtext("C", cex = 2, side = 3, adj = 0, font = 2)
 
@@ -243,7 +247,6 @@ dev.off()
 #################################
 
 pdf("qIA.pdf", width = 12, height = 6)
-# First we had a look at the C81 data set with the str function.
 
 str(C81)
 
@@ -285,8 +288,8 @@ res <- lapply(c(2, 4), function(i) {
 # Add the cycle threshold time from the object 'res' to the plot.
 
 abline(h = 0.05, lty = 2)
-legend("topleft", paste(c("D1 Cq.t: ", "D2 Cq.t: "), res), pch = 19, col = c(1, 3), 
-       bty = "n")
+legend("topleft", paste(c("D1 Cq.t: ", "D2 Cq.t: "), res), pch = 19, 
+       col = c(1, 3), bty = "n")
 dev.off()
 
 #################################
@@ -302,7 +305,7 @@ require(dpcR)
 k <- 4601
 n <- 16800
 (dens <- dpcr_density(k = k, n = n, average = TRUE, methods = "wilson", 
-		      conf.level = 0.95))
+                      conf.level = 0.95))
 legend("topleft", paste("k:", k,"\nn:", n))
 #dev.off()
 # Let us assume, that every partition has roughly a volume of 5 nL.
@@ -352,44 +355,48 @@ wells <- c("A02", "B02", "C02", "D02", "G04")
 # calculated on according to the droplet volume as defined in the QX100 system,
 # or the method proposed by Corbisier et al. (2015).
 par(mfrow = c(5,3))
-
-# The function bioamp was used in a loop to extract the number of positive and negative 
-# partitions from the sample files. The results were assigned to the object 'res' and plotted.
-# Horizontal and vertical lines show the threshold borders as defined by the QX100 system. 
-
+ 
+# The function bioamp was used in a loop to extract the number of positive and 
+# negative partitions from the sample files. The results were assigned to the 
+# object 'res' and plotted.
 
 for (i in 1L:length(wells)) {
   cluster.info <- unique(pds_raw[wells[i]][[1]]["Cluster"])
   res <- bioamp(data = pds_raw[wells[i]][[1]], amp_x = 2, amp_y = 1, 
-		main = paste("Well", wells[i]), xlab = "Amplitude of ileS (FAM)",
-		ylab = "Amplitude of styA (HEX)", xlim = c(500,4700), 
-		ylim = c(0,3300), pch = 19)
-
-  legend("topright", as.character(cluster.info[, 1]), col = cluster.info[, 1], pch = 19)
+                main = paste("Well", wells[i]), xlab = "Amplitude of ileS (FAM)",
+                ylab = "Amplitude of styA (HEX)", xlim = c(500,4700), 
+                ylim = c(0,3300), pch = 19)
   
-  # Counts for the positive clusters 2 and 3 were assigned to new objects and further used by
-  # the function dpcr_density to calculate the number of molecules per partition and the 
-  # confidence intervals. The results were plotted as density plot.
+  legend("topright", as.character(cluster.info[, 1]), col = cluster.info[, 1], 
+	 pch = 19)
+	 
+  # Counts for the positive clusters 2 and 3 were assigned to new objects 
+  # and further used by the function dpcr_density to calculate the number 
+  # of molecules per partition and the confidence intervals. The results 
+  # were plotted as density plot.
+  
   k.tmp <- sum(res[1, "Cluster.2"], res[1, "Cluster.3"])
   # Counts for all clusters
+  
   n.tmp <- sum(res[1, ])
   
   if(i < 5) x.lim <- c(0.065, 0.115) else x.lim <- c(0, 0.115)
   dens <- dpcr_density(k = k.tmp, n = n.tmp, average = TRUE, methods = "wilson", 
-		       conf.level = 0.95, xlim = x.lim, bars = FALSE)
+                       conf.level = 0.95, xlim = x.lim, bars = FALSE)
   legend("topright", paste("k:", k.tmp,"\nn:", n.tmp), bty = "n")
   
-  # Finally, the concentration of the molecules was calculate with the volume used in 
-  # the QX100 system and as proposed by Corbisier et al. (2015). The results were added
-  # as barplot with the confidence intervals.
+  # Finally, the concentration of the molecules was calculate with the volume 
+  # used in the QX100 system and as proposed by Corbisier et al. (2015). The 
+  # results were added as barplot with the confidence intervals.
+  
   res.conc <- rbind(original = dens[4:6] /  0.90072, 
-		    corrected = dens[4:6] / 0.834)
+                    corrected = dens[4:6] / 0.834)
   barplot(res.conc[, 1], col = c("white","grey"), 
-	  names = c("Bio-Rad", "Corbisier"), 
-	  main = "Influence of\nDroplet size", ylab = "molecules/nL", 
-	  ylim = c(0,1.5*10E-2))
-    arrows(c(0.7,1.9), res.conc[, 2], c(0.7,1.9), res.conc[, 3], angle = 90, 
-	   code = 3, lwd = 2)
+          names = c("Bio-Rad", "Corbisier"), 
+          main = "Influence of\nDroplet size", ylab = "molecules/nL", 
+          ylim = c(0,1.5*10E-2))
+  arrows(c(0.7,1.9), res.conc[, 2], c(0.7,1.9), res.conc[, 3], angle = 90, 
+         code = 3, lwd = 2)
 }
 dev.off()
 
