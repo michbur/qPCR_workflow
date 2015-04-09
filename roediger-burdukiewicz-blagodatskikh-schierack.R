@@ -6,7 +6,7 @@ if(!grepl("figures", getwd()))
 # Case study one
 #################################
 # Load the required packages for the data import and analysis.
-# Load the chipPCR package for the pre-processing and curve data quality
+# # Load the chipPCR package for the pre-processing and curve data quality
 # analysis and load the qpcR package as data resource.
 require(chipPCR)
 require(qpcR)
@@ -119,9 +119,9 @@ BioRad <- RDML$new(filename)
 # And each sample type has qPCR ('adp') and melting ('mdp') data.
 # Last column shows how many samples of this type at this experiment.
 
-#pdf("RDML_dendrogram.pdf", width = 12, height = 8)
+pdf("RDML_dendrogram.pdf", width = 12, height = 8)
 BioRad$AsDendrogram()
-#dev.off()
+dev.off()
 # Fetch cycle dependent fluorescence for the EvaGreen channel and row 'D'
 # (that contains target 'Cy5-2' at channel 'Cy5') of the 
 # katG gene and aggregate the data in the object qPCR. 
@@ -147,8 +147,9 @@ Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
              method.reg = "least")[["y.norm"]]
   # The th.cyc fails when the threshold exceeds maximum 
   # observed fluorescence values, so it must be used with try()
-  th.cycle <- try(th.cyc(qPCR[, 1], res, r = 10)[1], silent = TRUE)
+  th.cycle <- try(th.cyc(qPCR[, 1], res, r = 10, linear = FALSE)[1], silent = TRUE)
   cq <- ifelse(class(th.cycle) != "try-error", as.numeric(th.cycle), NA)
+  if(th.cycle > 35) cq <- NA
   pos <- !is.na(cq)
   c(Cq=cq, M.Tub_positive = pos)
 }
@@ -257,7 +258,7 @@ mtext("A", cex = 2, side = 3, adj = 0, font = 2)
 lapply(c(2, 4), function(i) {
   lines(C81[, i] / 60, C81[, i + 1], type = "b", pch = 20, col = i - 1)
 })
-legend("bottomleft", c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 3), 
+legend("topleft", c("D1: 1x", "D2: 1:10 diluted sample"), pch = 19, col = c(1, 3), 
        bty = "n")
 
 # Prepare a plot on the second array for the pre-processed data.
@@ -298,7 +299,6 @@ require(dpcR)
 # Analysis of a digital PCR experiment. The density estimation.
 # In our in-silico experiment we counted in total 16800 partitions (n). 
 # Thereof, 4601 were positive (k).
-#pdf("dpcR.pdf")
 k <- 4601
 n <- 16800
 (dens <- dpcr_density(k = k, n = n, average = TRUE, methods = "wilson", 

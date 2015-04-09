@@ -22,7 +22,7 @@ available. In the paper, we describe exemplary workflows for the analysis of
 qPCR, qIA or dPCR experiments including the analysis of melting curve data. Our 
 analysis relies entirely on R packages available from public repositories. 
 Additionally, we provide information related to standardized and reproducible 
-research with R.
+research.
 }
 
 \section{Introduction}
@@ -63,7 +63,7 @@ Poisson statistics. Recently, we have published the \CRANpkg{dpcR} package at
 CRAN, which is the first open source R software package for the analysis of dPCR 
 experiments (see \CRANpkg{dpcR} for details).
 
-\begin{figure}[h]
+\begin{figure}[htbp]
   \centering
   \includegraphics[clip=true, width=12cm]{figures/dpcR_sim.pdf} \caption{Scheme 
 of a digital PCR experiment. \strong{(A)} A droplet digital PCR reaction 
@@ -662,21 +662,21 @@ lapply(2L:ncol(melt), function(i)
 \end{example}
 
 According to the analysis by MCA the samples ``D07\_katG315\ldots'' and 
-``D08\_katG315\ldots'' were the only positive. The remaining samples appeared to 
-be positive in the amplification plot in Figure~\ref{figure:plotCurves} due to 
-primer-dimer formation or sample contamination.
+``D08\_katG315\ldots'' were the only positive samples. The remaining samples 
+appeared to be positive in the amplification plot in 
+Figure~\ref{figure:plotCurves} due to primer-dimer formation or sample 
+contamination.
 
 \subsection{Case study three -- Isothermal Amplification}
 
-Isothermal amplification is an alternative to PCR, which uses a constant 
-temperature rather than cycling through denaturation, annealing and extension 
-steps \citep{rodiger_nucleic_2014}. The corresponding signal is monitored 
-continuously on a time basis. Often the abscissa values are not uniformly 
-spaced\footnote{The \texttt{C81} example datasets chosen in this case study are 
-not uniformly spaced. The \code{CPP} function gives a warning in such a case.}. 
-In qIA the $Cq$ values are dependent on the time instead of cycles. In this 
-study we used the \code{th.cyc} function from the \CRANpkg{chipPCR} package to 
-determine the time ($Cq_{t}$) required to reach a defined threshold signal 
+Isothermal amplification is an alternative nucleic acid amplification method, 
+which uses a constant temperature rather than cycling through denaturation, 
+annealing and extension steps \citep{rodiger_nucleic_2014}. The signal is 
+monitored continuously on a time basis. Often the abscissa values are not 
+uniformly spaced in qIA. Our \code{CPP} function gives a warning in such 
+a case. In qIA the $Cq$ values are dependent on the time instead of cycles. In 
+this study we used the \code{th.cyc} function from the \CRANpkg{chipPCR} package 
+to determine the time ($Cq_{t}$) required to reach a defined threshold signal 
 level.
 
 We performed a quantitative isothermal amplification (qIA) with the plasmid 
@@ -702,8 +702,9 @@ concentrations (stock and 1:10 diluted stock) of input DNA were used in the HDA.
 Similar to the previous case studies, we first prepared the plot of the data. 
 Since the raw data showed a slight negative trend and an off-set of circa 0.45 
 MFI (mean fluorescence intensity) it was necessary 
-to pre-process the raw data (Figure~\ref{figure:qIA}A). First we had a look at 
-the \texttt{C81} dataset with the \code{str} function.
+to pre-process the raw data (Figure~\ref{figure:qIA}A).
+
+First we had a look at the \texttt{C81} dataset with the \code{str} function.
 
 \begin{example}
 str(C81)
@@ -715,11 +716,16 @@ str(C81)
  $ MFI.D2: num  0.77 0.523 0.514 0.51 0.508 ...
 \end{example}
 
-The data are arranged in a data frame. The first column contains the measure 
-point (cycle) and the consecutive columns the time stamps (seconds) and the 
-signal hight (as MFI). A brief look at the time stamps (e.g., ``t.D1'') showed 
-that the data were not measured equidistant. Next we plotted and analysed the 
-data. 
+\texttt{C81} is a data frame. The first column contains the measure points 
+(Cycle) and the consecutive columns contain the time stamps (e.g., ``\$ t.D1'', 
+in seconds according to the \CRANpkg{chipPCR} manual) and the signal hight (``\$ 
+MFI.D1'', as mean fluorescence intensity (MFI)). A brief look at the time stamps 
+showed that the data are not uniformly spaced. The warning message by the 
+\code{CPP} functions is just a reminder for to user to take care during the 
+pre-processing. Methods like smoothing might cause artifacts 
+\citep{Spiess_2014}. Since we know that the HDA is a time-dependent reaction we 
+do not have a use for the discrete measure points. Next we plotted and analysed 
+the data. 
 
 \begin{figure}[htbp]
   \centering
@@ -849,7 +855,7 @@ require(dpcR)
 dens[4:6] / 5 * 1e-6
 \end{example}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
   \centering
   \includegraphics[clip=true, width=7cm]{figures/dpcR.pdf}
   \caption{\code{dpcr\_density} function from the \CRANpkg{dpcR} package used 
@@ -1002,7 +1008,7 @@ This is to be found in the clusters 2 and 3.
 }
 \end{example}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
   \includegraphics[clip=true, width=12cm]{figures/dpcR_bioamp.pdf}
     \caption{Analysis of a droplet digital PCR experiment. We used the 
@@ -1014,21 +1020,26 @@ dashed line ({\textbf{\textendash\textendash}}).
 $Cluster~1$~\textcolor{black}{\textbf{\textbullet}}, 
 $Cluster~2$~\textcolor{red}{\textbf{\textbullet}}~=~Target, 
 $Cluster~3$~\textcolor{green}{\textbf{\textbullet}}~=~Target, 
-$Cluster~4$~\textcolor{blue}{\textbf{\textbullet}}. Well~A01~-~D04 are replicate 
-measurements and Well~G04 is the negative control; Column two: Density function 
-with showing the number of molecules per partition. All replicates had similar 
-numbers of counted positive partitions ($k$) and total number of partitions ($n$); 
-Column three: Concentration of DNA molecules based on the volume used by the 
-BioRad QX100 Droplet Digital PCR System and the volume proposed by 
-\citet{corbisier_2015}. 
+$Cluster~4$~\textcolor{blue}{\textbf{\textbullet}}. Well~A01~-~D04 are 
+replicate measurements and Well~G04 is the negative control; Column two: Density 
+function with showing the number of molecules per partition. All replicates had 
+similar numbers of counted positive partitions ($k$) and total number of 
+partitions ($n$); Column three: Concentration of DNA molecules based on the 
+volume used by the BioRad QX100 Droplet Digital PCR System and the volume 
+proposed by \citet{corbisier_2015}. $n$, number of total partitions; $k$, number 
+of positive partitions; styA, styrene monooxygenase; ileS, isoleucyl-tRNA 
+synthetase; FAM, Fluorescein channel; HEX, hexachlorofluorescein. 
     }  \label{figure:dpcR_bioamp}
 \end{figure}
 
 Our results show, that the replicates in 
-Figure~\ref{figure:dpcR_bioamp}~A01~-~D01 vary. However, the variation is within 
-a similar range (Figure~\ref{figure:dpcR_bioamp}~column~2). The positive samples 
+Figure~\ref{figure:dpcR_bioamp}~A01~-~D01 vary. However, the variation is 
+within 
+a similar range (Figure~\ref{figure:dpcR_bioamp}~column~2). The positive 
+samples 
 differ significantly from the negative control 
-(Figure~\ref{figure:dpcR_bioamp}~G04). As proposed by \citet{corbisier_2015} the 
+(Figure~\ref{figure:dpcR_bioamp}~G04). As proposed by \citet{corbisier_2015} 
+the 
 analysis with the non-corrected droplet volume leads to an underestimation of 
 sample concentrations (Figure~\ref{figure:dpcR_bioamp}~column~3). However, our 
 case studies shows, that the R environment can be used to circumvent problems of 
@@ -1045,14 +1056,14 @@ means for statistical analysis and visualization. The software is not tied to a
 vendor or specific application (e.g., chamber or droplet based digital PCR, 
 capillary or plate qPCR). It should be quite easy even for an inexperienced user 
 to define a workflow and to set up an environment for specific needs in a broad 
-range of technical settings (Figure~\ref{figure:options}). R enforces no 
-monolithic integration. We claim that the modular structure of R packages allows 
+range of technical settings (Figure~\ref{figure:options}). This environment enforces no 
+monolithic integration. We claim that the modular structure allows 
 the user to perform flexible data analysis, adjusted to their needs and to 
 design frameworks for high-throughput analysis. Furthermore, R enables the user 
 to access and reuse code for the creation of reports in various formats (e.g., 
 HTML, PDF).
 
-\begin{figure}[h]
+\begin{figure}[htbp]
   \centering
   \includegraphics[clip=true, width=10cm]{figures/options.png}
   \caption{Deployment of R applications for the qPCR and dPCR experiments. 
@@ -1077,13 +1088,13 @@ Most of the software is cross-platform open source software. Despite the fact
 that R is free of charge, it is quite possible to build commercial applications. 
 The packages cover implementation of novel approaches and peer-reviewed analysis 
 methods. R packages are an open environment to adopt to the growing knowledge in 
-life sciences and medical sciences. Therefore, we argue that R may provide a 
+life sciences and medical sciences. Therefore, we argue that this environment may provide a 
 structure for standardized nomenclature and serve as reference in qPCR and dPCR 
 analysis. Speaking about openness, it needs to be emphasized that the main 
 advantage of this software is its transparency at any time for anybody. Thus, it 
 is possible to track numerical errors.  A disadvantage of R is the lack of 
-comprehensive GUIs for qPCR analysis. We believe that a graphical user interface 
-(GUI) is a key technology to spread the use of R in bioanalytical sciences. 
+comprehensive GUIs for qPCR analysis. Graphical user interfaces 
+(GUI) are key technologies to spread the use of R in bioanalytical sciences. 
 Currently, we are establishing the ``pcRuniveRsum'' 
 (\url{http://michbur.github.io/pcRuniveRsum/}) as an on-line resource for the 
 interested users. The command-line structure makes R ``inaccessible'' for many 
