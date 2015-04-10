@@ -66,7 +66,7 @@ mtext("A", side = 3, adj = 0, cex = 2)
 
 # Plot the pre-processed amplification curve data.
 matplot(res.CPP[, -1], type = "l", lty = 1, col = 1, xlab = "Cycle", 
-        ylab = "RFU", main = "Pre-processed data")
+        ylab = "RFU (normalized)", main = "Pre-processed data")
 mtext("B", side = 3, adj = 0, cex = 2)
 abline(h = 0.05, col = "red", lwd = 2)
 

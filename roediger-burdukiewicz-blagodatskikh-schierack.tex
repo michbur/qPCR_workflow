@@ -8,21 +8,20 @@ Blagodatskikh, Michael Jahn and Peter Schierack}
 \abstract{
 There is an ever-increasing number of applications, which use quantitative PCR 
 (qPCR) or digital PCR (dPCR) to elicit fundamentals of biological processes. 
-Moreover, the novel amplification strategies based on quantitative isothermal 
-amplification (qIA) have become more prominent in life sciences and 
-point-of-care-diagnostics. Additionally, the analysis of melting data is 
-essential during many experiments. Several software packages have been developed 
-for the analysis of such datasets. In most cases, the software is either 
-distributed as closed source software or as monolithic block with little freedom 
-to perform highly customized analysis procedures. We argue, among others, that R is 
-an excellent foundation for reproducible and transparent data analysis in a 
-highly customizable cross-platform environment. However, for novices it is often 
-challenging to master R or learn capabilities of the vast number of packages 
-available. In the paper, we describe exemplary workflows for the analysis of 
-qPCR, qIA or dPCR experiments including the analysis of melting curve data. Our 
-analysis relies entirely on R packages available from public repositories. 
-Additionally, we provide information related to standardized and reproducible 
-research.
+Moreover, quantitative isothermal amplification (qIA) methods have become more 
+prominent in life sciences and point-of-care-diagnostics. Additionally, the 
+analysis of melting data is essential during many experiments. Several software 
+packages have been developed for the analysis of such datasets. In most cases, 
+the software is either distributed as closed source software or as monolithic 
+block with little freedom to perform highly customized analysis procedures. We 
+argue, among others, that R is an excellent foundation for reproducible and 
+transparent data analysis in a highly customizable cross-platform environment. 
+However, for novices it is often challenging to master R or learn capabilities 
+of the vast number of packages available. In the paper, we describe exemplary 
+workflows for the analysis of qPCR, qIA or dPCR experiments including the 
+analysis of melting curve data. Our analysis relies entirely on R packages 
+available from public repositories. Additionally, we provide information related 
+to standardized and reproducible research.
 }
 
 \section{Introduction}
@@ -381,7 +380,7 @@ mtext("A", side = 3, adj = 0, cex = 2)
 
 # Plot the pre-processed amplification curve data.
 matplot(res.CPP[, -1], type = "l", lty = 1, col = 1, xlab = "Cycle", 
-        ylab = "RFU", main = "Pre-processed data")
+        ylab = "RFU (normalized)", main = "Pre-processed data")
 mtext("B", side = 3, adj = 0, cex = 2)
 abline(h = 0.05, col = "red", lwd = 2)
 
@@ -765,8 +764,7 @@ showed that the data are not uniformly spaced. The warning message by the
 \code{CPP} functions is just a reminder for to user to take care during the 
 pre-processing. Methods like smoothing might cause artifacts 
 \citep{Spiess_2014}. Since we know that the HDA is a time-dependent reaction we 
-do not have a use for the discrete measure points. Next we plotted and analysed 
-the data. 
+do not have a use for the discrete measure points. Next we processeded with the analysis. 
 
 \begin{figure}[htbp]
   \centering
