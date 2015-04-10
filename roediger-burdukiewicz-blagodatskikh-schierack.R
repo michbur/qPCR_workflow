@@ -407,3 +407,34 @@ for (i in 1L:length(wells)) {
 }
 dev.off()
 
+require(dpcR)
+
+# First step is as usual extracting data and shaping it into object of 
+# appropriate class, in this case 'ddpcr' (droplet digital PCR)
+
+cluster_data <- do.call(bind_dpcr, lapply(1L:length(wells), function(i) {
+  cluster.info <- unique(pds_raw[wells[i]][[1]]["Cluster"])
+  res <- bioamp(data = pds_raw[wells[i]][[1]], amp_x = 2, amp_y = 1, plot = FALSE)
+  #create ddpcr object for each experiment
+  create_dpcr(data = c(rep(1, res[1, "Cluster.2"]), rep(1, res[1, "Cluster.3"])), 
+              n = as.integer(sum(res[1, ])), threshold = 1,
+              type = "np", adpcr = FALSE)
+}))
+
+# message: 'Different number of partitions.' is expected while joining objects
+# with uneven length as droplet-based experiments. The message is specifically
+# verbose to also deliver that bind_dpcr function do not
+# recycle shorter vectors to prevent the addition non-existant data points.
+
+# Give experiments proper names
+
+colnames(cluster_data) <- wells
+
+# we choose ratio model which uses multiple ratio tests from rateratio.test
+# package
+
+comp <- test_counts(cluster_data, model = "ratio")
+
+pdf("test_counts.pdf", width = 8, height = 8)
+plot(comp)
+dev.off()
