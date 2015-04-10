@@ -1085,10 +1085,10 @@ variation appeared to be within a similar range
 (Figure~\ref{figure:dpcR_bioamp}~column~2). The positive samples seem to differ 
 from the negative control (Figure~\ref{figure:dpcR_bioamp}~G04). 
 Statistical capabilities of R simplifies next steps of the analysis of digital 
-PCR experiments. \CRANpkg{dpcR} package offers flexible wrapper 
-\code{test\_counts}  around several methods of comparing results of several 
+PCR experiments. The \CRANpkg{dpcR} package offers a flexible wrapper 
+\code{test\_counts} around several methods of comparing results of several 
 reactions. In the following example we use test implemented in 
-\CRANpkg{rateratio.test}.
+\CRANpkg{rateratio.test} as proposed by \citet{Fay_2010}.
 
 \begin{example}
 # First step is as usual extracting data and shaping it into object of 
