@@ -1092,6 +1092,86 @@ sample concentrations (Figure~\ref{figure:dpcR_bioamp}~column~3). However, our
 case studies shows, that the R environment can be used to circumvent problems of 
 locked-in systems.
 
+Statistical capabilities of R simplifies next steps of the analysis of digital PCR experiments. \CRANpkg{dpcR} package offers flexible wrapper \code{test\_counts}  around several methods of comparing esults of several reactions. In the following example we use test implemented in \CRANpkg{rateratio.test}.
+
+\begin{example}
+  # First step is as usual extracting data and shaping it into object of 
+  # appropriate class, in this case 'ddpcr' (droplet digital PCR)
+  
+  cluster_data <- do.call(bind_dpcr, lapply(1L:length(wells), function(i) {
+  cluster.info <- unique(pds_raw[wells[i]][[1]]["Cluster"])
+  res <- bioamp(data = pds_raw[wells[i]][[1]], amp_x = 2, amp_y = 1, plot = FALSE)
+  #create ddpcr object for each experiment
+  create_dpcr(data = c(rep(1, res[1, "Cluster.2"]), rep(1, res[1, "Cluster.3"])), 
+              n = as.integer(sum(res[1, ])), threshold = 1, 
+              type = "np", adpcr = FALSE)
+  }))
+  # message: 'Different number of partitions.' is expected while joining objects
+  # with uneven length as droplet-based experiments. The message is specifically
+  # verbose to also deliver that bind_dpcr function do not
+  # recycle shorter vectors to prevent the addition non-existant data points.
+  
+  # Give experiments proper names
+  colnames(cluster_data) <- wells
+  
+  # we choose ratio model which uses multiple ratio tests from rateratio.test
+  # package
+  comp <- test_counts(cluster_data, model = "ratio")
+
+\end{example}
+
+Output format of \code{test\_counts} is familiar to all R users:
+
+\begin{example}
+> comp
+
+Groups:
+    group      lambda   lambda.low   lambda.up
+A02     b 0.077011051 0.0704320674 0.084179123
+B02     c 0.096061636 0.0888030003 0.103883369
+C02     c 0.099979708 0.0918318731 0.108811947
+D02     c 0.092649940 0.0856180946 0.100230919
+G04     a 0.001218274 0.0006348818 0.002337119
+
+Results of multiple comparison:
+             X_squared       p_value signif
+B02 - A02   22.7202237  3.123089e-06    ***
+C02 - A02   29.5319827  1.100031e-07    ***
+D02 - A02   15.7795663  1.016671e-04    ***
+G04 - A02  897.9635582 6.799223e-197    ***
+C02 - B02    0.7480551  4.164049e-01       
+D02 - B02    0.6604392  4.164049e-01       
+G04 - B02 1132.7471108 1.260524e-247    ***
+D02 - C02    2.7724424  1.198747e-01       
+G04 - C02 1171.4948655 9.557011e-256    ***
+G04 - D02 1092.0273410 5.950879e-239    ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Model used:
+[1] "ratio"
+
+> summary(comp)
+
+  group      lambda   lambda.low   lambda.up
+1     a 0.001218274 0.0006348818 0.002337119
+2     b 0.077011051 0.0704320674 0.084179123
+3     c 0.096230428 0.0887509893 0.104308745
+\end{example}
+
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[scale=0.5]{figures/test_counts.pdf}
+  \caption{\code{plot} method for the output of the \code{test\_counts} function 
+  from the \CRANpkg{dpcR} package used 
+for comparision of droplet digital PCR runs. Different experiments were agreggated into color coded groups based on their estimeted mean number of copies per partition. 
+}
+  \label{figure:dpcR}
+\end{figure}
+
+\CRANpkg{dpcR} package can be used not only to analyse data on level provided by the commercial software. Access to the whole R environment allows performing more elaborated research in a highly customizable workflow. 
+
 \section{Discussion and Conclusion}
 
 This study gave a brief introduction to the analysis of qPCR, qIA, MCA and dPCR 
