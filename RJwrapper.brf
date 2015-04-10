@@ -12,6 +12,9 @@
 \backcite {huggett_2013}{{1}{2.1}{section.2.1}}
 \backcite {milbury_2014}{{1}{2.1}{section.2.1}}
 \backcite {morley_2014}{{1}{2.1}{section.2.1}}
+\backcite {milbury_2014}{{1}{2.1}{section.2.1}}
+\backcite {morley_2014}{{1}{2.1}{section.2.1}}
+\backcite {milbury_2014}{{1}{2.1}{section.2.1}}
 \backcite {huggett_BDQ_2014}{{1}{2.1}{figure.caption.2}}
 \backcite {conde_2014}{{1}{2.1}{figure.caption.2}}
 \backcite {bustin_2014}{{1}{2.1}{figure.caption.2}}
@@ -34,9 +37,9 @@
 \backcite {gentleman_2004}{{2}{2.1}{figure.caption.2}}
 \backcite {Oh_2014}{{2}{2.1}{figure.caption.2}}
 \backcite {Baaaath_2012}{{2}{2.1}{figure.caption.2}}
-\backcite {Guazzelli_2009}{{2}{2.1}{figure.caption.2}}
-\backcite {michna_2013}{{2}{2.1}{figure.caption.2}}
-\backcite {RDCT2010c}{{2}{2.1}{figure.caption.2}}
+\backcite {Guazzelli_2009}{{3}{2.1}{figure.caption.2}}
+\backcite {michna_2013}{{3}{2.1}{figure.caption.2}}
+\backcite {RDCT2010c}{{3}{2.1}{figure.caption.2}}
 \backcite {michna_2013}{{3}{2.1}{figure.caption.2}}
 \backcite {Murrell_2012}{{3}{2.1}{figure.caption.2}}
 \backcite {gandrud_2013}{{3}{2.1}{figure.caption.2}}
@@ -53,7 +56,7 @@
 \backcite {rodiger_rkward_2012}{{3}{2.2}{section.2.2}}
 \backcite {ritz_2008}{{3}{2.2}{section.2.2}}
 \backcite {roediger_2015_Bioinformatics}{{3}{2.2}{section.2.2}}
-\backcite {ruijter_2013}{{3}{2.2}{section.2.2}}
+\backcite {ruijter_2013}{{4}{2.2}{section.2.2}}
 \backcite {roediger_2015_Bioinformatics}{{4}{2.2}{section.2.2}}
 \backcite {svec_2015}{{4}{2.2}{section.2.2}}
 \backcite {roediger_RJ_2013}{{4}{2.2}{section.2.2}}
@@ -75,6 +78,7 @@
 \backcite {pabinger_2014}{{13}{2.3.4}{subsection.2.3.4}}
 \backcite {huggett_2013}{{14}{2.3.4}{subsection.2.3.4}}
 \backcite {brown_2001}{{14}{2.3.4}{equation.2.3.1}}
+\backcite {milbury_2014}{{14}{2.3.4}{equation.2.3.1}}
 \backcite {huggett_clinchem_2014}{{15}{2.3.5}{subsection.2.3.5}}
 \backcite {corbisier_2015}{{15}{2.3.5}{subsection.2.3.5}}
 \backcite {majumdar_2015}{{15}{2.3.5}{subsection.2.3.5}}
@@ -86,6 +90,6 @@
 \backcite {wang_2013}{{16}{2.3.5}{figure.caption.10}}
 \backcite {Fay_2010}{{16}{2.3.5}{figure.caption.10}}
 \backcite {corbisier_2015}{{17}{9}{figure.caption.10}}
-\backcite {R_web}{{19}{11}{figure.caption.12}}
-\backcite {R_cloud}{{19}{11}{figure.caption.12}}
-\backcite {rodiger_rkward_2012}{{20}{2.4}{figure.caption.12}}
+\backcite {rodiger_rkward_2012}{{19}{2.4}{figure.caption.12}}
+\backcite {R_web}{{20}{11}{figure.caption.12}}
+\backcite {R_cloud}{{20}{11}{figure.caption.12}}

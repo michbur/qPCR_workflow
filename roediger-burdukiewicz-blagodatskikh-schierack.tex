@@ -46,20 +46,22 @@ point-of-care-testing \citep{selck_2013, rodiger_nucleic_2014, nixon_2014}.
 Digital PCR (dPCR) is a novel approach for detection and quantification of 
 nucleic acids and can be seen as a next generation method 
 \citep{huggett_qpcr_2015}. The dPCR technology breaks fundamentally with the 
-previous concept of nucleic acid quantification. In contrast to 
-traditional qPCR measures dPCR absolute nucleic acids amounts. This is possible 
-after 'clonal DNA amplification' in thousands of small separated partitions 
-(e.g., droplets, nano chambers) \citep{huggett_2013, milbury_2014, morley_2014}. 
-Partitions with no nucleic acid remain negative and the others turn positive 
-(e.g., Figure~\ref{figure:dpcR_sim}). Selected technologies (e.g., 
+previous concept of nucleic acid quantification. In contrast to traditional qPCR 
+measures dPCR absolute nucleic acids amounts. This is possible after 'clonal DNA 
+amplification' in thousands of small separated partitions (e.g., droplets, nano 
+chambers) \citep{huggett_2013, milbury_2014, morley_2014}. Partitions with no 
+nucleic acid remain negative and the others turn positive (e.g., 
+Figure~\ref{figure:dpcR_sim}). Selected technologies (e.g., 
 OpenArray\textregistered Real-Time PCR System) monitor amplification reactions 
 in the chambers ('partitions') in real-time. After that, all quantification 
 cycle (Cq) values are calculated from the amplification curves and converted 
 into discrete events by means of positive and negative chambers. Finally, the 
-absolute quantification of nucleic acids is done using Poisson statistics. 
-Recently, we have published the \CRANpkg{dpcR} package at CRAN, which is the 
-first open source R software package for the analysis of dPCR experiments (see 
-\CRANpkg{dpcR} package manual for details).
+absolute quantification of nucleic acids is done using Poisson statistics 
+\citep{milbury_2014, morley_2014}. A representative workflow using the vendor 
+software for the analysis of a droplet dPCR experiment was described by 
+\citet{milbury_2014}. Recently, we have published the \CRANpkg{dpcR} package at 
+CRAN, which is the first open source R software package for the analysis of dPCR 
+experiments (see \CRANpkg{dpcR} package manual for details).
 
 \begin{figure}[htbp]
   \centering
@@ -872,10 +874,11 @@ counted $n = 16800$ partitions in total from which $k = 4601$ partitions were
 positive. The binomial distribution of positive and negative partitions was used 
 to determine $\hat \lambda$ (Figure~\ref{figure:dpcR}). Our package allows both 
 easy estimation of a density of the parameter and calculation of confidence 
-intervals using Wilson's method \citep{brown_2001} at a confidence interval 
-level of 0.95. The obtained mean number of template molecules per partition 
-multiplied by the volume of the partitions ($ 16800 * 5~nL$) constitutes the 
-sample concentration.
+intervals (CI) using Wilson's method \citep{brown_2001} at a confidence interval 
+level of 0.95. The true number of template molecules per partition ($\hat 
+\lambda$) is likely to be included in the range of the CI \citep{milbury_2014}. 
+The obtained mean number of template molecules per partition multiplied by the 
+volume of the partitions ($ 16800 * 5~nL$) constitutes the sample concentration.
 
 \begin{example}
 # Load the dpcR package for the analysis of the digital PCR experiment.
