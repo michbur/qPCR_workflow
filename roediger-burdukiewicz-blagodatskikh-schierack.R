@@ -421,17 +421,17 @@ cluster_data <- do.call(bind_dpcr, lapply(1L:length(wells), function(i) {
               type = "np", adpcr = FALSE)
 }))
 
-# message: 'Different number of partitions.' is expected while joining objects
-# with uneven length as droplet-based experiments. The message is specifically
-# verbose to also deliver that bind_dpcr function do not
-# recycle shorter vectors to prevent the addition non-existant data points.
+  # message: 'Different number of partitions.' is expected while joining objects
+  # with uneven length as droplet-based experiments. The message is specifically
+  # verbose to also deliver that the bind_dpcr function does not
+  # recycle shorter vectors to prevent the addition non-existent data points.
 
 # Give experiments proper names
 
 colnames(cluster_data) <- wells
-
-# we choose ratio model which uses multiple ratio tests from rateratio.test
-# package
+  
+  # We choose the ratio model, which uses multiple ratio tests from 'rateratio.test'
+  # package.
 
 comp <- test_counts(cluster_data, model = "ratio")
 
