@@ -150,7 +150,7 @@ data sets as present in high-throughput PCRs or dPCRs with large partition
 numbers. The R environment offers several datasets, which can be used for 
 testing of algorithms. Therefore, others and we argue that R is suitable for 
 reproducible research \citep{Murrell_2012, gandrud_2013, hofmann_2013, 
-kuhn_cran_2014, Leeper_2014, liu_2014}.
+Ooms_2013, kuhn_cran_2014, Leeper_2014, liu_2014}.
 
 The aim of this paper is to show case studies for qPCR, dPCR, qIA and melting 
 curve analysis experiments. Our workflow effectively follows the principle 
@@ -810,7 +810,9 @@ Savitzky-Golay smoother we used a cubic spline ($method = "spline"$) in the
 \code{CPP} function. In addition, outliers were automatically removed in the 
 baseline region (Figure~\ref{figure:qIA}A~and~B). The background range was 
 defined by bare eye to be between the $1^{th}$ and $190^{th}$ data point 
-(corresponds to baseline region between 0~and~52 minutes). 
+(corresponds to baseline region between 0~and~52 minutes). The \code{CPP} uses a 
+linear least squares or robust fit methods (e.g., Rfit by \citet{Kloke_2012}) to 
+estimate the slope of the background \citep{roediger_2015_Bioinformatics}.
 
 \begin{example}
 # Apply the CPP functions to pro-process the raw data.1) Baseline data to zero, 
@@ -1086,9 +1088,10 @@ droplet volume leads to an underestimation of sample concentrations
 replicates in Figure~\ref{figure:dpcR_bioamp}~A02~-~D02 vary. However, the 
 variation appeared to be within a similar range 
 (Figure~\ref{figure:dpcR_bioamp}~column~2). The positive samples seem to differ 
-from the negative control (Figure~\ref{figure:dpcR_bioamp}~G04). 
-Statistical capabilities of R simplifies next steps of the analysis of digital 
-PCR experiments. The \CRANpkg{dpcR} package offers a flexible wrapper 
+from the negative control (Figure~\ref{figure:dpcR_bioamp}~G04). This is 
+basically a comparison of proportions \citep{wang_2013}. Statistical 
+capabilities of R simplifies next steps of the analysis of digital PCR 
+experiments. The \CRANpkg{dpcR} package offers a flexible wrapper 
 \code{test\_counts} around several methods of comparing results of several 
 reactions. In the following example we use test implemented in 
 \CRANpkg{rateratio.test} as proposed by \citet{Fay_2010}.
