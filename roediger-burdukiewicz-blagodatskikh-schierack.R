@@ -387,7 +387,10 @@ for (i in 1L:length(wells)) {
   
   n.tmp <- sum(res[1, ])
   
+   # The next line is used to limit the x-axis for plot in a meaningful range.
   if(i < 5) x.lim <- c(0.065, 0.115) else x.lim <- c(0, 0.115)
+  
+  # Next step is the calculation of the dPCR statistics.
   dens <- dpcr_density(k = k.tmp, n = n.tmp, average = TRUE, methods = "wilson", 
                        conf.level = 0.95, xlim = x.lim, bars = FALSE)
   legend("topright", paste("k:", k.tmp,"\nn:", n.tmp), bty = "n")
