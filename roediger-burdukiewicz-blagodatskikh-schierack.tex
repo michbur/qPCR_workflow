@@ -26,8 +26,8 @@ to standardized and reproducible research.
 
 \section{Introduction}
 
-The quantitative Polymerase Chain Reaction (qPCR) is the method of choice when 
-a precise quantification of minute DNA traces is required. The applications 
+Quantitative Polymerase Chain Reaction (qPCR) is the method of choice when 
+a precise quantification of minute DNA traces is required. Applications 
 include the detection and quantification of pathogens or gene expression 
 analysis \citep{pabinger_2014}. Only few bioanalytical methods had such a 
 significant impact on the progress of life sciences and medical sciences as the 
@@ -40,37 +40,36 @@ wu_2014}.
 In the past decades several isothermal amplification technologies emerged, such 
 as helicase dependent amplification (HDA). Isothermal 
 amplification methods were readily combined with real-time monitoring technologies (qIA) 
-or digital PCR and is used in various fields like diagnostics and 
+or digital PCR and are used in various fields like diagnostics and 
 point-of-care-testing \citep{selck_2013, rodiger_nucleic_2014, nixon_2014}.
 
-The digital PCR (dPCR) is a novel approach for detection and quantification of 
+Digital PCR (dPCR) is a novel approach for detection and quantification of 
 nucleic acids and can be seen as a next generation method 
 \citep{huggett_qpcr_2015}. The dPCR technology breaks fundamentally with the 
-previous concept of nucleic acid quantification. The key difference between dPCR 
-and traditional qPCR lies in the method of measuring (absolute) nucleic acids 
-amounts, which yields discrete information instead of the continuous signal. 
-This is possible after ``clonal DNA amplification'' in thousands of small 
-separated partitions (e.g., droplets, nano chambers) \citep{huggett_2013, 
-milbury_2014, morley_2014}. The partitions with no nucleic acid remain negative 
-and the others turn positive (e.g., Figure~\ref{figure:dpcR_sim}). Selected 
-technologies (e.g., OpenArray\textregistered Real-Time PCR System) monitor 
-amplification reactions in the chambers (``partitions'') in real-time. After 
-that, all quantification cycle (Cq) values are calculated from the amplification 
-curves and converted into discrete events by means of positive and negative 
-chambers. Finally, the absolute quantification of nucleic acids is done using 
-Poisson statistics. Recently, we have published the \CRANpkg{dpcR} package at 
-CRAN, which is the first open source R software package for the analysis of dPCR 
-experiments (see \CRANpkg{dpcR} for details).
+previous concept of nucleic acid quantification. In contrast to 
+traditional qPCR measures dPCR absolute nucleic acids amounts. This is possible 
+after 'clonal DNA amplification' in thousands of small separated partitions 
+(e.g., droplets, nano chambers) \citep{huggett_2013, milbury_2014, morley_2014}. 
+Partitions with no nucleic acid remain negative and the others turn positive 
+(e.g., Figure~\ref{figure:dpcR_sim}). Selected technologies (e.g., 
+OpenArray\textregistered Real-Time PCR System) monitor amplification reactions 
+in the chambers ('partitions') in real-time. After that, all quantification 
+cycle (Cq) values are calculated from the amplification curves and converted 
+into discrete events by means of positive and negative chambers. Finally, the 
+absolute quantification of nucleic acids is done using Poisson statistics. 
+Recently, we have published the \CRANpkg{dpcR} package at CRAN, which is the 
+first open source R software package for the analysis of dPCR experiments (see 
+\CRANpkg{dpcR} package manual for details).
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[clip=true,trim=0.2cm 0.5cm 0.2cm 0.1cm, width=12cm]{figures/dpcR_sim.pdf} \caption{Scheme 
+  \includegraphics[clip=true,trim=0.1cm 0.3cm 0.2cm 0.1cm, width=12cm]{figures/dpcR_sim.pdf} \caption{Scheme 
 of a digital PCR experiment. \strong{(A)} A droplet digital PCR reaction 
-mix was formed in a BioRad QX100 Droplet Digital PCR System. The droplets (circa 
+mix was formed in a BioRad QX100 Droplet Digital PCR System. Droplets (circa 
 100 $\mu$m in diameter) were subjected to custom made slide chambers for the 
 detection and analysis in fully automatized imaging VideoScan platform 
 \citep{rodiger_highly_2013}. \strong{(B)} Subsequently the samples can be 
-digitalized by counting number of positive and total number of droplets. The 
+digitalized by counting the number of positive and total number of droplets. The 
 plot was generated with the \code{sim\_ddpcr} function from the \CRANpkg{dpcR} 
 package.}
 \label{figure:dpcR_sim}
@@ -82,7 +81,7 @@ analysis of data, multiple hypothesis testing, interpretation, reporting and
 storage of results \citep{huggett_BDQ_2014, conde_2014}. Scientific misconduct 
 and fraud have shaken the scientific community on several occasions 
 \citep{bustin_2014}. In particular, the scientific community works hard to 
-uncover pitfalls of qPCR experiments. This lead to the development of 
+uncover pitfalls of qPCR experiments. This led to the development of 
 peer-reviewed quantification cycle (Cq) analysis algorithms 
 \citep{ruijter_2013}, fully characterized qPCR chemistries \citep{ruijter_2014} 
 and guidelines for a proper conduct of qPCR experiments as implemented in the 
@@ -104,20 +103,20 @@ are independent of a development model. However, at least open~source gives the
 possibility to track and eliminate errors by an individual entity. Black-box 
 systems often force the user to process the data by suboptimal analysis 
 algorithms \citep{ruijter_2013}. Moreover, the data usually cannot be accessed 
-between the steps of the analysis which restrains quality control. The 
-visualization options are usually limited by the software vendor preferences and 
-do not attain publication quality. In addition to this, users who have no access 
-to the commercial software are barred. Aside from closed source software, data 
-analysis is often performed in spreadsheets. However, this data processing 
-approach is not advisable for research purposes. Most spreadsheets  lack (or do 
-not use) tools to validate the input, to debug implemented procedures and to 
-automatize the workflow. These traits make them prone to errors and not well 
-suited for complicated tasks \citep{mccullough_2008, burns_2014}.
+between the steps of the analysis which restrains quality control. Visualization 
+options are usually limited by the software vendor preferences and do not attain 
+publication quality. In addition to this, users who have no access to the 
+commercial software are barred. Aside from closed source software, data analysis 
+is often performed in spreadsheets. However, this data processing approach is 
+not advisable for research purposes. Most spreadsheets  lack (or do not use) 
+tools to validate the input, to debug implemented procedures and to automatize 
+the workflow. These traits make them prone to errors and not well suited for 
+complicated tasks \citep{mccullough_2008, burns_2014}.
 
 For several reasons, R is one of the most popular tools in bioinformatics and is 
 known as an early adopter of emerging technologies \citep{pabinger_2014}. R 
 provides packages to build highly customized workflows, covering: data read-in, 
-data preprocessing, analysis, post-processing, visualization and storage. As 
+data pre-processing, analysis, post-processing, visualization and storage. As 
 recently briefly reviewed in \citet{pabinger_2014}, numerous R packages have 
 been developed for the analysis of qPCR, dPCR, qIA and melting curve analysis 
 experiments, including: \CRANpkg{kulife}, \CRANpkg{MCMC.qpcr}, 
@@ -126,7 +125,7 @@ experiments, including: \CRANpkg{kulife}, \CRANpkg{MCMC.qpcr},
 \BIOpkg{qpcrNorm}, \BIOpkg{HTqPCR}, \BIOpkg{SLqPCR}, \BIOpkg{ddCt}, 
 \BIOpkg{EasyqpcR}, \BIOpkg{unifiedWMWqPCR}, \BIOpkg{ReadqPCR}, 
 \BIOpkg{NormqPCR}. All the packages are either available from CRAN or 
-Bioconductor \citep{gentleman_2004}. The packages can be freely combined in a 
+Bioconductor \citep{gentleman_2004}. All packages can be freely combined in a 
 plugin-like architecture.
 
 R is an open, operating system-independent platform for a broad spectrum of 
@@ -134,7 +133,7 @@ calculation options. Particularly, the visualization of experiments is one of
 R's pinnacles. R enables the users to create an efficient manipulation, 
 restructuring and reshaping of data to make them readily-available for further 
 processing. This is of the particular importance to the human--machine interface 
-\citep{Oh_2014}. Intrinsic properties of R such as the naming convention 
+\citep{Oh_2014}. Intrinsic properties of R such as naming conventions 
 \citep{Baaaath_2012} and class systems (e.g., \strong{S3}, \strong{S4}, 
 reference classes and \strong{R6}) vary considerable, depending on the package 
 developer preferences. However, due to the open source approach, there is the 
@@ -146,7 +145,7 @@ formats \citep{michna_2013} or tools provided by the R workspace
 \CRANpkg{RNetCDF} package, has advantages over some other binary formats (e.g., 
 the RData format), since arbitrary array data sections of massive datasets can 
 be processed efficiently \citep{michna_2013}. This might be useful for large 
-data sets as present in high-throughput PCRs or dPCRs with large partition 
+data sets as present in high-throughput PCR experiments or dPCR experiments with large partition 
 numbers. The R environment offers several datasets, which can be used for 
 testing of algorithms. Therefore, others and we argue that R is suitable for 
 reproducible research \citep{Murrell_2012, gandrud_2013, hofmann_2013, 
@@ -189,24 +188,24 @@ temperature.
 We recommend performing the scripting in a dedicated integrated development 
 environment (IDE) and graphical user interface (GUI) such as \pkg{RKWard} 
 \citep{rodiger_rkward_2012}, \pkg{RStudio} \citep{RStudio, gandrud_2013} or 
-other technologies \citep{Valero_2012}. Benefits of IDE's with GUI include 
+other technologies \citep{Valero_2012}. Benefits of IDEs with GUI include 
 syntax-highlighting, auto completion and function references for rapid 
 prototyping of workflows. Typically, the analysis will start with data from a 
 commercial platform. Most platforms have an option to export a CSV file or 
-spreadsheets application file (e.g., *.xls, *.odt). The details for the data 
+spreadsheets application file (e.g., *.xls, *.odt). Details for the data 
 import have been described elsewhere \citep{RDCT2010c, rodiger_rkward_2012}. To 
 keep the case study sections compact we have chosen to load datasets from the 
 \CRANpkg{qpcR} package \citep{ritz_2008} (v.~1.4.0) and the \CRANpkg{RDML} 
 package (v.~0.8-3) to our workspace. The \CRANpkg{chipPCR} package 
 \citep{roediger_2015_Bioinformatics} (v.~0.0.8-10) was used for data 
-preprocessing, quality control and  the calculation of the quantification cycle 
+pre-processing, quality control and  the calculation of the quantification cycle 
 (Cq).
 
 The Cq is a quantitative measure, which represents the number of cycles 
 needed to reach a user defined threshold signal level, in the exponential phase 
 of a qPCR/qIA reaction. Several Cq methods have been described 
 \citep{ruijter_2013}. In this study we have chosen the second derivative maximum 
-method ($Cq_{SDM}$) and the ``Cycle threshold'' ($Cq_{Ct}$) method.
+method ($Cq_{SDM}$) and the 'Cycle threshold' ($Cq_{Ct}$) method.
 
 During a perfect qPCR reaction, the target DNA doubles ($2^{n}$; n = cycle 
 number) at each cycle. Here the amplification efficiency ($AE$) is 100~\%. 
@@ -223,7 +222,7 @@ analysis of the target specific melting temperature ($T_{M}$) in experiments of
 the present study.
 
 We completed our examples with case studies for the analysis of dPCR 
-experiments. In particular, we used the \CRANpkg{dpcR} package (0.1.4.0) to 
+experiments. In particular, we used the \CRANpkg{dpcR} package (v.~0.1.4.0) to 
 estimate the number of molecules in a sample.
 
 \section{Results}
@@ -244,7 +243,7 @@ packages and datasets. A good practice for reproducible research is to track the
 package versions and environment used during the analysis. The function 
 \code{sessionInfo} from the \CRANpkg{utils} package provides this functionality. 
 Assuming that the analysis starts with a clean R session it is possible to 
-assign the required packages to an object, as shown below. The reproducibility 
+assign the required packages to an object, as shown below. Reproducibility 
 of research can be further improved by the \CRANpkg{archivist} package, which 
 stores and recovers crucial data and preserves metadata of saved objects (not 
 shown). All settings of R session can be easily saved and/or restored using 
@@ -261,7 +260,7 @@ require(qpcR)
 # experiment.
 current.session <- sessionInfo()
 
-# Next load the 'guescini1' dataset from the qpcR package to the
+# Next, we load the 'guescini1' dataset from the qpcR package to the
 # workspace and assign it to the object 'gue'.
 gue <- guescini1
 
@@ -287,12 +286,12 @@ dataset. \strong{(A)} Raw data from the calibration curve samples were visually
 inspected. The qPCR curves display a broad variation in plateau fluorescence 
 (38~--~62 RFU). The red horizontal line (\textcolor{red}\textemdash) indicates 
 the fluorescence level (0.05) used for the calculation of the Cq value by the 
-``cycle threshold'' method. \strong{(B)} The \code{CPP} function from the 
+'cycle threshold' method. \strong{(B)} The \code{CPP} function from the 
 \CRANpkg{chipPCR} was used to baseline the data, to smooth the data with 
 Savitzky-Golay smoothing filter and to normalize the data between 0 and 1. 
-\strong{(C)} The Cq values were calculated by the $Cq_{SDM}$ method (``SDM 
-method'') (\code{inder}, \CRANpkg{chipPCR}) and the $Cq_{Ct}$ method (``Ct 
-method'') (\code{th.cyc}, \CRANpkg{chipPCR}). The threshold value was set to 
+\strong{(C)} The Cq values were calculated by the $Cq_{SDM}$ method ('SDM 
+method') (\code{inder}, \CRANpkg{chipPCR}) and the $Cq_{Ct}$ method ('Ct 
+method') (\code{th.cyc}, \CRANpkg{chipPCR}). The threshold value was set to 
 $r~=~0.05$. The $Cq_{SDM}$ and $Cq_{Ct}$ values were plotted and analysed by a 
 linear regression ($R^{2}~=~0.9945$; $P < 2.2^{-16}$) and Pearson's 
 ($r~=~0.9972605$; $P < 2.2^{-16}$). The amplification efficiency based on 
@@ -356,10 +355,10 @@ Multiple R-squared:  0.9945,  Adjusted R-squared:  0.9945
 F-statistic: 1.49e+04 on 1 and 82 DF,  p-value: < 2.2e-16
 \end{example}
 
-The dilution (``dil'') and the Cq (``Cq.Ct'') values served as input for the 
+The dilution ('dil') and the Cq ('Cq.Ct') values served as input for the 
 calculation of the amplification efficiency ($AE$) with \code{effcalc} function 
 from the \CRANpkg{chipPCR} package. In our case study we needed to rearrange the 
-``Cq.Ct'' values in a matrix using the command $effcalc(dil, t(matrix(Cq.Ct, 
+'Cq.Ct' values in a matrix using the command $effcalc(dil, t(matrix(Cq.Ct, 
 nrow = 12, ncol = 7))$. For visualization of the confidence intervals of the 
 regression analysis we set the parameter $CI = TRUE$.
 
@@ -421,7 +420,7 @@ melting temperature of a sample is known it is possible to automatize the
 decision by a melting curve analysis (MCA). As shown in \citet{roediger_RJ_2013} 
 this can be done by interrogating the $T_{M}$. Therefore, we used a logical 
 statement, which tests if $T_{M}$ is within a tight temperature range. We used 
-the signal height as second parameter. In line with ``Case study one'' we used 
+the signal height as second parameter. In line with 'Case study one' we used 
 the function \code{sessionInfo} to track all packages used during the analysis. 
 Reproducible research is greatly enhanced if open data exchange formats are 
 used. Therefore, we used the \CRANpkg{RDML} package for data read-in. The 
@@ -447,9 +446,9 @@ initiated by 3 min incubation at 95~\textcelsius, followed by 41 cycles (15 s at
 end of each cycle. Probe melting was conducted between 35~\textcelsius~and 
 95~\textcelsius~by 1~\textcelsius~at 1 s steps.
 
-The structure of an RDML file is quite complex. Though RDML files are XML 
+RDML file structures can be complex. Though RDML files are XML 
 structured files and thus intended to be readable by humans, it is hard to grasp 
-the complex hierarchical file structure with out some basic understanding. A 
+the complex hierarchical file structure without some basic understanding. A 
 simple and fast method to compactly display the structure of object in R is to 
 use the \code{str} or \code{summary} function (not shown). However, such R tools 
 are not informative in this context. Therefore we implemented a dendrogram like 
@@ -503,7 +502,7 @@ qPCR <- BioRad$AsTable() %>%
   \caption{File structure visualization of the RDML file 
 \file{BioRad\_qPCR\_melt\.rdml} form the \CRANpkg{RDML} package. The file was read 
 by the \code{RDML} function and the structure displayed as dendrogram by the 
-call \code{BioRad\$AsDendrogram()}. The names are used according to the RDML 
+call \code{BioRad\$AsDendrogram()}. Names are used according to the RDML 
 convention by \citet{lefever_2009}. The object \texttt{BioRad} branches into an 
 experiment with \texttt{Run ID} names for two fluorescence detection channels 
 (FAM, Cy5). The targets have typical designations like \texttt{pos} (positive), 
@@ -521,8 +520,8 @@ using functionalities provided by the \CRANpkg{chipPCR} package. The
 data indicated a baseline shift in all curves with a slight negative trend 
 (Figure~\ref{figure:plotCurves}). This observation suggested to baseline the raw 
 data by using a linear regression model (cycles x - y; ($bg.range = c(x, y)$) in 
-the \code{CPP} function.). The curvatures of ``D1\_Alm12\ldots'' and 
-``D2\_Alm12\ldots'' exhibited a drop in the plateau phase. However, this is not 
+the \code{CPP} function.). The curvatures of 'D1\_Alm12\ldots' and 
+'D2\_Alm12\ldots' exhibited a drop in the plateau phase. However, this is not 
 of importance during this stage of the analysis.
 
 \begin{example}
@@ -541,14 +540,14 @@ mtext("Fluorescence", side = 2, line = 2)
 samples were inspected by the \code{plotCurves} function from the 
 \CRANpkg{chipPCR} package. The green color code indicates that the data contain 
 no missing values. However, the visual inspection revealed that the data are 
-noisy. All samples (``D1\_Alm12\ldots'' - ``D8\_Alm12\ldots'') appeared to be 
-positive. One negative control (``D10\_H20\_ntc\_EvaGreen'') 
+noisy. All samples ('D1\_Alm12\ldots' - 'D8\_Alm12\ldots') appeared to be 
+positive. One negative control ('D10\_H20\_ntc\_EvaGreen') 
 seems to be contaminated.}
   \label{figure:plotCurves}
 \end{figure}
 
 Since the amplification curves indicated that selected samples (except 
-non-template-control (``NTC'')) are positive, we distinguished between true 
+non-template-control ('NTC')) are positive, we distinguished between true 
 positive and true negative samples by MCA (Figure~\ref{figure:amp_melt}A).
 
 \begin{figure}[htbp]
@@ -590,11 +589,11 @@ Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
 ))
 \end{example}
 
-So far we were able to calculate the Cq values for all samples. Next we focused 
-on the analysis of the melting curve data. First, we fetched the melting curve 
-data from the \texttt{BioRad} object. Next, we focused on the important steps of 
-the melting curve analysis. A comprehensive overview on such analysis was 
-presented in \citet{roediger_RJ_2013}. 
+So far we were able to calculate the Cq values for all samples. Next, we 
+performed a melting curve analysis to characterize our samples. Therefore, we fetched the 
+melting curve data from the \texttt{BioRad} object. We focused on the 
+central steps of the melting curve analysis. A comprehensive overview on such 
+analysis was presented in \citet{roediger_RJ_2013}. 
 
 \begin{example}
 # Fetch temperature dependent fluorescence for the Cy5 channel of the 
@@ -701,8 +700,8 @@ lapply(2L:ncol(melt), function(i)
               fct = max, inder = TRUE)[["xy"]], col = color[i - 1]))
 \end{example}
 
-According to the analysis by MCA the samples ``D07\_katG315\ldots'' and 
-``D08\_katG315\ldots'' were the only positive samples. The remaining samples 
+According to the analysis by MCA the samples 'D07\_katG315\ldots' and 
+'D08\_katG315\ldots' were the only positive samples. The remaining samples 
 appeared to be positive in the amplification plot in 
 Figure~\ref{figure:plotCurves} due to primer-dimer formation or sample 
 contamination.
@@ -712,8 +711,8 @@ contamination.
 Isothermal amplification is an alternative nucleic acid amplification method, 
 which uses a constant temperature rather than cycling through denaturation, 
 annealing and extension steps \citep{rodiger_nucleic_2014}. The signal is 
-monitored continuously on a time basis. Often the abscissa values are not 
-uniformly spaced in qIA. Our \code{CPP} function gives a warning in such 
+monitored continuously on a time-wise basis. In qIA the abscissa values are often not 
+uniformly spaced. Our \code{CPP} function gives a warning in such 
 a case. In qIA the $Cq$ values are dependent on the time instead of cycles. In 
 this study we used the \code{th.cyc} function from the \CRANpkg{chipPCR} package 
 to determine the time ($Cq_{t}$) required to reach a defined threshold signal 
@@ -725,17 +724,17 @@ reported VideoScan platform \citep{rodiger_highly_2013} was used to control the
 temperature and to monitor the amplification reaction. The VideoScan technology 
 is based on a highly versatile fluorescence microscope imaging platform, which 
 can be operated with a heating/cooling unit (HCU) for qPCR and MCA applications 
-\citep{roediger_RJ_2013, rodiger_highly_2013}. Since the enzyme DNA Helicase 
-unwinds DNA, no thermal denaturation is needed. The HDA conditions were taken 
-from the ``IsoAmp III Universal tHDA Kit'', Biohelix Corp, as described by the 
-vendor. In detail, the reaction was composed of ``mix A'' 10 $\mu$L A. bidest, 
+\citep{roediger_RJ_2013, rodiger_highly_2013, Spiess_2014}. Since the enzyme DNA Helicase 
+unwinds DNA, no thermal denaturation is needed. HDA conditions were taken 
+from the 'IsoAmp III Universal tHDA Kit', Biohelix Corp, as described by the 
+vendor. In detail, the reaction was composed of 'mix A' 10 $\mu$L A. bidest, 
 1.25 $\mu$L 10X~buffer, 0.75 $\mu$L primer (150 nM final), 0.5 $\mu$L template 
 plasmid. Preincubation: The mixture was incubated for 2 min at 
-95\textcelsius~and immediately placed on ice. Reaction ``mix B'' contained 5 
+95\textcelsius~and immediately placed on ice. Reaction 'mix B' contained 5 
 $\mu$L A. bidest., 1.25 $\mu$L 10X buffer, 2 $\mu$L NaCl, 1.25 $\mu$L 
 $MgSO_{4}$, 1.75 $\mu$L dNTPs, 0.25 $\mu$L EvaGreen (Biotium), 1 $\mu$L enzyme 
 mix. The mix was covered with 50 $\mu$L mineral oil (Roth). The fluorescence 
-measurement in VideoScan HCU started directly after adding ``mix B'' at 
+measurement in VideoScan HCU started directly after adding 'mix B' at 
 65\textcelsius. A $1x$ (D1) and a $1:10$ dilution (D2) were tested. The 
 resulting dataset \texttt{C81} is part of the \CRANpkg{chipPCR} package. Two 
 concentrations (stock and 1:10 diluted stock) of input DNA were used in the HDA. 
@@ -752,19 +751,19 @@ str(C81)
  $ MFI.D2: num  0.77 0.523 0.514 0.51 0.508 ...
 \end{example}
 
-\texttt{C81} is a data frame. The first column contains the measure points 
-(Cycle) and the consecutive columns contain the time stamps (e.g., ``\$ t.D1'', 
-in seconds according to the \CRANpkg{chipPCR} manual) and the signal hight (``\$ 
-MFI.D1'', as mean fluorescence intensity (MFI)). A brief look at the time stamps 
-showed that the data are not uniformly spaced. The warning message by the 
-\code{CPP} functions is just a reminder for to user to take care during the 
-pre-processing. Methods like smoothing might cause artifacts 
-\citep{Spiess_2014}. Since we know that the HDA is a time-dependent reaction we 
-do not have a use for the discrete measure points. Next we processeded with the 
-analysis. Similar to the previous case studies, we prepared the plot of the raw 
-data. Since the raw data showed a slight negative trend and an off-set of circa 
-0.45 MFI (mean fluorescence intensity) it was necessary to pre-process the raw 
-data (Figure~\ref{figure:qIA}A).
+\texttt{C81} is a data frame. The first column contains the measuring points 
+(Cycle) and the consecutive columns contain the time stamps (e.g., '\$ t.D1', 
+in seconds according to the \CRANpkg{chipPCR} manual) and the signal hight ('\$ 
+MFI.D1', as mean fluorescence intensity (MFI)). A brief look at the time stamps 
+showed that the data are not uniformly spaced. Warning messages by the 
+\code{CPP} functions are just a reminder for the user to take care during the pre-processing. 
+Methods like smoothing might cause artifacts \citep{Spiess_2014}. We know 
+that the HDA is a time-dependent reaction. Therefore, we do not have a use for the discrete 
+measuring points. Next, we proceeded with the analysis. Similar to the previous 
+case studies, we prepared the plot of the raw data. Since the raw data showed a 
+slight negative trend and an off-set of circa 0.45 MFI (mean fluorescence 
+intensity) it was necessary to pre-process the raw data 
+(Figure~\ref{figure:qIA}A).
 
 \begin{figure}[htbp]
   \centering
@@ -809,7 +808,7 @@ prior to the analysis of the of the $Cq_{t}$ value. However, instead of the
 Savitzky-Golay smoother we used a cubic spline ($method = "spline"$) in the 
 \code{CPP} function. In addition, outliers were automatically removed in the 
 baseline region (Figure~\ref{figure:qIA}A~and~B). The background range was 
-defined by bare eye to be between the $1^{th}$ and $190^{th}$ data point 
+defined by bare eye to be between the $1^{st}$ and $190^{th}$ data point 
 (corresponds to baseline region between 0~and~52 minutes). The \code{CPP} uses a 
 linear least squares or robust fit methods (e.g., Rfit by \citet{Kloke_2012}) to 
 estimate the slope of the background \citep{roediger_2015_Bioinformatics}.
@@ -856,7 +855,7 @@ analysis methods, plotting facilities and report generation tools are part of
 the package \citep{pabinger_2014}. Here, we show a case study for the 
 \CRANpkg{dpcR} package. Simulations are part in many educational curricula and 
 greatly support teaching. In this case study, we mimicked an \textit{in silico} 
-experiment for a droplet digital PCR similar to Figure~\ref{figure:dpcR_sim}. 
+experiment for a droplet digital PCR experiment similar to Figure~\ref{figure:dpcR_sim}. 
 The aim was to assess the concentration of the template sample. In the following 
 we will use the expression partition as synonym for droplet. The number of 
 positive partitions ($k$), total number of partitions ($n$) and the size of the 
@@ -871,7 +870,7 @@ following equation \citep{huggett_2013}:
 The average partition volume in our experiment was assumed to be 5 nL. We 
 counted $n = 16800$ partitions in total from which $k = 4601$ partitions were 
 positive. The binomial distribution of positive and negative partitions was used 
-to determine $\hat \lambda$ (Figure~\ref{figure:dpcR}). Our packages allows both 
+to determine $\hat \lambda$ (Figure~\ref{figure:dpcR}). Our package allows both 
 easy estimation of a density of the parameter and calculation of confidence 
 intervals using Wilson's method \citep{brown_2001} at a confidence interval 
 level of 0.95. The obtained mean number of template molecules per partition 
@@ -910,7 +909,7 @@ total partitions; $k$, number of positive partitions.
 \end{figure}
 
 Since we assumed a partition volume of 5 nL we have a total volume of 0.084~mL 
-an $6.40^{-8}$ (95\% CI: $6.2^{-8}$ - $6.6^{-8}$) molecules/mL in the 
+and $6.40 x 10^{-8}$ (95\% CI: $6.2 x 10^{-8}$ - $6.6 x 10^{-8}$) molecules/mL in the 
 sample.
 
 Selected functionality was implemented as interactive \CRANpkg{shiny} GUI 
@@ -922,7 +921,7 @@ run the analyses and graphical representation into interactive web applications
 either as service on a web server or on a local machine without knowledge of 
 HTML or ECMAScript (see \CRANpkg{dpcR} manual). The interface is designed in a 
 cascade workflow approach (Data import $\rightarrow$ Analysis $\rightarrow$ 
-Output $\rightarrow$ Export) with interactive users choice on input data, 
+Output $\rightarrow$ Export) with interactive user choices on input data, 
 methods and parameters using typical GUI elements such as sliders, drop-downs 
 and text fields. An example can be found at 
 \url{https://michbur.shinyapps.io/dpcr_density/}. This approach enables the 
@@ -938,12 +937,13 @@ for the measurement of copy number concentrations. Their study revealed that the
 average droplet volume defined in the QuantaSoft software (v.~1.3.2.0, BioRad 
 QX100 Droplet Digital PCR System) is 8~\% lower than the real volume. In 
 consequence, results of quantifications were systematically biased between 
-different dPCR platforms. Case study four served as an introduction into the analysis of simulated dPCR 
-experiments with the \CRANpkg{dpcR} package. In the next case study, number 
-five, we used the \texttt{pds\_raw} dataset, which was generated by a BioRad 
-QX100 Droplet Digital PCR System experiment. We re-analysed the data with the 
-partition volume of 0.834~nL as proposed by \citet{corbisier_2015} and a volume 
-of 0.90072~nL as used in the BioRad QX100 Droplet Digital PCR System.
+different dPCR platforms. Case study four served as an introduction into the 
+analysis of simulated dPCR experiments with the \CRANpkg{dpcR} package. In the 
+next case study, number five, we used the \texttt{pds\_raw} dataset, which was 
+generated by a BioRad QX100 Droplet Digital PCR System experiment. We 
+re-analysed the data with the partition volume of 0.834~nL as proposed by 
+\citet{corbisier_2015} and a volume of 0.90072~nL as used in the BioRad QX100 
+Droplet Digital PCR System.
 
 Our experimental setup was as follows. A duplex assay was used to simultaneously 
 detect a constant amount of genomic DNA (theoretically $10^{2}$ copies/$\mu$L) 
@@ -951,7 +951,7 @@ and a variable amount of plasmid DNA (10-fold serial dilution, not shown). The
 genomic DNA was isolated from \textit{Pseudomonas putida KT2440} and the plasmid 
 was \textit{pCOM10-StyA::EGFP StyB}. Template DNA was heat treated at 
 95\textcelsius~for 5 min prior to PCR. We detected in Channel~1 the genomic DNA 
-marker \textit{ileS} with FAM labelled Taqman probes and in Channel~2 the the 
+marker \textit{ileS} with FAM labelled Taqman probes and in Channel~2 the 
 plasmid DNA marker \textit{styA} with HEX labelled Taqman probes. All 
 primer/probe sequences and experimental condiditions are described in 
 \citep{jahn_2013, jahn_2014} and the manual of the \CRANpkg{dpcR} package. 
@@ -977,7 +977,7 @@ A04 "3"    "data.frame" "list"
 B01 "3"    "data.frame" "list"
 B02 "3"    "data.frame" "list"
 
-# Next we used str for the element A01. The element of the list contains a data frame
+# Next, we used str for the element A01. The element of the list contains a data frame
 # with three columns. Two contains Amplitude values (fluorescence intensity) and one
 # contains cluster resultes (interger values of 1 - 4).
 
@@ -989,12 +989,12 @@ str(pds_raw[["A01"]])
 \end{example}
 
 Since the structure of the dataset was known now we selected samples for the 
-analysis. According to the \CRANpkg{dpcR} manual contain the samples A02, 
-B02, C02 and D02 the values for the replicates at a 1:100 dilution 
-and G04 the values for the non-template control.
+analysis. According to the \CRANpkg{dpcR} manual, the samples A02, 
+B02, C02 and D02 contained the values for the replicates at a 1:100 dilution 
+and G04 contained the values for the non-template control.
 
 \begin{example}
-# Select the wells for the analysis. A01 to D01 are four replicate dPCR reactions 
+# Select the wells for the analysis. A02 to D02 are four replicate dPCR reactions 
 # and G04 is the no template control (NTC).
 wells <- c("A02", "B02", "C02", "D02", "G04")
 
@@ -1019,8 +1019,8 @@ for (i in 1L:length(wells)) {
 	 pch = 19)
 \end{example}
 
-Next we used the results from the object \texttt{res} to get the information 
-about the number positive partitions for the  plasmid DNA marker \textit{styA}. 
+Next, we used the results from the object \texttt{res} to get the information 
+about the number of positive partitions for the  plasmid DNA marker \textit{styA}. 
 This is to be found in the clusters 2 and 3.
 
 \begin{example}
@@ -1034,10 +1034,10 @@ This is to be found in the clusters 2 and 3.
   
   n.tmp <- sum(res[1, ])
   
-  # The next line is used to limit the x-axis for plot in a meaningful range.
+  # Our next line is used to limit the x-axis for plot in a meaningful range.
   if(i < 5) x.lim <- c(0.065, 0.115) else x.lim <- c(0, 0.115)
   
-  # Next step is the calculation of the dPCR statistics.
+  # The next step is the calculation of the dPCR statistics.
   dens <- dpcr_density(k = k.tmp, n = n.tmp, average = TRUE, methods = "wilson", 
                        conf.level = 0.95, xlim = x.lim, bars = FALSE)
   legend("topright", paste("k:", k.tmp,"\nn:", n.tmp), bty = "n")
@@ -1064,19 +1064,18 @@ This is to be found in the clusters 2 and 3.
 \texttt{pds\_raw} dataset from the \CRANpkg{dpcR} package. All raw data were 
 generated with a BioRad QX100 Droplet Digital PCR System. Column one: Amplitude 
 plot of raw data shown by the \code{bioamp} function. Each dot represents a 
-partition in a cluster. Negative partition are below and positive partitions above the 
-dashed line ({\textbf{\textendash\textendash}}). 
+partition in a cluster. 
 $Cluster~1$~\textcolor{black}{\textbf{\textbullet}}, 
 $Cluster~2$~\textcolor{red}{\textbf{\textbullet}}~=~Target, 
 $Cluster~3$~\textcolor{green}{\textbf{\textbullet}}~=~Target, 
-$Cluster~4$~\textcolor{blue}{\textbf{\textbullet}}. Well~A02~-~D04 are 
-replicate measurements and Well~G04 is the negative control; Column two: Density 
+$Cluster~4$~\textcolor{blue}{\textbf{\textbullet}}. A02~-~D04 are 
+replicate measurements and well~G04 is a negative control; Column two: Density 
 function with showing the number of molecules per partition. All replicates had 
 similar numbers of counted positive partitions ($k$) and total number of 
 partitions ($n$); Column three: Concentration of DNA molecules based on the 
 volume used by the BioRad QX100 Droplet Digital PCR System and the volume 
 proposed by \citet{corbisier_2015}. $n$, number of total partitions; $k$, number 
-of positive partitions; styA, styrene monooxygenase; ileS, isoleucyl-tRNA 
+of positive partitions; \textit{styA}, styrene monooxygenase; \textit{ileS}, isoleucyl-tRNA 
 synthetase; FAM, Fluorescein channel; HEX, hexachlorofluorescein. 
     }  \label{figure:dpcR_bioamp}
 \end{figure}
@@ -1087,13 +1086,13 @@ droplet volume results in an underestimation of sample concentrations
 replicates in Figure~\ref{figure:dpcR_bioamp}~A02~-~D02 vary. However, the 
 variation appeared to be within a similar range 
 (Figure~\ref{figure:dpcR_bioamp}~column~2). The positive samples 
-(Figure~\ref{figure:dpcR_bioamp}~~A02~-~D02) seem to differ from the negative 
+(Figure~\ref{figure:dpcR_bioamp}~~A02~-~D02) clearly differ from the negative 
 control (Figure~\ref{figure:dpcR_bioamp}~G04). To compare this we performed a 
 statistical test. This is basically a comparison of proportions as described 
-elsewhere \citep{wang_2013}. Statistical capabilities of R simplifies next steps 
+elsewhere \citep{wang_2013}. Statistical capabilities of R simplify next steps 
 of the analysis of digital PCR experiments. The \CRANpkg{dpcR} package offers a 
 flexible wrapper \code{test\_counts} around several methods of comparing results 
-of several reactions. In the following, we use test implemented in 
+of several reactions. In the following, we use a test implemented in 
 \CRANpkg{rateratio.test} as proposed by \citet{Fay_2010}.
 
 \begin{example}
@@ -1179,8 +1178,8 @@ the negative control also remained individual \textcolor{red}{a}.
 The result of the analysis suggests that replicate samples B02, C02 and D02, with exception of A02,  
 do not differ significantly. The negative control G04 was 
 totally different from the other samples (Figure~\ref{figure:test_counts}). 
-Our \CRANpkg{dpcR} package can be used to analyse data beyond the level provided by 
-the commercial software. Access to the whole R environment allows performing 
+Our \CRANpkg{dpcR} package can be used to analyse data beyond a level as provided by 
+commercial software. Access to the whole R environment allows performing 
 more elaborated research in a highly customized workflow. In Conclusion, our 
 case study shows, that the R environment can be used to circumvent problems of 
 locked-in systems.
@@ -1199,7 +1198,7 @@ to define a workflow and to set up an cross-platform environment for specific ne
 range of technical settings (Figure~\ref{figure:options}). This environment enforces no 
 monolithic integration. We claim that the modular structure allows 
 the user to perform flexible data analysis, adjusted to their needs and to 
-design frameworks for high-throughput analysis. Furthermore, R enables the user 
+design frameworks for high-throughput analysis. Furthermore, R enables the users 
 to access and reuse code for the creation of reports in various formats (e.g., 
 HTML, PDF).
 
@@ -1207,7 +1206,7 @@ HTML, PDF).
   \centering
   \includegraphics[clip=true, trim=0.05cm 0cm 0.06cm 0.05cm, width=10cm]{figures/options.png}
   \caption{Deployment of R applications for the qPCR and dPCR experiments. 
-\strong{(A)} R is typically run from a desktop computer an operated by an 
+\strong{(A)} R is typically run from a desktop computer and operated by a 
 GUI/IDE application such as \pkg{RStudio} or \pkg{RKWard}. This approach 
 provides a flexible workflow for individuals. \strong{(B)} Another approach is 
 to run R with specific applications on a local server. Such scenarios are 
@@ -1216,7 +1215,7 @@ for the deployment within research departments or cooperate units
 \citep{R_web}. 
 \strong{(C)} Cloud computing (CC) provides shared and scalable computing 
 capacity (e.g., computing capacity, application software) and storage capacity 
-(e.g., databases) as a service to an individual user or a community Service 
+(e.g., databases) as a service to an individual user or a community. Service 
 categories include: Infrastructure-as-a-Service (IaaS), Platform-as-a-Service 
 (PaaS) and Software-as-a-Service (SaaS) over a network. Providers of CC manage 
 the infrastructure and resources to achieve coherence and economies of scale 
@@ -1235,9 +1234,9 @@ advantage of this software is its transparency at any time for anybody. Thus, it
 is possible to track numerical errors.  A disadvantage of R is the lack of 
 comprehensive GUIs for qPCR analysis. Graphical user interfaces 
 (GUI) are key technologies to spread the use of R in bioanalytical sciences. 
-Currently, we are establishing the ``pcRuniveRsum'' 
+Currently, we are establishing the 'pcRuniveRsum' 
 (\url{http://michbur.github.io/pcRuniveRsum/}) as an on-line resource for the 
-interested users. The command-line structure makes R ``inaccessible'' for many 
+interested users. The command-line structure makes R 'inaccessible' for many 
 novices. We try to solve this problem with easily accessible GUIs 
 \citep{rodiger_rkward_2012}. However, the work on this additions has been 
 recently started and is still in progress.
@@ -1249,7 +1248,7 @@ Part of this work was funded by the BMBF InnoProfile-Transfer-Projekt 03 IPT
 European Union, the S\"{a}chsische Aufbaubank (Free State of Saxony, 
 Germany) and the Russian Ministry of Education and Science (project No. 
 RFMEFI62114X0003), with usage of scientific equipment of Center for 
-collective use ``Biotechnology'' at All-Russia Research Institute of 
+collective use 'Biotechnology' at All-Russia Research Institute of 
 Agricultural Biotechnology. We would like to thank the R community. We would 
 like to thank Mario Menschikowski (Technical University Dresden) for the droplet 
 digital PCR samples. 
@@ -1273,7 +1272,7 @@ digital PCR samples.
 
 \address{Konstantin Blagodatskikh\\
   All-Russia Research Institute of Agricultural Biotechnology\\
-  Center for collective use ``Biotechnology''\\
+  Center for collective use 'Biotechnology'\\
   Moscow\\
   Russia}
 \email{k.blag@yandex.ru}

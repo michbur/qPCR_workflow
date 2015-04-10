@@ -34,9 +34,9 @@
 \backcite {gentleman_2004}{{2}{2.1}{figure.caption.2}}
 \backcite {Oh_2014}{{2}{2.1}{figure.caption.2}}
 \backcite {Baaaath_2012}{{2}{2.1}{figure.caption.2}}
-\backcite {Guazzelli_2009}{{3}{2.1}{figure.caption.2}}
-\backcite {michna_2013}{{3}{2.1}{figure.caption.2}}
-\backcite {RDCT2010c}{{3}{2.1}{figure.caption.2}}
+\backcite {Guazzelli_2009}{{2}{2.1}{figure.caption.2}}
+\backcite {michna_2013}{{2}{2.1}{figure.caption.2}}
+\backcite {RDCT2010c}{{2}{2.1}{figure.caption.2}}
 \backcite {michna_2013}{{3}{2.1}{figure.caption.2}}
 \backcite {Murrell_2012}{{3}{2.1}{figure.caption.2}}
 \backcite {gandrud_2013}{{3}{2.1}{figure.caption.2}}
@@ -53,7 +53,7 @@
 \backcite {rodiger_rkward_2012}{{3}{2.2}{section.2.2}}
 \backcite {ritz_2008}{{3}{2.2}{section.2.2}}
 \backcite {roediger_2015_Bioinformatics}{{3}{2.2}{section.2.2}}
-\backcite {ruijter_2013}{{4}{2.2}{section.2.2}}
+\backcite {ruijter_2013}{{3}{2.2}{section.2.2}}
 \backcite {roediger_2015_Bioinformatics}{{4}{2.2}{section.2.2}}
 \backcite {svec_2015}{{4}{2.2}{section.2.2}}
 \backcite {roediger_RJ_2013}{{4}{2.2}{section.2.2}}
@@ -68,6 +68,7 @@
 \backcite {rodiger_highly_2013}{{12}{2.3.3}{subsection.2.3.3}}
 \backcite {roediger_RJ_2013}{{12}{2.3.3}{subsection.2.3.3}}
 \backcite {rodiger_highly_2013}{{12}{2.3.3}{subsection.2.3.3}}
+\backcite {Spiess_2014}{{12}{2.3.3}{subsection.2.3.3}}
 \backcite {Spiess_2014}{{12}{2.3.3}{subsection.2.3.3}}
 \backcite {Kloke_2012}{{13}{2.3.3}{figure.caption.8}}
 \backcite {roediger_2015_Bioinformatics}{{13}{2.3.3}{figure.caption.8}}

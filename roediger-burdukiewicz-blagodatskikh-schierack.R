@@ -15,7 +15,7 @@ require(qpcR)
 # experiment.
 current.session <- sessionInfo()
 
-# Next load the 'guescini1' dataset from the qpcR package to the
+# Next, we load the 'guescini1' dataset from the qpcR package to the
 # workspace and assign it to the object 'gue'.
 gue <- guescini1
 
@@ -347,13 +347,13 @@ require(dpcR)
 # To get an overview of the data set we used the head and summary R functions.
 head(summary(pds_raw))
 
-# Next we used str for the element A01. The element of the list contains a data frame
+# Next, we used str for the element A01. The element of the list contains a data frame
 # with three columns. Two contains Amplitude values (fluorescence intensity) and one
 # contains cluster resultes (interger values of 1 - 4).
 
 str(pds_raw[["A01"]])
 
-# Select the wells for the analysis. A01 to D01 are four replicate dPCR reactions 
+# Select the wells for the analysis. A02 to D02 are four replicate dPCR reactions 
 # and G04 is the no template control (NTC).
 wells <- c("A02", "B02", "C02", "D02", "G04")
 
@@ -390,7 +390,7 @@ for (i in 1L:length(wells)) {
    # The next line is used to limit the x-axis for plot in a meaningful range.
   if(i < 5) x.lim <- c(0.065, 0.115) else x.lim <- c(0, 0.115)
   
-  # Next step is the calculation of the dPCR statistics.
+  # Our next step is the calculation of the dPCR statistics.
   dens <- dpcr_density(k = k.tmp, n = n.tmp, average = TRUE, methods = "wilson", 
                        conf.level = 0.95, xlim = x.lim, bars = FALSE)
   legend("topright", paste("k:", k.tmp,"\nn:", n.tmp), bty = "n")
