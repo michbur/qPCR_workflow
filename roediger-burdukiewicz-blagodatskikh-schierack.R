@@ -412,7 +412,7 @@ dev.off()
 
 require(dpcR)
 
-# First step is as usual extracting data and shaping it into object of 
+# The first step is as usual extracting data and shaping it into object of 
 # appropriate class, in this case 'ddpcr' (droplet digital PCR)
 
 cluster_data <- do.call(bind_dpcr, lapply(1L:length(wells), function(i) {

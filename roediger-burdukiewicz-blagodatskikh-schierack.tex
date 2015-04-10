@@ -240,7 +240,7 @@ The goal of our fist case study was to calculate the Cq values and the $AE$ from
 a qPCR experiment. We used the \texttt{guescini1} dataset from the \CRANpkg{qpcR} 
 package, where the gene \textit{NADH dehydrogenase 1} (MT-ND1) was amplified in 
 a LightCycler\circledR~480 (Roche) thermocycler. Details of the experiment are 
-described in \citet{guescini_2008}. First we started with loading the required 
+described in \citet{guescini_2008}. We started with loading the required 
 packages and datasets. A good practice for reproducible research is to track the 
 package versions and environment used during the analysis. The function 
 \code{sessionInfo} from the \CRANpkg{utils} package provides this functionality. 
@@ -740,7 +740,7 @@ measurement in VideoScan HCU started directly after adding 'mix B' at
 65\textcelsius. A $1x$ (D1) and a $1:10$ dilution (D2) were tested. The 
 resulting dataset \texttt{C81} is part of the \CRANpkg{chipPCR} package. Two 
 concentrations (stock and 1:10 diluted stock) of input DNA were used in the HDA. 
-First we had a look at the \texttt{C81} dataset with the \code{str} 
+First, we had a look at the \texttt{C81} dataset with the \code{str} 
 function.
 
 \begin{example}
@@ -774,7 +774,7 @@ intensity) it was necessary to pre-process the raw data
 Amplification (HDA). \strong{(A)} The raw data of the HDA (D1, undiluted, D2 
 $1:10$ diluted) exhibit some outliers (detector artifacts), an off-set of circa 
 0.5 MFI and a slight negative trend in the 
-baseline region (0~-~52 minutes). \strong{(B)} First we used the \code{CPP} 
+baseline region (0~-~52 minutes). \strong{(B)} We used the \code{CPP} 
 function to smooth the data with a spline function. Baselining was done with a 
 linear regression model (robust MM-estimator). Finally, we used the 
 \code{th.cyc} function (\CRANpkg{chipPCR}) to calculate the cycle threshold time 
@@ -1099,7 +1099,7 @@ of several reactions. In the following, we use a test implemented in
 \CRANpkg{rateratio.test} as proposed by \citet{Fay_2010}.
 
 \begin{example}
-# First step is as usual extracting data and shaping it into object of 
+# The first step is as usual extracting data and shaping it into object of 
 # appropriate class, in this case 'ddpcr' (droplet digital PCR)
 
 cluster_data <- do.call(bind_dpcr, lapply(1L:length(wells), function(i) {
