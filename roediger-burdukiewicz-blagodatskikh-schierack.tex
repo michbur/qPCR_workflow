@@ -55,10 +55,10 @@ Figure~\ref{figure:dpcR_sim}). Selected technologies (e.g.,
 OpenArray\textregistered Real-Time PCR System) monitor amplification reactions 
 in the chambers ('partitions') in real-time. After that, all quantification 
 cycle (Cq) values are calculated from the amplification curves and converted 
-into discrete events by means of positive and negative chambers. Finally, the 
+into discrete events of positive and negative chambers. Finally, the 
 absolute quantification of nucleic acids is done using Poisson statistics 
 \citep{milbury_2014, morley_2014}. A representative workflow using the vendor 
-software for the analysis of a droplet dPCR experiment was described by 
+software for the analysis of a droplet dPCR experiment has been described by 
 \citet{milbury_2014}. Recently, we have published the \CRANpkg{dpcR} package at 
 CRAN, which is the first open source R software package for the analysis of dPCR 
 experiments (see \CRANpkg{dpcR} package manual for details).
@@ -92,8 +92,7 @@ PCR experiments) \citep{huggett_2013, bustin_2014}. We share the philosophy of
 the MIQE guidelines to increase the experimental transparency for better 
 experimental practice and reliable interpretation of results and encourage the 
 use of open data exchange formats like the XML-based Real-Time PCR Data Markup 
-Language (RDML) \citep{lefever_2009}. We see the application of R in line with 
-this philosophy. 
+Language (RDML) \citep{lefever_2009}.
 
 In case of closed source software the analysis usually happens in a black~box 
 fashion tied to a specific platform. We agree that closed frameworks are not 
@@ -105,7 +104,7 @@ are independent of a development model. However, at least open~source gives the
 possibility to track and eliminate errors by an individual entity. Black-box 
 systems often force the user to process the data by suboptimal analysis 
 algorithms \citep{ruijter_2013}. Moreover, the data usually cannot be accessed 
-between the steps of the analysis which restrains quality control. Visualization 
+between the steps of the analysis, which restrains quality control. Visualization 
 options are usually limited by the software vendor preferences and do not attain 
 publication quality. In addition to this, users who have no access to the 
 commercial software are barred. Aside from closed source software, data analysis 
@@ -171,21 +170,20 @@ to:
 \begin{figure}[htbp]
   \centering
   \includegraphics[clip=true,trim=0cm 0cm 0cm 0cm]{figures/workflow.png}
-  \caption{Exemplary workflow for quantitative PCR, digital PCR, quantitative 
-isothermal amplification and melting curve analysis experiments in R. Core 
-functionality is provided by the R software environment for statistical 
-computing and graphics. In our scenario we used the \CRANpkg{RDML} package to 
-read-in data in standardized format. However, any format supported by R can be 
-used. Further, processing of amplification curve data was performed with the 
-\CRANpkg{chipPCR} package and melting curve data were analysed with the 
-\CRANpkg{MBmca} package. The \CRANpkg{dpcR} package can be embedded in the 
-analysis of digital PCR experiments. Cq, quantification cycle; $T_{M}$, melting 
-temperature. 
+  \caption{An exemplary workflow for quantitative PCR, digital PCR, quantitative 
+isothermal amplification and melting curve analysis experiments in R. The R 
+software environment provides core functionality for statistical computing and 
+graphics. In our scenario we used the \CRANpkg{RDML} package to read-in data in 
+standardized format. However, any format supported by R can be used. Further, 
+processing of amplification curve data was performed with the \CRANpkg{chipPCR} 
+package and melting curve data were analysed with the \CRANpkg{MBmca} package. 
+The \CRANpkg{dpcR} package can be embedded in the analysis of digital PCR 
+experiments. Cq, quantification cycle; $T_{M}$, melting temperature. 
 } 
 \label{figure:workflow}
 \end{figure}
 
-\section{Setting-up a working environment}
+\section{Setting-up a Working Environment}
 
 We recommend performing the scripting in a dedicated integrated development 
 environment (IDE) and graphical user interface (GUI) such as \pkg{RKWard} 
@@ -217,11 +215,10 @@ depending on the sample input quantity as described in
 \citep{roediger_2015_Bioinformatics, svec_2015}.
 
 In \citet{roediger_RJ_2013} we described the application of R for the analysis 
-of melting curve experiments from microbead-based assays. Since the mathematical 
-foundation for melting curve analysis (MCA) is identical between all methods
-we used functions from the \CRANpkg{MBmca} package (0.0.3-4) for an 
-analysis of the target specific melting temperature ($T_{M}$) in experiments of 
-the present study.
+of melting curve experiments from microbead-based assays. We used functions from 
+the \CRANpkg{MBmca} package (0.0.3-4) for an analysis of the target specific 
+melting temperature ($T_{M}$) in experiments of the present study, since the 
+mathematical foundation is the same.
 
 We completed our examples with case studies for the analysis of dPCR 
 experiments. In particular, we used the \CRANpkg{dpcR} package (v.~0.1.4.0) to 
@@ -271,14 +268,14 @@ gue <- guescini1
 dil <- 10^(2: -4)
 \end{example}
 
-We previewed the amplification curve raw data using the \code{matplot} 
-function (see code below). The amplification curve data showed a strong signal 
-level variation in the plateau region (Figure~~\ref{figure:dilution_Cq}A). 
-Therefore, all data were subjected to a minimum-maximum normalization (see 
-\citet{roediger_RJ_2013}) using the \code{CPP} function from the 
-\CRANpkg{chipPCR} package. In addition, all data were baselined and smoothed 
-(Figure~~\ref{figure:dilution_Cq}B). The Cq values were calculated by the 
-$Cq_{SDM}$ and $Cq_{Ct}$ methods as shown next.
+We previewed the amplification curve raw data using the \code{matplot} function 
+(see code below). The amplification curve data showed a strong signal level 
+variation in the plateau region (Figure~~\ref{figure:dilution_Cq}A). Therefore, 
+all data were subjected to a minimum-maximum normalization using the \code{CPP} 
+function from the \CRANpkg{chipPCR} package. In addition, all data were baselined and 
+smoothed (Figure~~\ref{figure:dilution_Cq}B) (see \citet{roediger_RJ_2013, 
+roediger_2015_Bioinformatics}). The Cq values were calculated by 
+the $Cq_{SDM}$ and $Cq_{Ct}$ methods as shown next.
 
 \begin{figure}[htbp]
   \centering
@@ -846,7 +843,7 @@ requirement for a sound calculation. We calculated $Cq_{t}$ values of
 70.18~minutes and 93.18 minutes for the stock (D1) and 1:10 (D2) diluted 
 samples, receptively.
 
-\subsection{Case study four - digital PCR}
+\subsection{Case study four - Digital PCR}
 
 We have developed the \CRANpkg{dpcR} package for analysis and presentation of 
 digital PCR experiments. This package can be used to build 
@@ -930,7 +927,7 @@ and text fields. An example can be found at
 \url{https://michbur.shinyapps.io/dpcr_density/}. This approach enables the 
 automatized output of R objects in combined plots, tables and summaries.
 
-\subsection{Case study five - digital PCR correction}
+\subsection{Case study five - Digital PCR Partition Volume Correction}
 
 There is an ongoing debate in the scientific community about the effect of the 
 partition volume on the estimated copy numbers size 
