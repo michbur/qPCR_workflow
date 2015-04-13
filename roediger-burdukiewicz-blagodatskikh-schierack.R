@@ -252,7 +252,11 @@ dev.off()
 #################################
 
 pdf("qIA.pdf", width = 12, height = 6)
+# This case study uses the qIA raw data (C81 dataset) from the from the chipPCR 
+# package. Therefore, first we load the chipPCR package.
+require(chipPCR)
 
+# To see the structure of the C81 dataset we used the str function.
 str(C81)
 
 # Drawn in an 2-by-1 array on the device by two columns and one row.
