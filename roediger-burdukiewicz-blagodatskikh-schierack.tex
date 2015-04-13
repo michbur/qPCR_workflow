@@ -149,7 +149,7 @@ be processed efficiently \citep{michna_2013}. This might be useful for large
 data sets as present in high-throughput PCR experiments or dPCR experiments with large partition 
 numbers. The R environment offers several datasets, which can be used for 
 testing of algorithms. Therefore, others and we argue that R is suitable for 
-reproducible research \citep{Murrell_2012, gandrud_2013, hofmann_2013, 
+reproducible research \citep{gentleman_2004, Murrell_2012, gandrud_2013, hofmann_2013, 
 Ooms_2013, kuhn_cran_2014, Leeper_2014, liu_2014}.
 
 The aim of this paper is to show case studies for qPCR, dPCR, qIA and melting 
@@ -333,7 +333,7 @@ $Cq_{Ct}$ values appeared to be higher than in the $Cq_{SDM}$ values
 (Figure~~\ref{figure:dilution_Cq}C).
 
 \begin{example}
-> summary(res.Cq)
+summary(res.Cq)
 
 Call:
 lm(formula = Cq.Ct ~ Cq.SDM)
@@ -491,8 +491,7 @@ BioRad$AsDendrogram()
 
 qPCR <- BioRad$AsTable() %>%
   filter(target == "EvaGreen",
-         grepl("^D", position))  %>% 
-  BioRad$GetFData(.)
+         grepl("^D", position))  %>% BioRad$GetFData(.)
 \end{example}
 
 \begin{figure}[htbp]
@@ -516,12 +515,13 @@ branches are the data types \texttt{adp} (amplification data point) and
 We inspected and pre-processed a subset of the amplification curve data solely 
 using functionalities provided by the \CRANpkg{chipPCR} package. The 
 \code{plotCurves} function was used to get an overview of the curvatures. The 
-data indicated a baseline shift in all curves with a slight negative trend 
-(Figure~\ref{figure:plotCurves}). This observation suggested to baseline the raw 
-data by using a linear regression model (cycles x - y; ($bg.range = c(x, y)$) in 
-the \code{CPP} function.). The curvatures of 'D1\_Alm12\ldots' and 
-'D2\_Alm12\ldots' exhibited a drop in the plateau phase. However, this is not 
-of importance during this stage of the analysis.
+green background colour of subplots shows that the data contain no missing 
+values. Some curves indicated a moderate baseline shift with a slight negative 
+trend (Figure~\ref{figure:plotCurves}). This observation suggested to baseline 
+the raw data by using a linear regression model (cycles x - y; ($bg.range = c(x, 
+y)$) in the \code{CPP} function.). The curvatures of 'D1\_Alm12\ldots' and 
+'D2\_Alm12\ldots' exhibited a drop in the plateau phase. However, this is not of 
+importance during this stage of the analysis.
 
 \begin{example}
 # Use plotCurves function to get an overview of the amplification curve samples
@@ -599,8 +599,7 @@ analysis was presented in \citet{roediger_RJ_2013}.
 # probe 'Cy5-2' that can hybridize with Mycobacterium tuberculosis 
 # katG gene (codon 315) and aggregate the data in the object 'melt'.
 melt <- BioRad$AsTable() %>%
-  filter(target == "Cy5-2")  %>% 
-  BioRad$GetFData(., data.type = "mdp")
+  filter(target == "Cy5-2")  %>% BioRad$GetFData(., data.type = "mdp")
 
 # Calculate the melting temperature with the diffQ function from the MBmca 
 # package. Use simple logical conditions to find out if a positive sample with 

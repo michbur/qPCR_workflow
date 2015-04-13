@@ -129,8 +129,7 @@ BioRad$AsDendrogram()
 
 qPCR <- BioRad$AsTable() %>%
   filter(target == "EvaGreen",
-         grepl("^D", position))  %>% 
-  BioRad$GetFData(.)
+         grepl("^D", position))  %>% BioRad$GetFData(.)
 
 dev.off()
 
@@ -166,8 +165,7 @@ Cq.Positive <- t(apply(qPCR[, -1], 2, function(x)
 # probe 'Cy5-2' that can hybridize with Mycobacterium tuberculosis 
 # katG gene (codon 315) and aggregate the data in the object 'melt'.
 melt <- BioRad$AsTable() %>%
-  filter(target == "Cy5-2")  %>% 
-  BioRad$GetFData(., data.type = "mdp")
+  filter(target == "Cy5-2")  %>% BioRad$GetFData(., data.type = "mdp")
 
 # Calculate the melting temperature with the diffQ function from the MBmca 
 # package. Use simple logical conditions to find out if a positive sample with 
