@@ -486,7 +486,7 @@ BioRad <- RDML$new(filename)
 BioRad$AsDendrogram()
 
 # Fetch cycle dependent fluorescence for the EvaGreen channel and row 'D'
-# (that contains target 'Cy5-2' at channel 'Cy5') of the 
+# (contains the target 'Cy5-2' in the channel 'Cy5') of the 
 # katG gene and aggregate the data in the object 'qPCR'. 
 
 qPCR <- BioRad$AsTable() %>%
@@ -740,7 +740,7 @@ First, we had a look at the \texttt{C81} dataset with the \code{str}
 function.
 
 \begin{example}
-# This case study uses the qIA raw data (C81 dataset) from the from the chipPCR 
+# This case study uses the qIA raw data (C81 dataset) from the chipPCR 
 # package. Therefore, first we load the chipPCR package.
 require(chipPCR)
 
@@ -967,12 +967,14 @@ the data structure of the \texttt{pds\_raw} dataset.
 \begin{example}
 # Load the dpcR package and use the pds_raw dataset for the analysis of the 
 # digital PCR experiment.
+# To get an overview of the data set we used the head and summary R functions 
+# in a chain. The output shows that the dataset contains lists of different 
+# samples (A01 ...)
+
 require(dpcR)
 
-# To get an overview of the dataset we used the head and summary R functions.
 head(summary(pds_raw))
 
-# The output shows that the dataset contains lists of different samples (A01 ...)
     Length Class        Mode  
 A01 "3"    "data.frame" "list"
 A02 "3"    "data.frame" "list"
@@ -999,7 +1001,7 @@ and G04 contained the values for the non-template control.
 
 \begin{example}
 # Select the wells for the analysis. A02 to D02 are four replicate dPCR reactions 
-# and G04 is the no template control (NTC).
+# and G04 is the no template control (NTC) (see dpcR manual for details).
 wells <- c("A02", "B02", "C02", "D02", "G04")
 
 # Set the arrangement for the plots. The first column contains the amplitude 

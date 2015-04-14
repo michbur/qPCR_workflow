@@ -1,5 +1,5 @@
-if(!grepl("figures", getwd()))
-  setwd(paste0(getwd(), "/figures/"))
+# if(!grepl("figures", getwd()))
+#   setwd(paste0(getwd(), "/figures/"))
 # Supplement to 'R as an Environment for the Analysis of dPCR and qPCR Experiments'
 # Journal by Rödiger et al. 2015
 #################################
@@ -48,7 +48,7 @@ res.Cq <- lm(Cq.Ct ~ Cq.SDM)
 
 summary(res.Cq)
 
-pdf("dilution_Cq.pdf", width = 9.5, height = 14)
+#pdf("dilution_Cq.pdf", width = 9.5, height = 14)
 
 # Arrange and plot the results in a convenient way.
 layout(matrix(c(1,2,3,3,4,5), 3, 2, byrow = TRUE))
@@ -90,11 +90,11 @@ mtext("E", side = 3, adj = 0, cex = 2)
 
 # Resore margin default values.
 par(mar = c(5.1, 4.1, 4.1, 2.1))
-dev.off()
+#dev.off()
 #################################
 # Case study two
 #################################
-pdf("RDML_dendrogram.pdf", width = 12, height = 8)
+#pdf("RDML_dendrogram.pdf", width = 12, height = 8)
 # Import the qPCR and melting curve data via the RDML package.
 # Load the chipPCR package for the pre-processing and curve data quality
 # analysis and the MBmca package for the melting curve analysis.
@@ -124,16 +124,16 @@ BioRad <- RDML$new(filename)
 BioRad$AsDendrogram()
 
 # Fetch cycle dependent fluorescence for the EvaGreen channel and row 'D'
-# (that contains target 'Cy5-2' at channel 'Cy5') of the 
+# (contains the target 'Cy5-2' in the channel 'Cy5') of the 
 # katG gene and aggregate the data in the object qPCR. 
 
 qPCR <- BioRad$AsTable() %>%
   filter(target == "EvaGreen",
          grepl("^D", position))  %>% BioRad$GetFData(.)
 
-dev.off()
+#dev.off()
 
-pdf("plotCurves.pdf", width = 6, height = 4)
+#pdf("plotCurves.pdf", width = 6, height = 4)
 # Use plotCurves function to get an overview of the amplification curve samples
 # (Figure 5).
 
@@ -141,7 +141,7 @@ plotCurves(qPCR[, 1], qPCR[, -1], type = "l")
 mtext("Cycles", SOUTH <- 1, line = 3)
 mtext("Fluorescence", side = 2, line = 2)
 
-dev.off()
+#dev.off()
 
 # To detect positive samples we calculated the Cq values by the cycle threshold 
 # method. This method is implemented in the th.cyc function. The threshold signal 
@@ -214,7 +214,7 @@ results.tab[["Tm positive"]] <- factor(results.tab[["Tm positive"]],
                                        labels=c(TRUE, FALSE))
 results.tab
 
-pdf("amp_melt.pdf", width = 12, height = 6)
+#pdf("amp_melt.pdf", width = 12, height = 6)
 
 # Convert the decision from the 'results' object in a color code:
 # Negative, black; Positive, red.
@@ -246,13 +246,13 @@ lapply(2L:ncol(melt), function(i)
   lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
               fct = max, inder = TRUE)[["xy"]], col = color[i - 1]))
 
-dev.off()
+#dev.off()
 #################################
 # Case study three
 #################################
 
-pdf("qIA.pdf", width = 12, height = 6)
-# This case study uses the qIA raw data (C81 dataset) from the from the chipPCR 
+#pdf("qIA.pdf", width = 12, height = 6)
+# This case study uses the qIA raw data (C81 dataset) from the chipPCR 
 # package. Therefore, first we load the chipPCR package.
 require(chipPCR)
 
@@ -299,12 +299,12 @@ res <- lapply(c(2, 4), function(i) {
 abline(h = 0.05, lty = 2)
 legend("topleft", paste(c("D1 Cq.t: ", "D2 Cq.t: "), res), pch = 19, 
        col = c(1, 3), bty = "n")
-dev.off()
+#dev.off()
 
 #################################
 # Case study four
 #################################
-pdf("dpcR.pdf")
+#pdf("dpcR.pdf")
 # Load the dpcR package for the analysis of the digital PCR experiment.
 require(dpcR)
 
@@ -321,7 +321,7 @@ legend("topleft", paste("k:", k,"\nn:", n))
 # The total concentration (and its confidence intervals) in molecules/ml is
 # (the factor 1e-6 is used for the conversion from nL to mL):
 dens[4:6] / 5 * 1e-6
-dev.off()
+#dev.off()
 ##################
 # dPCR demo
 ##################
@@ -340,13 +340,15 @@ dev.off()
 # NEW CASE STUDY
 # Load the dpcR package for the analysis of the digital PCR experiment.
 
-pdf("dpcR_bioamp.pdf", width = 8, height = 12)
+#pdf("dpcR_bioamp.pdf", width = 8, height = 12)
 
 # Load the dpcR package and use the pds_raw dataset for the analysis of the 
 # digital PCR experiment.
+# To get an overview of the data set we used the head and summary R functions 
+# in a chain. The output shows that the dataset contains lists of different 
+# samples (A01 ...)
 require(dpcR)
 
-# To get an overview of the data set we used the head and summary R functions.
 head(summary(pds_raw))
 
 # Next, we used str for the element A01. The element of the list contains a data frame
@@ -356,7 +358,7 @@ head(summary(pds_raw))
 str(pds_raw[["A01"]])
 
 # Select the wells for the analysis. A02 to D02 are four replicate dPCR reactions 
-# and G04 is the no template control (NTC).
+# and G04 is the no template control (NTC) (see dpcR manual for details).
 wells <- c("A02", "B02", "C02", "D02", "G04")
 
 # Set the arrangement for the plots. The first column contains the amplitude 
@@ -410,9 +412,7 @@ for (i in 1L:length(wells)) {
   arrows(c(0.7,1.9), res.conc[, 2], c(0.7,1.9), res.conc[, 3], angle = 90, 
          code = 3, lwd = 2)
 }
-dev.off()
-
-require(dpcR)
+#dev.off()
 
 # The first step is as usual extracting data and shaping it into object of 
 # appropriate class, in this case 'ddpcr' (droplet digital PCR)
@@ -440,6 +440,6 @@ colnames(cluster_data) <- wells
 
 comp <- test_counts(cluster_data, model = "ratio")
 
-pdf("test_counts.pdf", width = 8, height = 8)
+#pdf("test_counts.pdf", width = 8, height = 8)
 plot(comp)
-dev.off()
+#dev.off()
