@@ -242,10 +242,11 @@ plot(NA, NA, xlim = c(35, 95), ylim = c(-15, 120),
      ylab = "-d(RFU)/dT")
 mtext("C", cex = 2, side = 3, adj = 0, font = 2)
 
-lapply(2L:ncol(melt), function(i)
-  lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
-              fct = max, inder = TRUE)[["xy"]], col = color[i - 1]))
-
+invisible(
+  lapply(2L:ncol(melt), function(i)
+    lines(diffQ(cbind(melt[, 1], melt[, i]), verbose = TRUE, 
+		fct = max, inder = TRUE)[["xy"]], col = color[i - 1]))
+)
 #dev.off()
 #################################
 # Case study three
@@ -337,7 +338,7 @@ dens[4:6] / 5 * 1e-6
 # plot_vic_fam(fam = fluos1, vic = fluos2, col_vic = "green", col_fam = "pink")
 # #dev.off()
 
-# NEW CASE STUDY
+# CASE STUDY FIVE
 # Load the dpcR package for the analysis of the digital PCR experiment.
 
 #pdf("dpcR_bioamp.pdf", width = 8, height = 12)
